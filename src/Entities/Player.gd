@@ -14,8 +14,10 @@ func _ready():
 	pass
 
 func _process(delta):
-	print(current_velocity)
+	var is_on_floor = floor_detector.is_colliding()
 	var direction = (Input.is_action_pressed("move_right") as int - Input.is_action_pressed("move_left") as int)
+	if direction != 0:
+		sprite.scale.x = direction
 	current_velocity = move_and_slide_with_snap(
 		Vector2(direction * MOVE_SPEED, 0),
 		Vector2.DOWN * FLOOR_DETECT_DISTANCE,
