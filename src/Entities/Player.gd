@@ -5,8 +5,8 @@ const MOVE_SPEED = 150.0
 const FLOOR_DETECT_DISTANCE = 20.0
 
 onready var floor_detector := $FloorDetector
-onready var player_sprite := $Sprite
-onready var player_camera := $Camera
+onready var sprite := $Sprite
+onready var camera := $Camera
 
 var current_velocity := Vector2.ZERO
 
