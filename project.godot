@@ -24,6 +24,10 @@ config/name="Clockout"
 run/main_scene="res://src/Levels/DemoLevel.tscn"
 config/icon="res://icon.png"
 
+[display]
+
+window/size/resizable=false
+
 [input]
 
 move_left={

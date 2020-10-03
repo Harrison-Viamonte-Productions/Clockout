@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://assets/textures/world/Metal_tiles1_extra_4_colors.png" type="Texture" id=1]
 [ext_resource path="res://src/Entities/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/Backgrounds/Background1.tscn" type="PackedScene" id=3]
 
 [sub_resource type="ConvexPolygonShape2D" id=1]
 points = PoolVector2Array( 128, 128, 0, 128, 0, 0, 128, 0 )
@@ -152,9 +153,12 @@ points = PoolVector2Array( 128, 128, 0, 128, 0, 0, 128, 0 )
 [node name="DemoLevel" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
+position = Vector2( 164.051, 563.169 )
 tile_set = SubResource( 7 )
 format = 1
 tile_data = PoolIntArray( -393208, 2, 0, -393206, 2, 0, -393204, 2, 0, -262132, 1, 0, -131071, 3, 0, -131060, 5, 0, 65534, 4, 0, 0, 0, 0, 2, 0, 0, 4, 0, 0, 6, 0, 0, 8, 0, 0, 10, 0, 0, 12, 4, 0, 131070, 4, 0, 65536, 4, 0, 65538, 4, 0, 65540, 4, 0, 65542, 4, 0, 65544, 4, 0, 65546, 4, 0, 65548, 4, 0 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 347.058, -264.298 )
+position = Vector2( 511.109, 298.871 )
+
+[node name="ParallaxBackground" parent="." instance=ExtResource( 3 )]
