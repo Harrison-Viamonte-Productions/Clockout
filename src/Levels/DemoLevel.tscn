@@ -162,3 +162,4 @@ tile_data = PoolIntArray( -393208, 2, 0, -393206, 2, 0, -393204, 2, 0, -262132, 
 position = Vector2( 511.109, 298.871 )
 
 [node name="ParallaxBackground" parent="." instance=ExtResource( 3 )]
+scroll_limit_end = Vector2( 0, 700 )
