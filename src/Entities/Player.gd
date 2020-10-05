@@ -6,7 +6,7 @@ const GRAVITY = 400.0
 const ACCELERATION = 8
 const MOVE_SPEED = 300.0
 
-const JUMP_SPEED = 800
+const JUMP_SPEED = 950.0
 const MAX_JUMPS = 3
 const JUMP_DELAY_MS = 250
 const JUMP_ADD_DURATION_MS = 250
@@ -48,8 +48,8 @@ func _physics_process(delta):
 		jump_add_time_ms = time + JUMP_ADD_DURATION_MS
 	elif jump_count > 0 and time < jump_add_time_ms and Input.is_action_pressed("jump"):
 		target.y -= JUMP_SPEED
-	else:
-		target.y += GRAVITY
+
+	target.y += GRAVITY
 
 	var new_velocity = velocity.linear_interpolate(target, ACCELERATION * delta)
 	velocity = move_and_slide(new_velocity, Vector2.UP, not is_on_floor(), 4, 0.9, false)

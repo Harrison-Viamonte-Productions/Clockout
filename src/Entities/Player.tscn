@@ -16,6 +16,9 @@ region_rect = Rect2( -0.42115, 103.072, 29.7543, 25.094 )
 
 [node name="Camera" type="Camera2D" parent="."]
 current = true
+limit_smoothed = true
+smoothing_enabled = true
+smoothing_speed = 8.0
 
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
 position = Vector2( -1.43717, 0 )
