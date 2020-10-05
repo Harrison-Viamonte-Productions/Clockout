@@ -1,13 +1,12 @@
 class_name Player
 extends KinematicBody2D
 
-const GRAVITY = 200.0
+const GRAVITY = 400.0
 
 const ACCELERATION = 8
-const MOVE_SPEED = 150.0
+const MOVE_SPEED = 300.0
 
-const JUMP_SPEED = 500
-const DOUBLE_JUMP_SPEED_FACTOR = 0.8
+const JUMP_SPEED = 800
 const MAX_JUMPS = 3
 const JUMP_DELAY_MS = 250
 const JUMP_ADD_DURATION_MS = 250
@@ -37,22 +36,18 @@ func _physics_process(delta):
 
 	var target = direction * MOVE_SPEED
 
-	var jump_speed = JUMP_SPEED
-	if jump_count > 1:
-		jump_speed *= DOUBLE_JUMP_SPEED_FACTOR
-
 	if is_on_floor():
 		jump_count = 0
 	elif jump_count == 0:
 		jump_count = 1
 
 	if Input.is_action_just_pressed("jump") and (is_on_floor() or jump_count < MAX_JUMPS) and time > next_jump_time:
-		target.y = jump_speed
+		target.y -= JUMP_SPEED
 		jump_count += 1
 		next_jump_time = time + JUMP_DELAY_MS
 		jump_add_time_ms = time + JUMP_ADD_DURATION_MS
 	elif jump_count > 0 and time < jump_add_time_ms and Input.is_action_pressed("jump"):
-		target.y -= jump_speed
+		target.y -= JUMP_SPEED
 	else:
 		target.y += GRAVITY
 
