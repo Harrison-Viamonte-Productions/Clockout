@@ -21,6 +21,7 @@ var next_jump_time := 0
 var velocity := Vector2.ZERO
 
 func _ready():
+	Engine.set_target_fps(Engine.get_iterations_per_second());
 	pass
 
 func _physics_process(delta):
