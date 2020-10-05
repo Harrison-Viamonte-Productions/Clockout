@@ -5,9 +5,8 @@ const GRAVITY = 200.0
 
 const ACCELERATION = 8
 const MOVE_SPEED = 150.0
-const FLOOR_DETECT_DISTANCE = 20.0
 
-const JUMP_BASE_SPEED = 500
+const JUMP_SPEED = 500
 const DOUBLE_JUMP_SPEED_FACTOR = 0.8
 const MAX_JUMPS = 3
 const JUMP_DELAY_MS = 250
@@ -38,15 +37,16 @@ func _physics_process(delta):
 
 	var target = direction * MOVE_SPEED
 
-	var jump_speed = JUMP_BASE_SPEED
+	var jump_speed = JUMP_SPEED
 	if jump_count > 1:
 		jump_speed *= DOUBLE_JUMP_SPEED_FACTOR
+
 	if is_on_floor():
 		jump_count = 0
-	else:
-		jump_count += 1
+	elif jump_count == 0:
+		jump_count = 1
 
-	if Input.is_action_just_pressed("jump") and (is_on_floor() or jump_count < MAX_JUMPS) and OS.get_ticks_msec():
+	if Input.is_action_just_pressed("jump") and (is_on_floor() or jump_count < MAX_JUMPS) and time > next_jump_time:
 		target.y = jump_speed
 		jump_count += 1
 		next_jump_time = time + JUMP_DELAY_MS
@@ -57,7 +57,4 @@ func _physics_process(delta):
 		target.y += GRAVITY
 
 	var new_velocity = velocity.linear_interpolate(target, ACCELERATION * delta)
-	print(new_velocity)
-	
-	var snap = Vector2.DOWN * FLOOR_DETECT_DISTANCE if direction.y == 0.0 else Vector2.ZERO
-	velocity = move_and_slide_with_snap(new_velocity, snap, Vector2.UP, not is_on_floor(), 4, 0.9, false)
+	velocity = move_and_slide(new_velocity, Vector2.UP, not is_on_floor(), 4, 0.9, false)
