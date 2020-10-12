@@ -11,9 +11,6 @@ const MAX_JUMPS = 3
 const JUMP_DELAY_MS = 250
 const JUMP_ADD_DURATION_MS = 250
 
-onready var sprite := $Sprite
-onready var camera := $Camera
-
 var jump_count := 0
 var jump_add_time_ms := 0
 var next_jump_time := 0
