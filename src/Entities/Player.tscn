@@ -1,7 +1,9 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://src/Entities/Player.gd" type="Script" id=1]
 [ext_resource path="res://assets/player/player.png" type="Texture" id=2]
+[ext_resource path="res://src/Levels/Backgrounds/Background1.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/Entities/PlayerSprite.gd" type="Script" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 11.2027, 10.3234 )
@@ -13,12 +15,15 @@ script = ExtResource( 1 )
 texture = ExtResource( 2 )
 region_enabled = true
 region_rect = Rect2( -0.42115, 103.072, 29.7543, 25.094 )
+script = ExtResource( 4 )
 
 [node name="Camera" type="Camera2D" parent="."]
 current = true
 limit_smoothed = true
 smoothing_enabled = true
 smoothing_speed = 8.0
+
+[node name="Background" parent="Camera" instance=ExtResource( 3 )]
 
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
 position = Vector2( -1.43717, 0 )
