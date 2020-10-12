@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/tiles/office1_tiles.png" type="Texture" id=1]
+[ext_resource path="res://src/Scripts/StaticEntityDefault.gd" type="Script" id=2]
+
+[node name="Chair2" type="Sprite"]
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 1079.68, 438.979, 80.5342, 144.341 )
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D"]
+visible = false
+polygon = PoolVector2Array( -38.9194, 72.7744, -26.8148, -16.8819, 6.19042, -17.0921, 16.9421, -39.8324, 27.1951, -39.6556, 27.3719, -72.1825, 40.0998, -72.1825, 39.3927, 28.757, 40.4534, 73.3047 )

@@ -1,15 +1,19 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://src/Entities/Player.gd" type="Script" id=1]
+[ext_resource path="res://src/Scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://assets/player/player.png" type="Texture" id=2]
-[ext_resource path="res://src/Levels/Backgrounds/Background1.tscn" type="PackedScene" id=3]
-[ext_resource path="res://src/Entities/PlayerSprite.gd" type="Script" id=4]
+[ext_resource path="res://src/Scripts/PlayerSprite.gd" type="Script" id=4]
+[ext_resource path="res://src/GUI/GUI.tscn" type="PackedScene" id=5]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 11.2027, 10.3234 )
 
 [node name="Player" type="KinematicBody2D"]
+collision_mask = 6
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 2 )
@@ -19,11 +23,15 @@ script = ExtResource( 4 )
 
 [node name="Camera" type="Camera2D" parent="."]
 current = true
+limit_left = -20
+limit_top = -50
+limit_right = 1300
+limit_bottom = 600
 limit_smoothed = true
 smoothing_enabled = true
 smoothing_speed = 8.0
 
-[node name="Background" parent="Camera" instance=ExtResource( 3 )]
+[node name="GUI" parent="Camera" instance=ExtResource( 5 )]
 
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
 position = Vector2( -1.43717, 0 )
