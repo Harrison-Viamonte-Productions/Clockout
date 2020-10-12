@@ -39,7 +39,8 @@ func fall(delta):
 
 func jump(time):
 	if is_on_floor() or is_on_ceiling():
-		jump_count = 0
+		if is_on_floor():
+			jump_count = 0
 		velocity.y = 0
 	elif jump_count == 0:
 		jump_count = 1
