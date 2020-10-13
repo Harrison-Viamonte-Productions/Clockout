@@ -1,12 +1,23 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://src/Entities/Misc/Monitor.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/tiles/office1_tiles.png" type="Texture" id=1]
+[ext_resource path="res://src/Entities/Misc/StaticEntity.tscn" type="PackedScene" id=2]
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 38.8055, 72.4097 )
+[sub_resource type="OccluderPolygon2D" id=1]
+polygon = PoolVector2Array( -39.4816, 71.9338, -40.2308, 59.9473, -28.4316, 59.5727, -28.4316, 49.2719, -17.9434, 48.71, -17.9434, 38.2218, -6.89343, 38.2218, -5.58241, 27.1718, -30.6791, 27.1718, -30.1172, 15.7472, 4.71845, 15.9345, 4.71845, 7.50655, -7.82987, 5.63367, -7.82987, -4.29261, -29.1807, -4.66719, -29.1807, -16.8409, 5.09302, -16.2791, 4.90574, -4.66719, 15.5812, -5.22906, 15.3939, -39.8774, 26.4439, -39.6901, 26.2566, -72.2783, 38.2431, -71.5292, 37.4939, -26.9545, 27.1931, -26.9545, 26.8185, -7.28924, 37.4939, -5.79093, 37.4939, 27.1718, 5.09302, 27.1718, 4.90573, 37.0981, 15.3939, 37.66, 15.9557, 46.8371, 25.882, 48.1481, 25.882, 58.449, 37.3066, 61.6329, 36.5575, 71.3719, 26.2566, 71.3719, 15.3939, 60.3219, 3.59471, 49.4591, -7.08073, 71.7465 )
 
-[node name="Chair1" instance=ExtResource( 1 )]
-region_rect = Rect2( 1081.09, 438.339, 78.3376, 144.412 )
+[node name="Chair1" instance=ExtResource( 2 )]
 
-[node name="CollisionShape2D" parent="StaticBody2D" index="0"]
-shape = SubResource( 1 )
+[node name="Sprite" parent="StaticBody2D" index="0"]
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 1078.97, 435.67, 85.0206, 149.684 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" index="1"]
+visible = false
+polygon = PoolVector2Array( -40.205, 71.1726, -40.4152, 58.7694, -28.2222, -17.1215, 15.0839, -16.4908, 15.2277, -38.7103, 25.9426, -38.9087, 25.9426, -73.2362, 39.0387, -73.0378, 37.8481, 72.2094 )
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="StaticBody2D" index="2"]
+show_behind_parent = true
+z_index = -2
+occluder = SubResource( 1 )

@@ -116,3 +116,9 @@ collision_layer = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="misc3/StaticBody2D"]
 visible = false
 shape = SubResource( 2 )
+
+[node name="trim1" type="Sprite" parent="."]
+position = Vector2( 512.112, 63.7873 )
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 1088, 192, 64, 64 )

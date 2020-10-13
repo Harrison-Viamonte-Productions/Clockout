@@ -1,23 +1,45 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/tiles/office1_tiles.png" type="Texture" id=1]
-[ext_resource path="res://src/Scripts/StaticEntityDefault.gd" type="Script" id=2]
+[ext_resource path="res://src/Entities/Misc/StaticEntity.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/lightmaps/Lightmap_2.png" type="Texture" id=3]
+[ext_resource path="res://assets/lightmaps/monitor_light.png" type="Texture" id=4]
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 38.8055, 38.768 )
+extents = Vector2( 38.1049, 37.914 )
 
-[node name="Monitor" type="Sprite"]
+[sub_resource type="OccluderPolygon2D" id=2]
+polygon = PoolVector2Array( -16.8794, -37.8791, 38, -38, 37.7879, -27.8753, 15.7144, -27.4548, 15.5041, -16.9436, 5.6236, -16.9436, 4.99292, 16.9025, 37.1572, 16.482, 37.625, 27.25, 26.375, 27.25, 26.5, 38.5, -27.875, 38.625, -27.5, 27, -39.125, 27, -38.75, -27.25, -16.875, -27.5 )
+
+[node name="Monitor" instance=ExtResource( 2 )]
+
+[node name="Sprite" parent="StaticBody2D" index="0"]
 texture = ExtResource( 1 )
 region_enabled = true
-region_rect = Rect2( 970.656, 418.049, 78.8926, 78.3522 )
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_group_": true
-}
+region_rect = Rect2( 970.608, 416.77, 78.7595, 79.5275 )
 
-[node name="StaticBody2D" type="StaticBody2D" parent="."]
-collision_layer = 4
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" index="1"]
 visible = false
+position = Vector2( -0.561865, 0 )
 shape = SubResource( 1 )
+
+[node name="Light2D" type="Light2D" parent="StaticBody2D" index="2"]
+position = Vector2( 19.6431, 0.561231 )
+texture = ExtResource( 4 )
+offset = Vector2( -20, 0 )
+color = Color( 0.447059, 0.698039, 0.996078, 1 )
+
+[node name="Light2D2" type="Light2D" parent="StaticBody2D" index="3"]
+position = Vector2( 37.4742, -4.32461 )
+texture = ExtResource( 3 )
+offset = Vector2( 60, 0 )
+texture_scale = 1.25
+color = Color( 0.0431373, 0.345098, 0.705882, 1 )
+energy = 0.6
+shadow_enabled = true
+shadow_item_cull_mask = -2147483647
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="StaticBody2D" index="4"]
+show_behind_parent = true
+z_index = -2
+occluder = SubResource( 2 )

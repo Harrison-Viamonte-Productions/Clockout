@@ -1,9 +1,13 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://src/Scripts/Player.gd" type="Script" id=1]
 [ext_resource path="res://assets/player/player.png" type="Texture" id=2]
+[ext_resource path="res://assets/lightmaps/player_test.png" type="Texture" id=3]
 [ext_resource path="res://src/Scripts/PlayerSprite.gd" type="Script" id=4]
 [ext_resource path="res://src/GUI/GUI.tscn" type="PackedScene" id=5]
+
+[sub_resource type="OccluderPolygon2D" id=2]
+polygon = PoolVector2Array( -7.6875, -0.125, -6.8125, -5.625, -2.3125, -9.125, 3.5625, -9.125, 7.1875, -11, 9.1875, -10.4375, 7.125, -7.9375, 9.75, -3, 10.2966, 3.25968, 6.95194, 6.97596, 2.8125, 10.875, 2.375, 7.875, -2.0625, 7.75, -2.375, 9.625, -4.625, 10.625, -4.5, 7, -8.73073, 5.19214, -13.9375, -0.125 )
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 11.2027, 10.3234 )
@@ -21,6 +25,15 @@ region_enabled = true
 region_rect = Rect2( -0.42115, 103.072, 29.7543, 25.094 )
 script = ExtResource( 4 )
 
+[node name="Light2D" type="Light2D" parent="Sprite"]
+position = Vector2( -1.83748, 0.167044 )
+texture = ExtResource( 3 )
+energy = 0.5
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="Sprite"]
+z_index = -2
+occluder = SubResource( 2 )
+
 [node name="Camera" type="Camera2D" parent="."]
 current = true
 limit_left = -20
@@ -34,5 +47,6 @@ smoothing_speed = 8.0
 [node name="GUI" parent="Camera" instance=ExtResource( 5 )]
 
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2( -1.43717, 0 )
 shape = SubResource( 1 )

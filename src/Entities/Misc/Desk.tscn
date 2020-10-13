@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/tiles/office1_tiles.png" type="Texture" id=1]
+[ext_resource path="res://src/Entities/Misc/StaticEntity.tscn" type="PackedScene" id=2]
+
+[sub_resource type="OccluderPolygon2D" id=1]
+polygon = PoolVector2Array( -38.0668, -43.0501, 35.9321, -43.2603, 35.7219, 0.0458826, 13.8586, -0.164341, 14.6995, 44.1929, -38.277, 44.1929 )
+
+[node name="Desk" instance=ExtResource( 2 )]
+
+[node name="Sprite" parent="StaticBody2D" index="0"]
+texture = ExtResource( 1 )
+region_enabled = true
+region_rect = Rect2( 976.12, 511.736, 77.6481, 91.56 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="StaticBody2D" index="1"]
+visible = false
+polygon = PoolVector2Array( -38.2433, -43.9236, 37.4212, -44.1109, 37.9831, 0.089196, 14.7593, 0.089196, 14.9466, 45.0384, -38.6179, 45.0384 )
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="StaticBody2D" index="2"]
+show_behind_parent = true
+z_index = -2
+occluder = SubResource( 1 )

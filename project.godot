@@ -31,6 +31,10 @@ Game="*res://src/Scripts/Game.gd"
 [display]
 
 window/size/resizable=false
+window/size/test_width=1600
+window/size/test_height=900
+window/stretch/mode="2d"
+window/stretch/aspect="expand"
 
 [input]
 
@@ -68,4 +72,5 @@ jump={
 
 [rendering]
 
+quality/driver/driver_name="GLES2"
 environment/default_environment="res://default_env.tres"
