@@ -2,12 +2,14 @@ extends "res://src/Scripts/StaticEntityDefault.gd"
 
 export var light_on: bool = true;
 export var light_broken: bool = false;
+export var color: Color = Color.white;
 
 func _ready():
 	update_light();
 
 func update_light():
 	$StaticBody2D/Light2D.enabled = light_on;
+	$StaticBody2D/Light2D.color = color;
 	if light_broken:
 		if !$Timer.is_connected("timeout", self, "_on_Timeout"):
 			$Timer.connect("timeout", self, "_on_Timeout");
