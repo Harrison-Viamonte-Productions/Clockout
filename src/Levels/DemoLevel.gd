@@ -11,6 +11,7 @@ func _ready():
 
 #For testing only, remove later
 func night_time_test(is_night: bool):#if is_night:
+	"""
 	if is_night:
 		$Lights/CeilingLamp.enable_light();
 		$Lights/CeilingLamp2.enable_light();
@@ -23,3 +24,5 @@ func night_time_test(is_night: bool):#if is_night:
 		$Background/Back3.modulate = Color(0.2, 0.2, 0.2);
 		$Background/Back4.modulate = Color(0.2, 0.2, 0.2);
 		$Background/Back5.modulate = Color(0.2, 0.2, 0.2);
+	"""
+	pass;

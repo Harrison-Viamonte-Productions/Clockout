@@ -7,57 +7,59 @@
 [ext_resource path="res://assets/backgrounds/mountains_back1/background3.png" type="Texture" id=5]
 
 [node name="Mountains1" type="ParallaxBackground"]
-scroll_limit_end = Vector2( 0, 600 )
 scroll_ignore_camera_zoom = true
 __meta__ = {
 "_edit_horizontal_guides_": [ 599.784 ]
 }
 
-[node name="back1" type="Sprite" parent="."]
-position = Vector2( 511.387, 300.015 )
-scale = Vector2( 0.798544, 0.831007 )
+[node name="ParallaxLayer" type="ParallaxLayer" parent="."]
+motion_mirroring = Vector2( 1024, 600 )
+
+[node name="back1" type="Sprite" parent="ParallaxLayer"]
 texture = ExtResource( 2 )
+centered = false
 
 [node name="Back2" type="ParallaxLayer" parent="."]
 position = Vector2( 0.446366, -0.141138 )
 motion_scale = Vector2( 0.2, 0.2 )
-motion_mirroring = Vector2( 1024, 350 )
+motion_mirroring = Vector2( 1024, 250 )
 
 [node name="Sprite" type="Sprite" parent="Back2"]
-position = Vector2( -0.535709, -215.647 )
-scale = Vector2( 0.799212, 0.830776 )
+scale = Vector2( 0.8, 0.835 )
 texture = ExtResource( 1 )
 centered = false
 
 [node name="Back3" type="ParallaxLayer" parent="."]
 position = Vector2( 0.446366, -0.141138 )
 motion_scale = Vector2( 0.4, 0.2 )
-motion_mirroring = Vector2( 1024, 500 )
+motion_mirroring = Vector2( 1024, 350 )
 
 [node name="Sprite" type="Sprite" parent="Back3"]
-position = Vector2( -1.69511, -216.704 )
-scale = Vector2( 0.799592, 0.833512 )
+scale = Vector2( 0.800477, 0.835114 )
 texture = ExtResource( 5 )
 centered = false
 
 [node name="Back4" type="ParallaxLayer" parent="."]
 position = Vector2( 0.446366, -0.141138 )
 motion_scale = Vector2( 0.6, 0.4 )
+motion_offset = Vector2( 0, -150 )
 motion_mirroring = Vector2( 1024, 0 )
 
 [node name="Sprite" type="Sprite" parent="Back4"]
-position = Vector2( -2.16705, -262.704 )
-scale = Vector2( 0.800254, 0.8329 )
+scale = Vector2( 0.8, 0.835 )
 texture = ExtResource( 4 )
 centered = false
 
 [node name="Back5" type="ParallaxLayer" parent="."]
 position = Vector2( 0.446366, -0.141138 )
 motion_scale = Vector2( 0.8, 0.4 )
+motion_offset = Vector2( 0, -150 )
 motion_mirroring = Vector2( 1024, 0 )
 
 [node name="Sprite" type="Sprite" parent="Back5"]
-position = Vector2( -2.16705, -263.704 )
-scale = Vector2( 0.800787, 0.832462 )
+scale = Vector2( 0.8, 0.835 )
 texture = ExtResource( 3 )
 centered = false
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color( 0.278431, 0.278431, 0.278431, 1 )
