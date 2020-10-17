@@ -67,4 +67,5 @@ texture = ExtResource( 3 )
 centered = false
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
+visible = false
 color = Color( 0.278431, 0.278431, 0.278431, 1 )

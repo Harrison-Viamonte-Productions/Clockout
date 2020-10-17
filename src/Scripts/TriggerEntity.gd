@@ -36,7 +36,6 @@ func has_node_type(nodeEntity: Node, nodeType):
 	if nodeEntity is nodeType:
 		return true;
 	
-	#check if the children does not include a phycisbody2d first
 	var children_of_node = nodeEntity.get_children();
 	for child in children_of_node:
 		if has_node_type(child, nodeType):
