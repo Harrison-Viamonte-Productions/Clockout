@@ -7,35 +7,42 @@
 [ext_resource path="res://assets/backgrounds/mountains_back1/background3.png" type="Texture" id=5]
 
 [node name="Mountains1" type="ParallaxBackground"]
-scroll_ignore_camera_zoom = true
 __meta__ = {
 "_edit_horizontal_guides_": [ 599.784 ]
 }
 
-[node name="ParallaxLayer" type="ParallaxLayer" parent="."]
-motion_mirroring = Vector2( 1024, 600 )
-
-[node name="back1" type="Sprite" parent="ParallaxLayer"]
+[node name="back2" type="Sprite" parent="."]
+z_index = -50
 texture = ExtResource( 2 )
 centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 1280, 720 )
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="."]
+motion_mirroring = Vector2( 1280, 720 )
+
+[node name="back1" type="Sprite" parent="ParallaxLayer"]
+z_index = -50
+texture = ExtResource( 2 )
+centered = false
+region_enabled = true
+region_rect = Rect2( 0, 0, 1280, 720 )
 
 [node name="Back2" type="ParallaxLayer" parent="."]
 position = Vector2( 0.446366, -0.141138 )
 motion_scale = Vector2( 0.2, 0.2 )
-motion_mirroring = Vector2( 1024, 250 )
+motion_mirroring = Vector2( 1280, 250 )
 
 [node name="Sprite" type="Sprite" parent="Back2"]
-scale = Vector2( 0.8, 0.835 )
 texture = ExtResource( 1 )
 centered = false
 
 [node name="Back3" type="ParallaxLayer" parent="."]
 position = Vector2( 0.446366, -0.141138 )
 motion_scale = Vector2( 0.4, 0.2 )
-motion_mirroring = Vector2( 1024, 350 )
+motion_mirroring = Vector2( 1280, 350 )
 
 [node name="Sprite" type="Sprite" parent="Back3"]
-scale = Vector2( 0.800477, 0.835114 )
 texture = ExtResource( 5 )
 centered = false
 
@@ -43,10 +50,9 @@ centered = false
 position = Vector2( 0.446366, -0.141138 )
 motion_scale = Vector2( 0.6, 0.4 )
 motion_offset = Vector2( 0, -150 )
-motion_mirroring = Vector2( 1024, 0 )
+motion_mirroring = Vector2( 1280, 0 )
 
 [node name="Sprite" type="Sprite" parent="Back4"]
-scale = Vector2( 0.8, 0.835 )
 texture = ExtResource( 4 )
 centered = false
 
@@ -54,10 +60,9 @@ centered = false
 position = Vector2( 0.446366, -0.141138 )
 motion_scale = Vector2( 0.8, 0.4 )
 motion_offset = Vector2( 0, -150 )
-motion_mirroring = Vector2( 1024, 0 )
+motion_mirroring = Vector2( 1280, 0 )
 
 [node name="Sprite" type="Sprite" parent="Back5"]
-scale = Vector2( 0.8, 0.835 )
 texture = ExtResource( 3 )
 centered = false
 

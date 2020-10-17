@@ -15,8 +15,11 @@ var jump_add_time_ms : int = 0
 var next_jump_time : int = 0
 var velocity : Vector2  = Vector2.ZERO
 
-func _ready() -> void:
+func _enter_tree():
 	Game.Player = self;
+
+func _ready() -> void:
+	Game.set_active_camera($Camera);
 	Engine.set_target_fps(Engine.get_iterations_per_second())
 
 func _physics_process(delta: float) -> void:
@@ -56,8 +59,5 @@ func run() -> void:
 	if Input.is_action_pressed("move_left"):
 		velocity.x -= MOVE_SPEED;
 
-func update_camera_limits(start: Vector2, end:Vector2) -> void:
-	$Camera.limit_left = start.x;
-	$Camera.limit_top = start.y;
-	$Camera.limit_right = end.x;
-	$Camera.limit_bottom = end.y;
+func get_camera():
+	return $Camera;

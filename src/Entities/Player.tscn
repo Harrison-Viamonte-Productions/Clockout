@@ -5,7 +5,7 @@
 [ext_resource path="res://assets/lightmaps/player_test.png" type="Texture" id=3]
 [ext_resource path="res://src/Scripts/PlayerSprite.gd" type="Script" id=4]
 [ext_resource path="res://src/GUI/GUI.tscn" type="PackedScene" id=5]
-[ext_resource path="res://src/Levels/Backgrounds/Mountains1.tscn" type="PackedScene" id=6]
+[ext_resource path="res://src/Entities/Misc/CameraEntity.tscn" type="PackedScene" id=6]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 16.4352, 16.3369 )
@@ -30,20 +30,18 @@ position = Vector2( -1.83748, 0.167044 )
 texture = ExtResource( 3 )
 energy = 0.5
 
-[node name="Camera" type="Camera2D" parent="."]
-current = true
-limit_left = 0
-limit_top = -600
-limit_right = 1300
-limit_bottom = 600
-limit_smoothed = true
-smoothing_enabled = true
-smoothing_speed = 8.0
-
-[node name="GUI" parent="Camera" instance=ExtResource( 5 )]
-
-[node name="Mountains1" parent="Camera" instance=ExtResource( 6 )]
-
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
 position = Vector2( -1.43717, 0 )
 shape = SubResource( 1 )
+
+[node name="Camera" parent="." instance=ExtResource( 6 )]
+current = true
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+smoothing_speed = 8.0
+drag_margin_left = 0.15
+drag_margin_top = 0.15
+drag_margin_right = 0.15
+drag_margin_bottom = 0.15
+
+[node name="GUI" parent="Camera" instance=ExtResource( 5 )]
