@@ -32,3 +32,6 @@ func camera_move_to(path_index: int, interpolated: bool = true):
 
 func reset_camera():
 	Game.set_active_camera(Game.Player.get_camera());
+
+func show_message(msg: String, time: float) -> void:
+	Game.GUI.display_message(msg, time);

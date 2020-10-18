@@ -11,15 +11,15 @@ func _ready():
 	camera_next_pos = global_position;
 	camera_next_zoom = zoom;
 
-#func _process(delta):
-#	interpolate_zoom(delta);
-
 func _physics_process(delta):
+	interpolate_movement(delta);
+	interpolate_zoom(delta);
+
+func interpolate_movement(delta):
 	if moving_to:
 		global_position = global_position.linear_interpolate(camera_next_pos, delta * 4.0);
 		if (global_position - camera_next_pos).length() <= MIN_MOVE_PRECISION:
 			moving_to = false;
-	interpolate_zoom(delta);
 
 func interpolate_zoom(delta: float) -> void:
 	if camera_next_zoom != zoom:

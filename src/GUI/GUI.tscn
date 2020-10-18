@@ -1,11 +1,38 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=13 format=2]
 
+[ext_resource path="res://assets/uipack_fixed/PNG/grey_button12.png" type="Texture" id=1]
 [ext_resource path="res://assets/fonts/PixelOperator8-Bold.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://src/Scripts/GUI.gd" type="Script" id=3]
+[ext_resource path="res://assets/fonts/PixelOperatorMonoHB8.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://src/Animations/show_message.tres" type="Animation" id=5]
+[ext_resource path="res://src/Animations/hide_message.tres" type="Animation" id=6]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
 font_data = ExtResource( 2 )
+
+[sub_resource type="ShaderMaterial" id=7]
+
+[sub_resource type="StyleBoxTexture" id=4]
+texture = ExtResource( 1 )
+region_rect = Rect2( 0, 0, 10, 49 )
+modulate_color = Color( 0.0745098, 0.109804, 0.121569, 1 )
+
+[sub_resource type="StyleBoxTexture" id=5]
+texture = ExtResource( 1 )
+region_rect = Rect2( 10, 0, 25, 49 )
+modulate_color = Color( 0.0745098, 0.109804, 0.121569, 1 )
+
+[sub_resource type="DynamicFont" id=3]
+size = 12
+outline_size = 1
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 4 )
+
+[sub_resource type="StyleBoxTexture" id=6]
+texture = ExtResource( 1 )
+region_rect = Rect2( 39, 0, 10, 49 )
+modulate_color = Color( 0.0745098, 0.109804, 0.121569, 1 )
 
 [node name="GUI" type="CanvasLayer"]
 script = ExtResource( 3 )
@@ -13,25 +40,96 @@ script = ExtResource( 3 )
 [node name="CenterContainer" type="CenterContainer" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-margin_left = -305.464
-margin_top = 9.96447
-margin_right = -11.4644
-margin_bottom = 73.9645
+margin_left = -264.0
+margin_top = 10.0
+margin_right = -12.0
+margin_bottom = 64.0
 __meta__ = {
-"_edit_group_": true,
 "_edit_use_anchors_": false
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer"]
-margin_left = 146.0
-margin_top = 32.0
-margin_right = 146.0
-margin_bottom = 32.0
+margin_left = 88.0
+margin_top = 16.0
+margin_right = 163.0
+margin_bottom = 37.0
+alignment = 1
 
 [node name="FPSLabel" type="Label" parent="CenterContainer/HBoxContainer"]
-visible = false
 margin_right = 75.0
 margin_bottom = 21.0
 custom_fonts/font = SubResource( 1 )
 custom_colors/font_color_shadow = Color( 0.137255, 0.129412, 0.129412, 1 )
 text = "FPS:"
+
+[node name="MessageContainer" type="HBoxContainer" parent="."]
+modulate = Color( 0, 0, 0, 1 )
+material = SubResource( 7 )
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 25.0
+margin_top = 85.0
+margin_right = -14.0
+margin_bottom = 188.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MessageContainer"]
+margin_right = 921.0
+margin_bottom = 103.0
+size_flags_horizontal = 3
+custom_constants/separation = 0
+alignment = 1
+
+[node name="margin" type="VBoxContainer" parent="MessageContainer/HBoxContainer"]
+margin_right = 25.0
+margin_bottom = 103.0
+rect_min_size = Vector2( 25, 0 )
+
+[node name="Panel" type="Panel" parent="MessageContainer/HBoxContainer/margin"]
+margin_right = 25.0
+margin_bottom = 103.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 4 )
+
+[node name="PanelContainer" type="PanelContainer" parent="MessageContainer/HBoxContainer"]
+margin_left = 25.0
+margin_right = 896.0
+margin_bottom = 103.0
+size_flags_horizontal = 3
+custom_styles/panel = SubResource( 5 )
+
+[node name="message_label" type="Label" parent="MessageContainer/HBoxContainer/PanelContainer"]
+margin_top = 45.0
+margin_right = 871.0
+margin_bottom = 58.0
+custom_fonts/font = SubResource( 3 )
+custom_colors/font_color = Color( 0.784314, 0.8, 1, 1 )
+text = "lalasd"
+align = 1
+uppercase = true
+
+[node name="margin3" type="VBoxContainer" parent="MessageContainer/HBoxContainer"]
+margin_left = 896.0
+margin_right = 921.0
+margin_bottom = 103.0
+rect_min_size = Vector2( 25, 0 )
+
+[node name="Panel" type="Panel" parent="MessageContainer/HBoxContainer/margin3"]
+margin_right = 25.0
+margin_bottom = 103.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_styles/panel = SubResource( 6 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/hide_message = ExtResource( 6 )
+anims/show_message = ExtResource( 5 )
+
+[node name="MessageTimer" type="Timer" parent="."]
+__meta__ = {
+"_editor_description_": "Timer used to control the time a message keeps visible at screen."
+}

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://src/Levels/ModularScenes/Office1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/Entities/Player.tscn" type="PackedScene" id=2]
@@ -33,6 +33,9 @@ extents = Vector2( 32, 24 )
 
 [sub_resource type="RectangleShape2D" id=11]
 extents = Vector2( 16, 112 )
+
+[sub_resource type="RectangleShape2D" id=12]
+extents = Vector2( 40, 160 )
 
 [sub_resource type="OccluderPolygon2D" id=2]
 closed = false
@@ -469,6 +472,7 @@ position = Vector2( -79, 0 )
 [node name="Triggers" type="Node2D" parent="Entities"]
 
 [node name="Trigger1" parent="Entities/Triggers" instance=ExtResource( 11 )]
+visible = false
 call_function_enter = "_on_player_outside"
 call_function_exit = "_on_player_inside"
 
@@ -477,6 +481,7 @@ position = Vector2( 4407, 120 )
 shape = SubResource( 6 )
 
 [node name="TriggerCam1" parent="Entities/Triggers" instance=ExtResource( 11 )]
+visible = false
 call_function_enter = "camera_move_to"
 call_args_enter = [ 0 ]
 
@@ -485,6 +490,7 @@ position = Vector2( 423, 384 )
 shape = SubResource( 7 )
 
 [node name="TriggerCam2" parent="Entities/Triggers" instance=ExtResource( 11 )]
+visible = false
 position = Vector2( 647, -8 )
 call_function_enter = "camera_move_to"
 call_args_enter = [ 1 ]
@@ -494,6 +500,7 @@ position = Vector2( 423, 384 )
 shape = SubResource( 7 )
 
 [node name="TriggerCam3" parent="Entities/Triggers" instance=ExtResource( 11 )]
+visible = false
 position = Vector2( 1287, -8 )
 call_function_enter = "camera_move_to"
 call_args_enter = [ 2 ]
@@ -503,6 +510,7 @@ position = Vector2( 423, 384 )
 shape = SubResource( 7 )
 
 [node name="TriggerCam4" parent="Entities/Triggers" instance=ExtResource( 11 )]
+visible = false
 call_function_enter = "camera_move_to"
 call_args_enter = [ 3 ]
 
@@ -511,6 +519,7 @@ position = Vector2( 2271, 384 )
 shape = SubResource( 8 )
 
 [node name="TriggerCam5" parent="Entities/Triggers" instance=ExtResource( 11 )]
+visible = false
 position = Vector2( 2479, 0 )
 call_function_enter = "camera_move_to"
 call_args_enter = [ 4, false ]
@@ -534,6 +543,45 @@ shape = SubResource( 10 )
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="Entities/Triggers/RestoreCamera1"]
 position = Vector2( 824, 256 )
 shape = SubResource( 11 )
+
+[node name="ShowMessage1" parent="Entities/Triggers" instance=ExtResource( 11 )]
+call_function_enter = "show_message"
+call_args_enter = [ "Something is not right here...", 3.0 ]
+trigger_once = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/ShowMessage1"]
+position = Vector2( 2255, 384 )
+shape = SubResource( 12 )
+
+[node name="ShowMessage2" parent="Entities/Triggers" instance=ExtResource( 11 )]
+position = Vector2( -1561, -512 )
+call_function_enter = "show_message"
+call_args_enter = [ "......?", 2.0 ]
+trigger_once = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/ShowMessage2"]
+position = Vector2( 2255, 384 )
+shape = SubResource( 12 )
+
+[node name="ShowMessage3" parent="Entities/Triggers" instance=ExtResource( 11 )]
+position = Vector2( 1199, 64 )
+call_function_enter = "show_message"
+call_args_enter = [ "Nothing like a bit of fresh air", 3.0 ]
+trigger_once = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/ShowMessage3"]
+position = Vector2( 2255, 384 )
+shape = SubResource( 12 )
+
+[node name="ShowMessage4" parent="Entities/Triggers" instance=ExtResource( 11 )]
+position = Vector2( 3111, 0 )
+call_function_enter = "show_message"
+call_args_enter = [ "This seems to be locked...", 3.0 ]
+trigger_once = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/ShowMessage4"]
+position = Vector2( 2255, 384 )
+shape = SubResource( 12 )
 
 [node name="StaticEntities" type="Node2D" parent="."]
 position = Vector2( -648, -86.5 )
