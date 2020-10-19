@@ -11,6 +11,7 @@ func _enter_tree():
 	
 func _ready():
 	Game.ActiveCamera.update_limits(map_limit_start, map_limit_end);
+	LevelStaticCamera.update_limits(map_limit_start, map_limit_end);
 	CameraPaths = $Cameras/CameraPath.get_children();
 
 func _on_player_outside():
@@ -27,10 +28,18 @@ func select_camera(cameraStr: String):
 	Game.set_active_camera(CameraNode);
 
 func camera_move_to(path_index: int, interpolated: bool = true):
+	if Game.ActiveCamera != LevelStaticCamera:
+		LevelStaticCamera.global_position = Game.ActiveCamera.global_position;
 	Game.set_active_camera(LevelStaticCamera);
-	Game.ActiveCamera.move_to(CameraPaths[path_index], interpolated);
+	Game.ActiveCamera.move_to_point2d(CameraPaths[path_index], interpolated);
 
-func reset_camera():
+func reset_camera(interpolated: bool = false):
+	interpolated = true;
+	if interpolated:
+		var playerCamera_initPos: Vector2 = Game.Player.get_camera().Util.init_pos;
+		var cameraOffset: Vector2 = (Game.ActiveCamera.global_position - Game.Player.get_camera().global_position);
+		Game.Player.get_camera().position += cameraOffset;
+		Game.Player.get_camera().move_to(playerCamera_initPos, true, false);
 	Game.set_active_camera(Game.Player.get_camera());
 
 func show_message(msg: String, time: float) -> void:

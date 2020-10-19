@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://assets/uipack_fixed/PNG/grey_button12.png" type="Texture" id=1]
 [ext_resource path="res://assets/fonts/PixelOperator8-Bold.ttf" type="DynamicFontData" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://assets/fonts/PixelOperatorMonoHB8.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://src/Animations/show_message.tres" type="Animation" id=5]
 [ext_resource path="res://src/Animations/hide_message.tres" type="Animation" id=6]
+[ext_resource path="res://src/GUI/DialogSystem.tscn" type="PackedScene" id=7]
 
 [sub_resource type="DynamicFont" id=1]
 size = 20
@@ -63,6 +64,7 @@ custom_colors/font_color_shadow = Color( 0.137255, 0.129412, 0.129412, 1 )
 text = "FPS:"
 
 [node name="MessageContainer" type="HBoxContainer" parent="."]
+visible = false
 modulate = Color( 0, 0, 0, 1 )
 material = SubResource( 7 )
 anchor_top = 1.0
@@ -133,3 +135,6 @@ anims/show_message = ExtResource( 5 )
 __meta__ = {
 "_editor_description_": "Timer used to control the time a message keeps visible at screen."
 }
+
+[node name="DialogSystem" parent="." instance=ExtResource( 7 )]
+visible = false

@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=2]
+[gd_scene load_steps=27 format=2]
 
 [ext_resource path="res://src/Levels/ModularScenes/Office1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/Entities/Player.tscn" type="PackedScene" id=2]
@@ -12,50 +12,56 @@
 [ext_resource path="res://src/Levels/Backgrounds/Mountains1.tscn" type="PackedScene" id=10]
 [ext_resource path="res://src/Entities/Misc/TriggerEntity.tscn" type="PackedScene" id=11]
 [ext_resource path="res://src/Entities/Misc/CameraEntity.tscn" type="PackedScene" id=12]
+[ext_resource path="res://src/Levels/ModularScenes/Rain.tscn" type="PackedScene" id=13]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
 
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 1048, 488 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 224, 96 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 176, 96 )
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 96, 24 )
+
 [sub_resource type="RectangleShape2D" id=6]
-extents = Vector2( 1112, 488 )
+extents = Vector2( 64, 24 )
 
 [sub_resource type="RectangleShape2D" id=7]
-extents = Vector2( 312, 168 )
+extents = Vector2( 32, 96 )
 
 [sub_resource type="RectangleShape2D" id=8]
-extents = Vector2( 248, 160 )
-
-[sub_resource type="RectangleShape2D" id=9]
-extents = Vector2( 56, 24 )
-
-[sub_resource type="RectangleShape2D" id=10]
-extents = Vector2( 32, 24 )
-
-[sub_resource type="RectangleShape2D" id=11]
-extents = Vector2( 16, 112 )
-
-[sub_resource type="RectangleShape2D" id=12]
 extents = Vector2( 40, 160 )
 
-[sub_resource type="OccluderPolygon2D" id=2]
+[sub_resource type="OccluderPolygon2D" id=9]
 closed = false
 cull_mode = 1
-polygon = PoolVector2Array( 3144, -73.5, 3144, -265.5, 3208, -265.5, 3208, -73.5 )
+polygon = PoolVector2Array( 3013.86, -22.2298, 3144, -73.5, 3144, -265.5, 3208, -265.5, 3208, -73.5 )
 
-[sub_resource type="OccluderPolygon2D" id=3]
+[sub_resource type="OccluderPolygon2D" id=10]
 closed = false
 cull_mode = 1
-polygon = PoolVector2Array( 1856, -160, 1856, -352, 1920, -352, 1920, -160 )
+polygon = PoolVector2Array( 1856, -160, 1856, -352, 1920, -352, 1920, -160, 2150.35, -68.9169 )
 
-[sub_resource type="OccluderPolygon2D" id=4]
+[sub_resource type="OccluderPolygon2D" id=11]
 closed = false
 cull_mode = 2
 polygon = PoolVector2Array( 640, 160, 640, 352, 704, 352, 704, 160 )
 
-[sub_resource type="OccluderPolygon2D" id=5]
+[sub_resource type="OccluderPolygon2D" id=12]
 closed = false
 cull_mode = 2
 polygon = PoolVector2Array( 1920, 352, 1984, 352, 1984, 160, 1920, 160, 1920, 352 )
+
+[sub_resource type="OccluderPolygon2D" id=13]
+closed = false
+cull_mode = 2
+polygon = PoolVector2Array( 2432, -32, 2432, 32, 2624, 32, 2624, -32 )
 
 [node name="DemoLevel" type="Node2D"]
 script = ExtResource( 4 )
@@ -65,22 +71,25 @@ map_limit_end = Vector2( 5730, 610 )
 [node name="Tiles" type="Node2D" parent="."]
 position = Vector2( 32, 32 )
 
-[node name="Floor1" type="Node2D" parent="Tiles"]
+[node name="Inside" type="Node2D" parent="Tiles"]
+z_index = 2
 
-[node name="Office1" parent="Tiles/Floor1" instance=ExtResource( 1 )]
+[node name="Floor1" type="Node2D" parent="Tiles/Inside"]
+
+[node name="Office1" parent="Tiles/Inside/Floor1" instance=ExtResource( 1 )]
 position = Vector2( -32, 160 )
 
-[node name="Office2" type="Node2D" parent="Tiles/Floor1"]
+[node name="Office2" type="Node2D" parent="Tiles/Inside/Floor1"]
 position = Vector2( 608, 160 )
 
-[node name="back_decals1_nonsolid" type="TileMap" parent="Tiles/Floor1/Office2"]
+[node name="back_decals1_nonsolid" type="TileMap" parent="Tiles/Inside/Floor1/Office2"]
 tile_set = ExtResource( 5 )
 collision_layer = 0
 collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 1, 1, 0, 2, 1, 0, 3, 1, 0, 4, 1, 0, 5, 1, 0, 6, 1, 0, 7, 1, 0, 8, 1, 0, 9, 1, 0, 65537, 1, 0, 65538, 1, 0, 65539, 1, 0, 65540, 1, 0, 65541, 1, 0, 65542, 1, 0, 65543, 1, 0, 65544, 1, 0, 65545, 1, 0, 131073, 1, 0, 131074, 1, 0, 131075, 1, 0, 131076, 1, 0, 131077, 1, 0, 131078, 1, 0, 131079, 1, 0, 131080, 1, 0, 131081, 1, 0, 131082, 1, 0, 196609, 1, 0, 196610, 1, 0, 196611, 1, 0, 196612, 1, 0, 196613, 1, 0, 196614, 1, 0, 196615, 1, 0, 196616, 1, 0, 196617, 1, 0, 196618, 1, 0, 262145, 1, 0, 262146, 1, 0, 262147, 1, 0, 262148, 1, 0, 262149, 1, 0, 262150, 1, 0, 262151, 1, 0, 262152, 1, 0, 262153, 1, 0, 262154, 1, 0, 327681, 1, 0, 327682, 1, 0, 327683, 1, 0, 327684, 1, 0, 327685, 1, 0, 327686, 1, 0, 327687, 1, 0, 327688, 1, 0, 327689, 1, 0, 327690, 1, 0, 327700, 1, 0 )
 
-[node name="back_decals2_nonsolid2" type="TileMap" parent="Tiles/Floor1/Office2"]
+[node name="back_decals2_nonsolid2" type="TileMap" parent="Tiles/Inside/Floor1/Office2"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
@@ -88,21 +97,22 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65538, -1610612724, 0, 65540, -1610612724, 0, 65542, -1610612724, 0, 65544, -1610612724, 0, 65546, -1610612724, 0, 65548, -1610612724, 0, 65550, -1610612724, 0, 65552, -1610612724, 0, 65554, -1610612724, 0, 327700, 21, 0 )
 
-[node name="walls_solid" type="TileMap" parent="Tiles/Floor1/Office2"]
+[node name="walls_solid" type="TileMap" parent="Tiles/Inside/Floor1/Office2"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 2
 format = 1
 tile_data = PoolIntArray( -65534, 0, 0, -65532, 0, 0, -65530, 0, 0, -65528, 0, 0, -65526, 0, 0, -65524, 0, 0, -65522, 0, 0, -65520, 0, 0, -65518, 0, 0, -65516, 0, 0, 65556, 0, 0, 196628, 0, 0, 720898, 3, 0, 720900, 3, 0, 720902, 3, 0, 720904, 3, 0, 720906, 3, 0, 720908, 3, 0, 720910, 3, 0, 720912, 3, 0, 720914, 3, 0, 720916, 3, 0 )
 
-[node name="front_decals1_solid" type="TileMap" parent="Tiles/Floor1/Office2"]
+[node name="front_decals1_nonsolid2" type="TileMap" parent="Tiles/Inside/Floor1/Office2"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 16, 16 )
-collision_layer = 2
+collision_layer = 0
+collision_mask = 2147483648
 format = 1
 tile_data = PoolIntArray( 655377, 536870939, 0, 655383, 27, 0, 917515, 536870931, 0, 917520, 24, 0, 917524, 536870938, 0, 917528, 536870936, 0, 917533, 19, 0 )
 
-[node name="front_decals1_nonsolid" type="TileMap" parent="Tiles/Floor1/Office2"]
+[node name="front_decals1_nonsolid" type="TileMap" parent="Tiles/Inside/Floor1/Office2"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
@@ -110,17 +120,17 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 720898, 4, 0, 720900, 4, 0, 720902, 4, 0, 720904, 4, 0, 720906, 4, 0, 720908, 4, 0, 720910, 4, 0, 720912, 4, 0, 720914, 4, 0 )
 
-[node name="Office3" type="Node2D" parent="Tiles/Floor1"]
+[node name="Office3" type="Node2D" parent="Tiles/Inside/Floor1"]
 position = Vector2( 1248, 160 )
 
-[node name="back_decals1_nonsolid" type="TileMap" parent="Tiles/Floor1/Office3"]
+[node name="back_decals1_nonsolid" type="TileMap" parent="Tiles/Inside/Floor1/Office3"]
 tile_set = ExtResource( 5 )
 collision_layer = 0
 collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 1, 1, 0, 2, 1, 0, 3, 1, 0, 4, 1, 0, 5, 1, 0, 6, 1, 0, 7, 1, 0, 8, 1, 0, 9, 1, 0, 65537, 1, 0, 65538, 1, 0, 65539, 1, 0, 65540, 1, 0, 65541, 1, 0, 65542, 1, 0, 65543, 1, 0, 65544, 1, 0, 65545, 1, 0, 131073, 1, 0, 131074, 1, 0, 131075, 1, 0, 131076, 1, 0, 131077, 1, 0, 131081, 1, 0, 196609, 1, 0, 196610, 1, 0, 196611, 1, 0, 196612, 1, 0, 196613, 1, 0, 196614, 1, 0, 196615, 1, 0, 196616, 1, 0, 196617, 1, 0, 262145, 1, 0, 262146, 1, 0, 262147, 1, 0, 262148, 1, 0, 262149, 1, 0, 262150, 1, 0, 262151, 1, 0, 262152, 1, 0, 262153, 1, 0, 327681, 1, 0, 327682, 1, 0, 327683, 1, 0, 327684, 1, 0, 327685, 1, 0, 327686, 1, 0, 327687, 1, 0, 327688, 1, 0, 327689, 1, 0 )
 
-[node name="back_decals2_nonsolid2" type="TileMap" parent="Tiles/Floor1/Office3"]
+[node name="back_decals2_nonsolid2" type="TileMap" parent="Tiles/Inside/Floor1/Office3"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
@@ -128,21 +138,22 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65538, -1610612724, 0, 65539, -1610612724, 0, 65541, -1610612723, 0, 65544, 6, 0, 65546, 6, 0, 65548, 6, 0, 65550, 6, 0, 65552, 6, 0, 65554, 6, 0, 196613, 1610612748, 0, 327685, 1610612748, 0, 458757, 1610612748, 0, 589829, 1610612748, 0 )
 
-[node name="walls_solid" type="TileMap" parent="Tiles/Floor1/Office3"]
+[node name="walls_solid" type="TileMap" parent="Tiles/Inside/Floor1/Office3"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 2
 format = 1
 tile_data = PoolIntArray( -65534, 0, 0, -65532, 0, 0, -65530, 0, 0, -65528, 0, 0, -65526, 0, 0, -65524, 0, 0, -65522, 0, 0, -65520, 0, 0, -65518, 0, 0, 720898, 3, 0, 720900, 3, 0, 720902, 3, 0, 720904, 3, 0, 720906, 3, 0, 720908, 3, 0, 720910, 3, 0, 720912, 3, 0, 720914, 3, 0 )
 
-[node name="front_decals1_solid" type="TileMap" parent="Tiles/Floor1/Office3"]
+[node name="front_decals1_nonsolid2" type="TileMap" parent="Tiles/Inside/Floor1/Office3"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
-collision_layer = 2
+collision_layer = 0
+collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65550, 20, 0, 327688, 18, 0, 393228, 8, 0, 393230, 8, 0, 393232, 8, 0, 589835, -1610612717, 0 )
 
-[node name="front_decals1_nonsolid" type="TileMap" parent="Tiles/Floor1/Office3"]
+[node name="front_decals1_nonsolid" type="TileMap" parent="Tiles/Inside/Floor1/Office3"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
@@ -150,10 +161,10 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 720898, 4, 0, 720900, 4, 0, 720902, 4, 0, 720904, 4, 0, 720906, 4, 0, 720908, 4, 0, 720910, 4, 0, 720912, 4, 0, 720914, 4, 0 )
 
-[node name="Office4" type="Node2D" parent="Tiles/Floor1"]
+[node name="Office4" type="Node2D" parent="Tiles/Inside/Floor1"]
 position = Vector2( 1888, 160 )
 
-[node name="back_decals1_nonsolid" type="TileMap" parent="Tiles/Floor1/Office4"]
+[node name="back_decals1_nonsolid" type="TileMap" parent="Tiles/Inside/Floor1/Office4"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
@@ -161,7 +172,7 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65538, 2, 0, 65540, 2, 0, 65542, 2, 0, 65544, 2, 0, 65546, 2, 0, 65548, 2, 0, 65550, 2, 0, 65552, 1, 0, 131080, 2, 0, 131082, 2, 0, 131084, 2, 0, 131086, 2, 0, 131088, 1610612737, 0, 196610, 2, 0, 196612, 2, 0, 196614, 2, 0, 196616, 2, 0, 196618, 2, 0, 196622, 2, 0, 262152, 2, 0, 262154, 2, 0, 262155, 2, 0, 262157, 2, 0, 262158, 2, 0, 327680, 2, 0, 327682, 2, 0, 327683, 2, 0, 327685, 2, 0, 327687, 2, 0, 327689, 2, 0, 327690, 2, 0, 327691, 2, 0, 393216, 2, 0, 393219, 2, 0, 393224, 2, 0, 393226, 2, 0, 393227, 2, 0, 393229, 2, 0, 393230, 2, 0, 458752, 2, 0, 458754, 2, 0, 458757, 2, 0, 458758, 2, 0, 458759, 2, 0, 458760, 2, 0, 458763, 2, 0, 458764, 2, 0, 458766, 2, 0, 524288, 2, 0, 524292, 2, 0, 524294, 2, 0, 524296, 2, 0, 524298, 2, 0, 524299, 2, 0, 589824, 2, 0, 589826, 2, 0, 589828, 2, 0, 589830, 2, 0, 589832, 2, 0, 589834, 2, 0, 589836, 2, 0, 589838, 2, 0, 655360, 2, 0 )
 
-[node name="back_decals2_nonsolid2" type="TileMap" parent="Tiles/Floor1/Office4"]
+[node name="back_decals2_nonsolid2" type="TileMap" parent="Tiles/Inside/Floor1/Office4"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
@@ -169,32 +180,32 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65546, -1610612722, 0, 65548, -1610612724, 0, 65550, -1610612724, 0, 327680, 23, 0 )
 
-[node name="walls_solid" type="TileMap" parent="Tiles/Floor1/Office4"]
+[node name="walls_solid" type="TileMap" parent="Tiles/Inside/Floor1/Office4"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 2
 format = 1
-tile_data = PoolIntArray( -65536, 0, 0, -65534, 0, 0, -65532, 0, 0, -65530, 0, 0, -65528, 0, 0, -65526, 0, 0, -65522, 0, 0, -65520, -1610612736, 0, 65536, 0, 0, 65552, -1610612736, 0, 196608, 0, 0, 196624, -1610612736, 0, 327696, -1610612736, 0, 458768, -1610612736, 0, 589840, -1610612736, 0, 720896, 3, 0, 720898, 3, 0, 720900, 3, 0, 720902, 3, 0, 720904, 3, 0, 720906, 3, 0, 720908, 3, 0, 720910, 3, 0, 720912, 3, 0 )
+tile_data = PoolIntArray( -65536, 0, 0, -65534, 0, 0, -65532, 0, 0, -65530, 0, 0, -65528, 0, 0, -65526, 0, 0, -65520, 0, 0, 65536, 0, 0, 65552, 0, 0, 196608, 0, 0, 196624, 0, 0, 327696, 0, 0, 458768, 0, 0, 589840, 0, 0, 720896, 3, 0, 720898, 3, 0, 720900, 3, 0, 720902, 3, 0, 720904, 3, 0, 720906, 3, 0, 720908, 3, 0, 720910, 3, 0, 720912, 3, 0 )
 
-[node name="front_decals1_solid" type="TileMap" parent="Tiles/Floor1/Office4"]
+[node name="front_decals1_solid" type="TileMap" parent="Tiles/Inside/Floor1/Office4"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 2
 format = 1
-tile_data = PoolIntArray( 65544, 20, 0, 327693, 1610612753, 0, 458762, 17, 0, 458765, -1610612720, 0, 589833, 16, 0, 589835, -1073741808, 0, 589837, -1610612720, 0 )
+tile_data = PoolIntArray( 327693, 1610612753, 0, 458762, 17, 0, 458765, -1610612720, 0, 589833, 16, 0, 589835, -1073741808, 0, 589837, -1610612720, 0 )
 
-[node name="front_decals1_nonsolid" type="TileMap" parent="Tiles/Floor1/Office4"]
+[node name="front_decals1_nonsolid" type="TileMap" parent="Tiles/Inside/Floor1/Office4"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
 collision_mask = 0
 format = 1
-tile_data = PoolIntArray( -65534, 1610612746, 0, -65533, 1610612746, 0, -65532, 1610612746, 0, -65531, 1610612746, 0, -65530, 1610612746, 0, -65529, 1610612746, 0, -65528, 1610612746, 0, -65527, 1610612746, 0, -65526, 1610612746, 0, -65525, 1610612746, 0, -65524, 1610612746, 0, -65523, 1610612746, 0, -65522, 1610612746, 0, 196608, 1610612746, 0, 720904, 10, 0, 720906, 10, 0, 720908, 10, 0, 720910, 10, 0 )
+tile_data = PoolIntArray( -65534, 1610612746, 0, -65533, 1610612746, 0, -65532, 1610612746, 0, -65531, 1610612746, 0, -65530, 1610612746, 0, -65529, 1610612746, 0, -65528, 1610612746, 0, -65527, 1610612746, 0, -65526, 1610612746, 0, -65525, 1610612746, 0, -65524, 1610612746, 0, -65523, 1610612746, 0, -65522, 1610612746, 0, 65544, 20, 0, 196608, 1610612746, 0, 720904, 10, 0, 720906, 10, 0, 720908, 10, 0, 720910, 10, 0 )
 
-[node name="Office5" type="Node2D" parent="Tiles/Floor1"]
+[node name="Office5" type="Node2D" parent="Tiles/Inside/Floor1"]
 position = Vector2( 2464, 160 )
 
-[node name="back_decals1_nonsolid" type="TileMap" parent="Tiles/Floor1/Office5"]
+[node name="back_decals1_nonsolid" type="TileMap" parent="Tiles/Inside/Floor1/Office5"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
@@ -202,7 +213,7 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65538, 1, 0, 65540, 1, 0, 65542, 1, 0, 65544, 1, 0, 65546, 1, 0, 65548, 1, 0, 65550, 1, 0, 65552, 1, 0, 65554, 1, 0, 131078, 1, 0, 131079, 1, 0, 131080, 1, 0, 131082, 1, 0, 131083, 1, 0, 131084, 1, 0, 131088, -1610612735, 0, 196610, 1, 0, 196612, 1, 0, 196616, -1610612735, 0, 196618, -1610612735, 0, 196620, -1610612735, 0, 196622, 1, 0, 196626, -1610612735, 0, 262150, 1, 0, 262159, -1610612735, 0, 262160, -1610612735, 0, 262162, -1610612735, 0, 327682, 1, 0, 327683, 1, 0, 327685, 1, 0, 327686, 1, 0, 327687, -1610612735, 0, 327693, -1610612735, 0, 327694, -1610612735, 0, 327695, -1610612735, 0, 327696, -1610612735, 0, 327697, -1610612735, 0, 327698, -1610612735, 0, 327700, 1, 0, 393219, 1, 0, 458754, 1, 0, 458757, 1, 0, 458758, 1, 0, 458759, 1, 0, 458760, 1, 0, 458762, 1, 0, 458763, 1, 0, 458764, 1, 0, 458766, 1, 0, 458768, 1, 0, 458770, 1, 0, 458772, 1, 0, 524292, 1, 0, 524294, 1, 0, 524296, 1, 0, 524298, 1, 0, 589826, 1, 0, 589828, 1, 0, 589830, 1, 0, 589832, 1, 0, 589834, 1, 0, 589836, 1, 0, 589838, 1, 0, 589840, 1, 0, 589842, 1, 0, 589844, 1, 0 )
 
-[node name="back_decals2_nonsolid2" type="TileMap" parent="Tiles/Floor1/Office5"]
+[node name="back_decals2_nonsolid2" type="TileMap" parent="Tiles/Inside/Floor1/Office5"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
@@ -210,21 +221,21 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65538, -1610612724, 0, 65540, -1610612724, 0, 65542, -1610612724, 0, 65544, -1610612724, 0, 65546, -1610612724, 0, 65548, -1610612724, 0, 65550, 14, 0, 327700, 21, 0 )
 
-[node name="walls_solid" type="TileMap" parent="Tiles/Floor1/Office5"]
+[node name="walls_solid" type="TileMap" parent="Tiles/Inside/Floor1/Office5"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 2
 format = 1
-tile_data = PoolIntArray( -196588, 1610612736, 0, -65536, 0, 0, -65534, 0, 0, -65532, 0, 0, -65530, 0, 0, -65528, 0, 0, -65526, 0, 0, -65524, 0, 0, -65522, 0, 0, -65518, 0, 0, -65516, 0, 0, 65536, 0, 0, 65556, 0, 0, 196608, 0, 0, 196628, 0, 0, 327680, 0, 0, 458752, 0, 0, 589824, 0, 0, 720896, 3, 0, 720898, 3, 0, 720900, 3, 0, 720902, 3, 0, 720904, 3, 0, 720906, 3, 0, 720908, 3, 0, 720910, 3, 0, 720912, 3, 0, 720914, 3, 0, 720916, 3, 0 )
+tile_data = PoolIntArray( -327660, 0, 0, -196588, 1610612736, 0, -65536, 0, 0, -65534, 0, 0, -65532, 0, 0, -65530, 0, 0, -65528, 0, 0, -65526, 0, 0, -65524, 0, 0, -65522, 0, 0, -65516, 0, 0, 65536, 0, 0, 65556, 0, 0, 196608, 0, 0, 196628, 0, 0, 327680, 0, 0, 458752, 0, 0, 589824, 0, 0, 720896, 3, 0, 720898, 3, 0, 720900, 3, 0, 720902, 3, 0, 720904, 3, 0, 720906, 3, 0, 720908, 3, 0, 720910, 3, 0, 720912, 3, 0, 720914, 3, 0, 720916, 3, 0 )
 
-[node name="front_decals1_solid" type="TileMap" parent="Tiles/Floor1/Office5"]
+[node name="front_decals1_solid" type="TileMap" parent="Tiles/Inside/Floor1/Office5"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 16, 16 )
 collision_layer = 2
 format = 1
 tile_data = PoolIntArray( 196644, -1610612716, 0, 655366, 18, 0, 655377, 1610612744, 0, 655381, 1610612744, 0, 655383, 1610612744, 0, 917515, 19, 0 )
 
-[node name="front_decals1_nonsolid" type="TileMap" parent="Tiles/Floor1/Office5"]
+[node name="front_decals1_nonsolid" type="TileMap" parent="Tiles/Inside/Floor1/Office5"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
@@ -232,23 +243,34 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 720898, 6, 0, 720900, 6, 0, 720902, 6, 0, 720904, 6, 0, 720906, 6, 0, 720908, 6, 0, 720910, 6, 0, 720912, 6, 0, 720914, 6, 0, 720916, 6, 0 )
 
-[node name="Floor2" type="Node2D" parent="Tiles"]
-position = Vector2( 0, -512 )
+[node name="Lights" type="Node2D" parent="Tiles/Inside/Floor1"]
+material = SubResource( 1 )
+position = Vector2( -32, 0 )
 
-[node name="Office1" parent="Tiles/Floor2" instance=ExtResource( 1 )]
+[node name="LightsMap" type="TileMap" parent="Tiles/Inside/Floor1/Lights"]
+use_parent_material = true
+tile_set = ExtResource( 7 )
+cell_size = Vector2( 16, 16 )
+format = 1
+tile_data = PoolIntArray( 786436, 536870912, 0, 786440, 536870912, 0, 786444, 536870912, 0, 786448, 536870912, 0, 786452, 536870912, 0, 786456, 536870912, 0, 786460, 536870912, 0, 786528, 536870912, 0, 786532, 536870912, 0, 786536, 536870912, 0, 786540, 3, 0, 786544, 536870912, 0, 786548, 536870912, 0, 786568, 3, 0, 852160, -1610612733, 0, 1310744, 4, 0, 1310777, 536870914, 0, 1310783, 2, 0, 1310816, 2, 0, 1310882, 2, 0 )
+
+[node name="Floor2" type="Node2D" parent="Tiles/Inside"]
+position = Vector2( 0, -576 )
+
+[node name="Office1" parent="Tiles/Inside/Floor2" instance=ExtResource( 1 )]
 position = Vector2( 2464, 160 )
 
-[node name="Office2" type="Node2D" parent="Tiles/Floor2"]
+[node name="Office2" type="Node2D" parent="Tiles/Inside/Floor2"]
 position = Vector2( 1824, 160 )
 
-[node name="back_decals1_nonsolid" type="TileMap" parent="Tiles/Floor2/Office2"]
+[node name="back_decals1_nonsolid" type="TileMap" parent="Tiles/Inside/Floor2/Office2"]
 tile_set = ExtResource( 5 )
 collision_layer = 0
 collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 1, 1, 0, 2, 1, 0, 3, 1, 0, 4, 1, 0, 5, 1, 0, 6, 1, 0, 7, 1, 0, 8, 1, 0, 9, 1, 0, 65537, 1, 0, 65538, 1, 0, 65539, 1, 0, 65540, 1, 0, 65541, 1, 0, 65542, 1, 0, 65543, 1, 0, 65544, 1, 0, 65545, 1, 0, 131073, 1, 0, 131074, 1, 0, 131075, 1, 0, 131076, 1, 0, 131077, 1, 0, 131078, 1, 0, 131079, 1, 0, 131080, 1, 0, 131081, 1, 0, 196609, 1, 0, 196610, 1, 0, 196611, 1, 0, 196612, 1, 0, 196613, 1, 0, 196614, 1, 0, 196615, 1, 0, 196616, 1, 0, 196617, 1, 0, 262145, 1, 0, 262146, 1, 0, 262147, 1, 0, 262148, 1, 0, 262149, 1, 0, 262150, 1, 0, 262151, 1, 0, 262152, 1, 0, 262153, 1, 0, 327681, 1, 0, 327682, 1, 0, 327683, 1, 0, 327684, 1, 0, 327685, 1, 0, 327686, 1, 0, 327687, 1, 0, 327688, 1, 0, 327689, 1, 0 )
 
-[node name="back_decals2_nonsolid2" type="TileMap" parent="Tiles/Floor2/Office2"]
+[node name="back_decals2_nonsolid2" type="TileMap" parent="Tiles/Inside/Floor2/Office2"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
@@ -256,40 +278,41 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65540, -1610612722, 0, 65542, -1610612724, 0, 65544, -1610612724, 0, 65546, -1610612724, 0, 65548, -1610612724, 0, 65550, -1610612724, 0, 65552, 14, 0 )
 
-[node name="walls_solid" type="TileMap" parent="Tiles/Floor2/Office2"]
+[node name="walls_solid" type="TileMap" parent="Tiles/Inside/Floor2/Office2"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 2
 format = 1
-tile_data = PoolIntArray( -65534, 0, 0, -65532, 0, 0, -65530, 0, 0, -65528, 0, 0, -65526, 0, 0, -65524, 0, 0, -65522, 0, 0, -65520, 0, 0, -65518, 0, 0, 720898, 3, 0, 720900, 3, 0, 720902, 3, 0, 720904, 3, 0, 720906, 3, 0, 720908, 3, 0, 720912, 3, 0, 720914, 3, 0 )
+tile_data = PoolIntArray( -65534, 0, 0, -65532, 0, 0, -65530, 0, 0, -65528, 0, 0, -65526, 0, 0, -65524, 0, 0, -65522, 0, 0, -65520, 0, 0, -65518, 0, 0, 720898, 3, 0, 720900, 3, 0, 720902, 3, 0, 720904, 3, 0, 720906, 3, 0, 720908, 3, 0, 720914, 3, 0 )
 
-[node name="front_decals1_solid" type="TileMap" parent="Tiles/Floor2/Office2"]
+[node name="front_decals2_nonsolid" type="TileMap" parent="Tiles/Inside/Floor2/Office2"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 16, 16 )
-collision_layer = 2
+collision_layer = 0
+collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 655377, 536870939, 0, 917515, 536870931, 0, 917520, 24, 0, 917524, 536870938, 0, 917528, 536870936, 0 )
 
-[node name="front_decals1_nonsolid" type="TileMap" parent="Tiles/Floor2/Office2"]
+[node name="front_decals1_nonsolid" type="TileMap" parent="Tiles/Inside/Floor2/Office2"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
 collision_mask = 0
 format = 1
-tile_data = PoolIntArray( 720898, 4, 0, 720900, 4, 0, 720902, 4, 0, 720904, 4, 0, 720906, 4, 0, 720908, 4, 0, 720912, 4, 0, 720914, 4, 0 )
+tile_data = PoolIntArray( 720898, 4, 0, 720900, 4, 0, 720902, 4, 0, 720904, 4, 0, 720906, 4, 0, 720908, 4, 0, 720914, 4, 0 )
 
-[node name="Office3" type="Node2D" parent="Tiles/Floor2"]
+[node name="Office3" type="Node2D" parent="Tiles/Inside/Floor2"]
 position = Vector2( 1184, 160 )
 
-[node name="back_decals1_nonsolid" type="TileMap" parent="Tiles/Floor2/Office3"]
+[node name="back_decals1_nonsolid" type="TileMap" parent="Tiles/Inside/Floor2/Office3"]
 light_mask = -2147483647
 tile_set = ExtResource( 5 )
 collision_layer = 0
 collision_mask = 0
 format = 1
-tile_data = PoolIntArray( 65526, 1, 0, 65527, 1, 0, 65528, 1, 0, 65529, 1, 0, 65530, 1, 0, 65531, 1, 0, 65532, 1, 0, 65533, 1, 0, 65534, 1, 0, 65535, 1, 0, 0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1, 0, 4, 1, 0, 5, 1, 0, 6, 1, 0, 7, 1, 0, 8, 1, 0, 9, 1, 0, 10, 1, 0, 131062, 1, 0, 131063, 1, 0, 131064, 1, 0, 131065, 1, 0, 131066, 1, 0, 131067, 1, 0, 131068, 1, 0, 131069, 1, 0, 131070, 1, 0, 131071, 1, 0, 65536, 1, 0, 65537, 1, 0, 65538, 1, 0, 65539, 1, 0, 65540, 1, 0, 65541, 1, 0, 65542, 1, 0, 65543, 1, 0, 65544, 1, 0, 65545, 1, 0, 65546, 1, 0, 196598, 1, 0, 196599, 1, 0, 196600, 1, 0, 196603, 1, 0, 196604, 1, 0, 196605, 1, 0, 196606, 1, 0, 196607, 1, 0, 131072, 1, 0, 131073, 1, 0, 131074, 1, 0, 131075, 1, 0, 131076, 1, 0, 131077, 1, 0, 131080, 1, 0, 131081, 1, 0, 131082, 1, 0, 131094, 1, 0, 262134, 1, 0, 262135, 1, 0, 262136, 1, 0, 262137, 1, 0, 262138, 1, 0, 262139, 1, 0, 262140, 1, 0, 262141, 1, 0, 262142, 1, 0, 262143, 1, 0, 196608, 1, 0, 196609, 1, 0, 196610, 1, 0, 196611, 1, 0, 196612, 1, 0, 196613, 1, 0, 196614, 1, 0, 196615, 1, 0, 196616, 1, 0, 196617, 1, 0, 196618, 1, 0, 327670, 1, 0, 327671, 1, 0, 327672, 1, 0, 327673, 1, 0, 327674, 1, 0, 327675, 1, 0, 327676, 1, 0, 327677, 1, 0, 327678, 1, 0, 327679, 1, 0, 262144, 1, 0, 262145, 1, 0, 262146, 1, 0, 262147, 1, 0, 262148, 1, 0, 262149, 1, 0, 262150, 1, 0, 262151, 1, 0, 262152, 1, 0, 262153, 1, 0, 262154, 1, 0, 393206, 1, 0, 393207, 1, 0, 393208, 1, 0, 393209, 1, 0, 393210, 1, 0, 393211, 1, 0, 393212, 1, 0, 393213, 1, 0, 393214, 1, 0, 393215, 1, 0, 327680, 1, 0, 327681, 1, 0, 327682, 1, 0, 327683, 1, 0, 327684, 1, 0, 327685, 1, 0, 327686, 1, 0, 327687, 1, 0, 327688, 1, 0, 327689, 1, 0, 327690, 1, 0, 393233, 1, 0 )
+tile_data = PoolIntArray( 65526, 1, 0, 65527, 1, 0, 65528, 1, 0, 65529, 1, 0, 65530, 1, 0, 65531, 1, 0, 65532, 1, 0, 65533, 1, 0, 65534, 1, 0, 65535, 1, 0, 0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1, 0, 4, 1, 0, 5, 1, 0, 6, 1, 0, 7, 1, 0, 8, 1, 0, 9, 1, 0, 10, 1, 0, 131062, 1, 0, 131063, 1, 0, 131064, 1, 0, 131065, 1, 0, 131066, 1, 0, 131067, 1, 0, 131068, 1, 0, 131069, 1, 0, 131070, 1, 0, 131071, 1, 0, 65536, 1, 0, 65537, 1, 0, 65538, 1, 0, 65539, 1, 0, 65540, 1, 0, 65541, 1, 0, 65542, 1, 0, 65543, 1, 0, 65544, 1, 0, 65545, 1, 0, 65546, 1, 0, 196598, 1, 0, 196599, 1, 0, 196600, 1, 0, 196603, 1, 0, 196604, 1, 0, 196605, 1, 0, 196606, 1, 0, 196607, 1, 0, 131072, 1, 0, 131073, 1, 0, 131074, 1, 0, 131075, 1, 0, 131076, 1, 0, 131077, 1, 0, 131080, 1, 0, 131081, 1, 0, 131082, 1, 0, 262134, 1, 0, 262135, 1, 0, 262136, 1, 0, 262137, 1, 0, 262138, 1, 0, 262139, 1, 0, 262140, 1, 0, 262141, 1, 0, 262142, 1, 0, 262143, 1, 0, 196608, 1, 0, 196609, 1, 0, 196610, 1, 0, 196611, 1, 0, 196612, 1, 0, 196613, 1, 0, 196614, 1, 0, 196615, 1, 0, 196616, 1, 0, 196617, 1, 0, 196618, 1, 0, 327670, 1, 0, 327671, 1, 0, 327672, 1, 0, 327673, 1, 0, 327674, 1, 0, 327675, 1, 0, 327676, 1, 0, 327677, 1, 0, 327678, 1, 0, 327679, 1, 0, 262144, 1, 0, 262145, 1, 0, 262146, 1, 0, 262147, 1, 0, 262148, 1, 0, 262149, 1, 0, 262150, 1, 0, 262151, 1, 0, 262152, 1, 0, 262153, 1, 0, 262154, 1, 0, 393206, 1, 0, 393207, 1, 0, 393208, 1, 0, 393209, 1, 0, 393210, 1, 0, 393211, 1, 0, 393212, 1, 0, 393213, 1, 0, 393214, 1, 0, 393215, 1, 0, 327680, 1, 0, 327681, 1, 0, 327682, 1, 0, 327683, 1, 0, 327684, 1, 0, 327685, 1, 0, 327686, 1, 0, 327687, 1, 0, 327688, 1, 0, 327689, 1, 0, 327690, 1, 0, 393233, 1, 0 )
 
-[node name="back_decals2_nonsolid2" type="TileMap" parent="Tiles/Floor2/Office3"]
+[node name="back_decals2_nonsolid2" type="TileMap" parent="Tiles/Inside/Floor2/Office3"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
@@ -297,21 +320,22 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65541, 1610612748, 0, 65544, 6, 0, 65546, 6, 0, 65548, 6, 0, 65550, 6, 0, 65552, 6, 0, 65554, 6, 0, 196613, 1610612748, 0, 327685, 1610612748, 0, 458757, 1610612748, 0, 589829, 1610612748, 0 )
 
-[node name="walls_solid" type="TileMap" parent="Tiles/Floor2/Office3"]
+[node name="walls_solid" type="TileMap" parent="Tiles/Inside/Floor2/Office3"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 2
 format = 1
 tile_data = PoolIntArray( -20, 0, 0, -18, 0, 0, -16, 0, 0, -14, 0, 0, -12, 0, 0, -10, 0, 0, -8, 0, 0, -6, 0, 0, -4, 0, 0, -2, 0, 0, -65536, 0, 0, -65534, 0, 0, -65532, 0, 0, -65530, 0, 0, -65528, 0, 0, -65526, 0, 0, -65524, 0, 0, -65522, 0, 0, -65520, 0, 0, -65518, 0, 0, -65516, 0, 0, 65556, 0, 0, 196628, 0, 0, 786412, 3, 0, 786414, 3, 0, 786416, 3, 0, 786418, 3, 0, 786420, 3, 0, 786422, 3, 0, 786424, 3, 0, 786426, 3, 0, 786428, 3, 0, 786430, 3, 0, 720896, 3, 0, 720898, 3, 0, 720900, 3, 0, 720902, 3, 0, 720904, 3, 0, 720906, 3, 0, 720908, 3, 0, 720910, 3, 0, 720912, 3, 0, 720914, 3, 0, 720916, 3, 0 )
 
-[node name="front_decals1_solid" type="TileMap" parent="Tiles/Floor2/Office3"]
+[node name="front_decals2_nonsolid" type="TileMap" parent="Tiles/Inside/Floor2/Office3"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
-collision_layer = 2
+collision_layer = 0
+collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65550, 20, 0, 327665, 1610612744, 0, 327667, 1610612744, 0, 327669, 1610612744, 0, 327688, 18, 0, 393227, 8, 0, 393229, 8, 0, 393231, 8, 0, 524271, 24, 0, 524273, 536870938, 0, 524275, 536870938, 0, 524277, 536870938, 0, 524279, 536870936, 0, 524282, 19, 0, 589835, -1610612717, 0 )
 
-[node name="front_decals1_nonsolid" type="TileMap" parent="Tiles/Floor2/Office3"]
+[node name="front_decals1_nonsolid" type="TileMap" parent="Tiles/Inside/Floor2/Office3"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
@@ -319,10 +343,10 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 131052, 6, 0, 131055, 6, 0, 131057, 6, 0, 131059, 6, 0, 131061, 6, 0, 131063, 6, 0, 131065, 6, 0, 131067, 6, 0, 131069, 6, 0, 131071, 6, 0, 65537, 6, 0, 65539, 6, 0, 327700, 23, 0, 786412, 4, 0, 786414, 4, 0, 786416, 4, 0, 786418, 4, 0, 786420, 4, 0, 786422, 4, 0, 786424, 4, 0, 786426, 4, 0, 786428, 4, 0, 786430, 4, 0, 720896, 4, 0, 720898, 4, 0, 720900, 4, 0, 720902, 4, 0, 720904, 4, 0, 720906, 4, 0, 720908, 4, 0, 720910, 4, 0, 720912, 4, 0, 720914, 4, 0 )
 
-[node name="Office4" type="Node2D" parent="Tiles/Floor2"]
+[node name="Office4" type="Node2D" parent="Tiles/Inside/Floor2"]
 position = Vector2( -32, 160 )
 
-[node name="back_decals1_nonsolid" type="TileMap" parent="Tiles/Floor2/Office4"]
+[node name="back_decals1_nonsolid" type="TileMap" parent="Tiles/Inside/Floor2/Office4"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
@@ -330,7 +354,7 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65538, 2, 0, 65540, 2, 0, 65542, 2, 0, 65544, 2, 0, 65546, 2, 0, 65548, 2, 0, 65550, 2, 0, 65552, 1, 0, 131080, 2, 0, 131082, 2, 0, 131084, 2, 0, 131086, 2, 0, 131088, 1610612737, 0, 196610, 2, 0, 196612, 2, 0, 196614, 2, 0, 196616, 2, 0, 196618, 2, 0, 196622, 2, 0, 262152, 2, 0, 262154, 2, 0, 262155, 2, 0, 262157, 2, 0, 262158, 2, 0, 327680, 2, 0, 327682, 2, 0, 327683, 2, 0, 327685, 2, 0, 327687, 2, 0, 327689, 2, 0, 327690, 2, 0, 327691, 2, 0, 393216, 2, 0, 393219, 2, 0, 393224, 2, 0, 393226, 2, 0, 393227, 2, 0, 393229, 2, 0, 393230, 2, 0, 458752, 2, 0, 458754, 2, 0, 458757, 2, 0, 458758, 2, 0, 458759, 2, 0, 458760, 2, 0, 458763, 2, 0, 458764, 2, 0, 458766, 2, 0, 524288, 2, 0, 524292, 2, 0, 524294, 2, 0, 524296, 2, 0, 524298, 2, 0, 524299, 2, 0, 589824, 2, 0, 589826, 2, 0, 589828, 2, 0, 589830, 2, 0, 589832, 2, 0, 589834, 2, 0, 589836, 2, 0, 589838, 2, 0, 655360, 2, 0 )
 
-[node name="back_decals2_nonsolid2" type="TileMap" parent="Tiles/Floor2/Office4"]
+[node name="back_decals2_nonsolid2" type="TileMap" parent="Tiles/Inside/Floor2/Office4"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
@@ -338,21 +362,21 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65546, -1610612722, 0, 65548, -1610612724, 0, 65550, -1610612724, 0, 327680, 23, 0 )
 
-[node name="walls_solid" type="TileMap" parent="Tiles/Floor2/Office4"]
+[node name="walls_solid" type="TileMap" parent="Tiles/Inside/Floor2/Office4"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 2
 format = 1
 tile_data = PoolIntArray( -65536, 0, 0, -65534, 0, 0, -65532, 0, 0, -65530, 0, 0, -65528, 0, 0, -65526, 0, 0, -65524, 0, 0, -65522, 0, 0, -65520, -1610612736, 0, 65536, 0, 0, 65552, -1610612736, 0, 196608, 0, 0, 196624, -1610612736, 0, 327696, -1610612736, 0, 458768, -1610612736, 0, 589840, -1610612736, 0, 720896, 3, 0, 720898, 3, 0, 720900, 3, 0, 720902, 3, 0, 720904, 3, 0, 720906, 3, 0, 720908, 3, 0, 720910, 3, 0, 720912, 3, 0 )
 
-[node name="front_decals1_solid" type="TileMap" parent="Tiles/Floor2/Office4"]
+[node name="front_decals1_solid" type="TileMap" parent="Tiles/Inside/Floor2/Office4"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 2
 format = 1
 tile_data = PoolIntArray( 65544, 20, 0, 196618, 16, 0, 327687, 16, 0, 327690, 16, 0, 327693, 1610612753, 0, 458756, 16, 0, 458758, 16, 0, 458760, 17, 0, 458762, 17, 0, 458765, -1610612720, 0, 589829, 16, 0, 589831, 17, 0, 589833, 16, 0, 589835, -1073741808, 0, 589837, -1610612720, 0 )
 
-[node name="front_decals1_nonsolid" type="TileMap" parent="Tiles/Floor2/Office4"]
+[node name="front_decals1_nonsolid" type="TileMap" parent="Tiles/Inside/Floor2/Office4"]
 tile_set = ExtResource( 5 )
 cell_size = Vector2( 32, 32 )
 collision_layer = 0
@@ -360,44 +384,46 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( -65534, 1610612746, 0, -65533, 1610612746, 0, -65532, 1610612746, 0, -65531, 1610612746, 0, -65530, 1610612746, 0, -65529, 1610612746, 0, -65528, 1610612746, 0, -65527, 1610612746, 0, -65526, 1610612746, 0, -65525, 1610612746, 0, -65524, 1610612746, 0, -65523, 1610612746, 0, -65522, 1610612746, 0, 196608, 1610612746, 0, 720904, 10, 0, 720906, 10, 0, 720908, 10, 0, 720910, 10, 0 )
 
-[node name="Vents" type="Node2D" parent="Tiles"]
-
-[node name="backwalls" type="TileMap" parent="Tiles/Vents"]
-position = Vector2( -32, 0 )
-tile_set = ExtResource( 5 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 36, 1, 0, 65536, 1, 0, 65537, 1, 0, 65538, 1, 0, 65539, 1, 0, 65540, 1, 0, 65541, 1, 0, 65542, 1, 0, 65543, 1, 0, 65544, 1, 0, 65545, 1, 0, 65546, 1, 0, 65547, 1, 0, 65548, 1, 0, 65549, 1, 0, 65550, 1, 0, 65551, 1, 0, 65552, 1, 0, 65553, 1, 0, 65554, 1, 0, 65555, 1, 0, 65556, 1, 0, 65557, 1, 0, 65558, 1, 0, 65559, 1, 0, 65560, 1, 0, 65561, 1, 0, 65562, 1, 0, 65563, 1, 0, 65564, 1, 0, 65565, 1, 0, 65566, 1, 0, 65567, 1, 0, 65568, 1, 0, 65569, 1, 0, 65570, 1, 0, 65571, 1, 0, 65572, 1, 0, 65573, 1, 0, 65574, 1, 0, 65575, 1610612737, 0, 65576, 1610612737, 0, 65577, 1610612737, 0, 65578, 1610612737, 0, 65579, 1610612737, 0, 65580, 1610612737, 0, 65581, 1610612737, 0, 65582, 1610612737, 0, 65583, 1610612737, 0, 65584, 1610612737, 0, 131108, 1, 0, 131119, 1610612737, 0 )
-
-[node name="decals" type="TileMap" parent="Tiles/Vents"]
-position = Vector2( -32, 0 )
-z_index = 5
-tile_set = ExtResource( 5 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 36, 15, 0, 65536, 15, 0, 65537, 15, 0, 65538, 15, 0, 65539, 15, 0, 65540, 15, 0, 65541, 15, 0, 65542, 15, 0, 65543, 15, 0, 65544, 15, 0, 65545, 15, 0, 65546, 15, 0, 65547, 15, 0, 65548, 15, 0, 65549, 15, 0, 65550, 15, 0, 65551, 15, 0, 65552, 15, 0, 65553, 15, 0, 65554, 15, 0, 65555, 15, 0, 65556, 15, 0, 65557, 15, 0, 65558, 15, 0, 65559, 15, 0, 65560, 15, 0, 65561, 15, 0, 65562, 15, 0, 65563, 15, 0, 65564, 15, 0, 65565, 15, 0, 65566, 15, 0, 65567, 15, 0, 65568, 15, 0, 65569, 15, 0, 65570, 15, 0, 65571, 15, 0, 65572, 15, 0, 65573, 15, 0, 65574, 15, 0, 65575, 1610612751, 0, 65576, 1610612751, 0, 65577, 1610612751, 0, 65578, 1610612751, 0, 65579, 1610612751, 0, 65580, 1610612751, 0, 65581, 1610612751, 0, 65582, 1610612751, 0, 65583, 1610612751, 0, 65584, 1610612751, 0, 131108, 15, 0, 131119, 1610612751, 0 )
-
-[node name="decals2" type="TileMap" parent="Tiles/Vents"]
-position = Vector2( -32, 0 )
-z_index = 5
-tile_set = ExtResource( 5 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 36, -1610612727, 0, 65536, 9, 0, 65537, 9, 0, 65538, 9, 0, 65539, 9, 0, 65540, 9, 0, 65541, 9, 0, 65542, 9, 0, 65543, 9, 0, 65544, 9, 0, 65545, 9, 0, 65546, 9, 0, 65547, 9, 0, 65548, 9, 0, 65549, 9, 0, 65550, 9, 0, 65551, 9, 0, 65552, 9, 0, 65553, 9, 0, 65554, 9, 0, 65555, 9, 0, 65556, 9, 0, 65557, 9, 0, 65558, 9, 0, 65559, 9, 0, 65560, 9, 0, 65561, 9, 0, 65562, 9, 0, 65563, 9, 0, 65564, 9, 0, 65565, 9, 0, 65566, 9, 0, 65567, 9, 0, 65568, 9, 0, 65569, 9, 0, 65570, 9, 0, 65571, 9, 0, 65573, 9, 0, 65574, 9, 0, 65575, 9, 0, 65576, 9, 0, 65577, 9, 0, 65578, 9, 0, 65579, 9, 0, 65580, 9, 0, 65581, 9, 0, 65582, 9, 0, 65584, 9, 0, 131108, -1610612727, 0, 131119, -1610612727, 0 )
-
-[node name="Lights" type="Node2D" parent="Tiles"]
+[node name="Lights" type="Node2D" parent="Tiles/Inside/Floor2"]
 material = SubResource( 1 )
-position = Vector2( -32, 0 )
+position = Vector2( -32, 576 )
 
-[node name="LightsMap" type="TileMap" parent="Tiles/Lights"]
+[node name="LightsMap" type="TileMap" parent="Tiles/Inside/Floor2/Lights"]
 use_parent_material = true
 tile_set = ExtResource( 7 )
 cell_size = Vector2( 16, 16 )
 format = 1
-tile_data = PoolIntArray( -1310704, 3, 0, -1310684, 536870912, 0, -1310678, 536870912, 0, -1310674, 536870912, 0, -1310670, 536870912, 0, -1310666, 536870912, 0, -1310662, 536870912, 0, -1310658, 536870912, 0, -1310654, 536870912, 0, -1310650, 536870912, 0, -1310646, 536870912, 0, -1310642, 536870912, 0, -1310638, 536870912, 0, -1310628, 536870912, 0, -1310624, 536870912, 0, -1310620, 536870912, 0, -1310616, 3, 0, -1310612, 536870912, 0, -1310608, 536870912, 0, -1310560, 536870912, 0, -1310556, 536870912, 0, -1310552, 536870912, 0, -1310548, 536870912, 0, -1310544, 536870912, 0, -1310540, 536870912, 0, -1310536, 536870912, 0, -786340, 2, 0, -786299, 536870914, 0, -786251, 2, 0, 786436, 536870912, 0, 786440, 536870912, 0, 786444, 536870912, 0, 786448, 536870912, 0, 786452, 536870912, 0, 786456, 536870912, 0, 786460, 536870912, 0, 786528, 536870912, 0, 786532, 536870912, 0, 786536, 536870912, 0, 786540, 3, 0, 786544, 536870912, 0, 786548, 536870912, 0, 786568, 3, 0, 852160, -1610612733, 0, 1310745, 2, 0, 1310777, 536870914, 0, 1310783, 2, 0, 1310816, 2, 0, 1310882, 2, 0 )
+tile_data = PoolIntArray( -1572848, 3, 0, -1572828, 0, 0, -1572822, 0, 0, -1572818, 0, 0, -1572814, 0, 0, -1572810, 0, 0, -1572806, 0, 0, -1572802, 0, 0, -1572798, 0, 0, -1572794, 0, 0, -1572790, 0, 0, -1572786, 0, 0, -1572782, 0, 0, -1572772, 0, 0, -1572768, 0, 0, -1572764, 0, 0, -1572760, 3, 0, -1572756, 0, 0, -1572752, 0, 0, -1572704, 0, 0, -1572700, 0, 0, -1572696, 0, 0, -1572692, 0, 0, -1572688, 0, 0, -1572684, 0, 0, -1572680, 0, 0, -1048484, 2, 0, -1048443, 536870914, 0, -1048396, 2, 0 )
+
+[node name="Vents" type="Node2D" parent="Tiles/Inside"]
+
+[node name="backwalls" type="TileMap" parent="Tiles/Inside/Vents"]
+position = Vector2( -32, 0 )
+tile_set = ExtResource( 5 )
+collision_layer = 0
+collision_mask = 0
+format = 1
+tile_data = PoolIntArray( -65499, 50, 0, 0, 1, 0, 1, 1, 0, 2, 1, 0, 3, 1, 0, 4, 1, 0, 5, 1, 0, 6, 1, 0, 7, 1, 0, 8, 1, 0, 9, 1, 0, 10, 1, 0, 11, 1, 0, 12, 1, 0, 13, 1, 0, 14, 1, 0, 15, 1, 0, 16, 1, 0, 17, 1, 0, 18, 1, 0, 19, 1, 0, 20, 1, 0, 21, 1, 0, 22, 1, 0, 23, 1, 0, 24, 1, 0, 25, 1, 0, 26, 1, 0, 27, 1, 0, 28, 1, 0, 29, 1, 0, 30, 1, 0, 31, 1, 0, 32, 1, 0, 33, 1, 0, 34, 1, 0, 35, 1, 0, 36, 1, 0, 37, 1, 0, 38, 1, 0, 39, 1, 0, 40, 1, 0, 41, 1, 0, 42, 1, 0, 43, 1, 0, 44, 1, 0, 45, 1, 0, 46, 1, 0, 47, 1, 0, 48, 1, 0, 65536, 1, 0, 65537, 1, 0, 65538, 1, 0, 65539, 1, 0, 65540, 1, 0, 65541, 1, 0, 65542, 1, 0, 65543, 1, 0, 65544, 1, 0, 65545, 1, 0, 65546, 1, 0, 65547, 1, 0, 65548, 1, 0, 65549, 1, 0, 65550, 1, 0, 65551, 1, 0, 65552, 1, 0, 65553, 1, 0, 65554, 1, 0, 65555, 1, 0, 65556, 1, 0, 65557, 1, 0, 65558, 1, 0, 65559, 1, 0, 65560, 1, 0, 65561, 1, 0, 65562, 1, 0, 65563, 1, 0, 65564, 1, 0, 65565, 1, 0, 65566, 1, 0, 65567, 1, 0, 65568, 1, 0, 65569, 1, 0, 65570, 1, 0, 65571, 1, 0, 65572, 1, 0, 65573, 1, 0, 65574, 1, 0, 65575, 1610612737, 0, 65576, 1610612737, 0, 65577, 1610612737, 0, 65578, 1610612737, 0, 65579, 1610612737, 0, 65580, 1610612737, 0, 65581, 1610612737, 0, 65582, 1610612737, 0, 65583, 1610612737, 0, 65584, 1610612737, 0, 131108, 1, 0, 131109, 1, 0, 131119, 1610612737, 0, 131120, 1, 0 )
+
+[node name="decals" type="TileMap" parent="Tiles/Inside/Vents"]
+position = Vector2( -32, 0 )
+z_index = 5
+tile_set = ExtResource( 5 )
+collision_layer = 0
+collision_mask = 0
+format = 1
+tile_data = PoolIntArray( -65500, -1073741809, 0, -65499, 15, 0, 0, 15, 0, 1, 15, 0, 2, 15, 0, 3, 15, 0, 4, 15, 0, 5, 15, 0, 6, 15, 0, 7, 15, 0, 8, 15, 0, 9, 15, 0, 10, 15, 0, 11, 15, 0, 12, 15, 0, 13, 15, 0, 14, 15, 0, 15, 15, 0, 16, 15, 0, 17, 15, 0, 18, 15, 0, 19, 15, 0, 20, 15, 0, 21, 15, 0, 22, 15, 0, 23, 15, 0, 24, 15, 0, 25, 15, 0, 26, 15, 0, 27, 15, 0, 28, 15, 0, 29, 15, 0, 30, 15, 0, 31, 15, 0, 32, 15, 0, 33, 15, 0, 34, 15, 0, 35, 15, 0, 36, 15, 0, 37, 15, 0, 38, 15, 0, 39, 15, 0, 40, 15, 0, 41, 15, 0, 42, 15, 0, 43, 15, 0, 44, 15, 0, 45, 15, 0, 46, 15, 0, 47, 15, 0, 48, 15, 0, 65536, 15, 0, 65537, 15, 0, 65538, 15, 0, 65539, 15, 0, 65540, 15, 0, 65541, 15, 0, 65542, 15, 0, 65543, 15, 0, 65544, 15, 0, 65545, 15, 0, 65546, 15, 0, 65547, 15, 0, 65548, 15, 0, 65549, 15, 0, 65550, 15, 0, 65551, 15, 0, 65552, 15, 0, 65553, 15, 0, 65554, 15, 0, 65555, 15, 0, 65556, 15, 0, 65557, 15, 0, 65558, 15, 0, 65559, 15, 0, 65560, 15, 0, 65561, 15, 0, 65562, 15, 0, 65563, 15, 0, 65564, 15, 0, 65565, 15, 0, 65566, 15, 0, 65567, 15, 0, 65568, 15, 0, 65569, 15, 0, 65570, 15, 0, 65571, 15, 0, 65572, 15, 0, 65573, 15, 0, 65574, 15, 0, 65575, 1610612751, 0, 65576, 1610612751, 0, 65577, 1610612751, 0, 65578, 1610612751, 0, 65579, 1610612751, 0, 65580, 1610612751, 0, 65581, 1610612751, 0, 65582, 1610612751, 0, 65583, 1610612751, 0, 65584, 1610612751, 0, 131108, 15, 0, 131109, 15, 0, 131119, 1610612751, 0, 131120, 15, 0 )
+
+[node name="decals2" type="TileMap" parent="Tiles/Inside/Vents"]
+position = Vector2( -32, 0 )
+z_index = 5
+tile_set = ExtResource( 5 )
+collision_layer = 0
+collision_mask = 0
+format = 1
+tile_data = PoolIntArray( -65500, -1073741816, 0, -65499, -1610612728, 0, 0, 8, 0, 1, 8, 0, 2, 8, 0, 3, 8, 0, 4, 8, 0, 5, 8, 0, 6, 8, 0, 7, 8, 0, 8, 8, 0, 9, 8, 0, 10, 8, 0, 11, 8, 0, 12, 8, 0, 13, 8, 0, 14, 8, 0, 15, 8, 0, 16, 8, 0, 17, 8, 0, 18, 8, 0, 19, 8, 0, 20, 8, 0, 21, 8, 0, 22, 8, 0, 23, 8, 0, 24, 8, 0, 25, 8, 0, 26, 8, 0, 27, 8, 0, 28, 8, 0, 29, 8, 0, 30, 8, 0, 31, 8, 0, 32, 8, 0, 33, 8, 0, 34, 8, 0, 35, 8, 0, 38, 8, 0, 39, 8, 0, 40, 8, 0, 41, 8, 0, 42, 8, 0, 43, 8, 0, 44, 8, 0, 45, 8, 0, 46, 8, 0, 47, 8, 0, 48, 8, 0, 65536, 1610612744, 0, 65537, 1610612744, 0, 65538, 1610612744, 0, 65539, 1610612744, 0, 65540, 1610612744, 0, 65541, 1610612744, 0, 65542, 1610612744, 0, 65543, 1610612744, 0, 65544, 1610612744, 0, 65545, 1610612744, 0, 65546, 1610612744, 0, 65547, 1610612744, 0, 65548, 1610612744, 0, 65549, 1610612744, 0, 65550, 1610612744, 0, 65551, 1610612744, 0, 65552, 1610612744, 0, 65553, 1610612744, 0, 65554, 1610612744, 0, 65555, 1610612744, 0, 65556, 1610612744, 0, 65557, 1610612744, 0, 65558, 1610612744, 0, 65559, 1610612744, 0, 65560, 1610612744, 0, 65561, 1610612744, 0, 65562, 1610612744, 0, 65563, 1610612744, 0, 65564, 1610612744, 0, 65565, 1610612744, 0, 65566, 1610612744, 0, 65567, 1610612744, 0, 65568, 1610612744, 0, 65569, 1610612744, 0, 65570, 1610612744, 0, 65571, 1610612744, 0, 65574, 1610612744, 0, 65575, 1610612744, 0, 65576, 1610612744, 0, 65577, 1610612744, 0, 65578, 1610612744, 0, 65579, 1610612744, 0, 65580, 1610612744, 0, 65581, 1610612744, 0, 65582, 1610612744, 0, 65584, -1610612728, 0, 131108, -1073741816, 0, 131109, -1610612728, 0, 131119, -1073741816, 0, 131120, -1610612728, 0 )
+
+[node name="Rain" parent="Tiles" instance=ExtResource( 13 )]
 
 [node name="Outside" type="Node2D" parent="Tiles"]
 
@@ -468,81 +494,76 @@ tile_data = PoolIntArray( -131071, 1073741873, 0, -131070, 50, 0, -131069, 50, 0
 
 [node name="Entities" type="Node2D" parent="."]
 position = Vector2( -79, 0 )
+z_index = 2
 
 [node name="Triggers" type="Node2D" parent="Entities"]
 
 [node name="Trigger1" parent="Entities/Triggers" instance=ExtResource( 11 )]
-visible = false
 call_function_enter = "_on_player_outside"
 call_function_exit = "_on_player_inside"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/Trigger1"]
 position = Vector2( 4407, 120 )
-shape = SubResource( 6 )
+shape = SubResource( 2 )
 
 [node name="TriggerCam1" parent="Entities/Triggers" instance=ExtResource( 11 )]
-visible = false
 call_function_enter = "camera_move_to"
 call_args_enter = [ 0 ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/TriggerCam1"]
-position = Vector2( 423, 384 )
-shape = SubResource( 7 )
+position = Vector2( 431, 384 )
+shape = SubResource( 3 )
 
 [node name="TriggerCam2" parent="Entities/Triggers" instance=ExtResource( 11 )]
-visible = false
 position = Vector2( 647, -8 )
 call_function_enter = "camera_move_to"
 call_args_enter = [ 1 ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/TriggerCam2"]
 position = Vector2( 423, 384 )
-shape = SubResource( 7 )
+shape = SubResource( 3 )
 
 [node name="TriggerCam3" parent="Entities/Triggers" instance=ExtResource( 11 )]
-visible = false
 position = Vector2( 1287, -8 )
 call_function_enter = "camera_move_to"
 call_args_enter = [ 2 ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/TriggerCam3"]
 position = Vector2( 423, 384 )
-shape = SubResource( 7 )
+shape = SubResource( 3 )
 
 [node name="TriggerCam4" parent="Entities/Triggers" instance=ExtResource( 11 )]
-visible = false
 call_function_enter = "camera_move_to"
 call_args_enter = [ 3 ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/TriggerCam4"]
 position = Vector2( 2271, 384 )
-shape = SubResource( 8 )
+shape = SubResource( 4 )
 
 [node name="TriggerCam5" parent="Entities/Triggers" instance=ExtResource( 11 )]
-visible = false
 position = Vector2( 2479, 0 )
 call_function_enter = "camera_move_to"
-call_args_enter = [ 4, false ]
+call_args_enter = [ 4, true ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/TriggerCam5"]
 position = Vector2( 423, 384 )
-shape = SubResource( 7 )
+shape = SubResource( 3 )
 
 [node name="RestoreCamera1" parent="Entities/Triggers" instance=ExtResource( 11 )]
 position = Vector2( 2423, 184 )
 call_function_enter = "reset_camera"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/RestoreCamera1"]
-position = Vector2( -8, 0 )
-shape = SubResource( 9 )
+position = Vector2( 24, -56 )
+shape = SubResource( 5 )
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Entities/Triggers/RestoreCamera1"]
-position = Vector2( 696, 0 )
-shape = SubResource( 10 )
+position = Vector2( 728, -56 )
+shape = SubResource( 6 )
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="Entities/Triggers/RestoreCamera1"]
-position = Vector2( 824, 256 )
-shape = SubResource( 11 )
+position = Vector2( 824, 264 )
+shape = SubResource( 7 )
 
 [node name="ShowMessage1" parent="Entities/Triggers" instance=ExtResource( 11 )]
 call_function_enter = "show_message"
@@ -551,17 +572,17 @@ trigger_once = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/ShowMessage1"]
 position = Vector2( 2255, 384 )
-shape = SubResource( 12 )
+shape = SubResource( 8 )
 
 [node name="ShowMessage2" parent="Entities/Triggers" instance=ExtResource( 11 )]
-position = Vector2( -1561, -512 )
+position = Vector2( -1561, -575 )
 call_function_enter = "show_message"
 call_args_enter = [ "......?", 2.0 ]
 trigger_once = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/ShowMessage2"]
 position = Vector2( 2255, 384 )
-shape = SubResource( 12 )
+shape = SubResource( 8 )
 
 [node name="ShowMessage3" parent="Entities/Triggers" instance=ExtResource( 11 )]
 position = Vector2( 1199, 64 )
@@ -571,7 +592,7 @@ trigger_once = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/ShowMessage3"]
 position = Vector2( 2255, 384 )
-shape = SubResource( 12 )
+shape = SubResource( 8 )
 
 [node name="ShowMessage4" parent="Entities/Triggers" instance=ExtResource( 11 )]
 position = Vector2( 3111, 0 )
@@ -581,7 +602,7 @@ trigger_once = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/ShowMessage4"]
 position = Vector2( 2255, 384 )
-shape = SubResource( 12 )
+shape = SubResource( 8 )
 
 [node name="StaticEntities" type="Node2D" parent="."]
 position = Vector2( -648, -86.5 )
@@ -590,21 +611,25 @@ position = Vector2( -648, -86.5 )
 visible = false
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="LightOcluders"]
-position = Vector2( -648, -86.5 )
-occluder = SubResource( 2 )
+position = Vector2( -648, -150.5 )
+occluder = SubResource( 9 )
 
 [node name="LightOccluder2D2" type="LightOccluder2D" parent="LightOcluders"]
-occluder = SubResource( 3 )
+position = Vector2( 0, -64 )
+occluder = SubResource( 10 )
 
 [node name="LightOccluder2D3" type="LightOccluder2D" parent="LightOcluders"]
-occluder = SubResource( 4 )
+occluder = SubResource( 11 )
 
 [node name="LightOccluder2D4" type="LightOccluder2D" parent="LightOcluders"]
 position = Vector2( 640, 0 )
-occluder = SubResource( 4 )
+occluder = SubResource( 11 )
 
 [node name="LightOccluder2D5" type="LightOccluder2D" parent="LightOcluders"]
-occluder = SubResource( 5 )
+occluder = SubResource( 12 )
+
+[node name="LightOccluder2D6" type="LightOccluder2D" parent="LightOcluders"]
+occluder = SubResource( 13 )
 
 [node name="Lights" type="Node2D" parent="."]
 visible = false
@@ -627,7 +652,7 @@ energy = 0.41
 shadow_enabled = true
 
 [node name="Light5" parent="Lights" instance=ExtResource( 3 )]
-position = Vector2( 3432, -41.5 )
+position = Vector2( 3432, -109.5 )
 scale = Vector2( 6.5, 3.5 )
 z_index = 1
 texture = ExtResource( 9 )
@@ -635,7 +660,7 @@ energy = 0.41
 shadow_enabled = true
 
 [node name="Light6" parent="Lights" instance=ExtResource( 3 )]
-position = Vector2( 1928, -41.5 )
+position = Vector2( 1928, -109.5 )
 scale = Vector2( 12, 3.5 )
 z_index = 1
 texture = ExtResource( 9 )
@@ -649,26 +674,23 @@ z_index = 1
 texture = ExtResource( 9 )
 color = Color( 0.768627, 0.0862745, 0.0862745, 1 )
 energy = 0.41
-shadow_enabled = true
 light_broken = true
 
 [node name="Light7" parent="Lights" instance=ExtResource( 3 )]
-position = Vector2( 936, -41.5 )
+position = Vector2( 936, -102.5 )
 scale = Vector2( 3.5, 2.5 )
 z_index = 1
 texture = ExtResource( 9 )
 color = Color( 0.768627, 0.0862745, 0.0862745, 1 )
 energy = 0.41
-shadow_enabled = true
 
 [node name="Light8" parent="Lights" instance=ExtResource( 3 )]
-position = Vector2( 680, 22.5 )
+position = Vector2( 680, -40.5 )
 scale = Vector2( 0.5, 1.5 )
 z_index = 1
 texture = ExtResource( 9 )
 color = Color( 0.768627, 0.0862745, 0.0862745, 1 )
 energy = 0.41
-shadow_enabled = true
 
 [node name="Light4" parent="Lights" instance=ExtResource( 3 )]
 position = Vector2( 2600, 534.5 )
@@ -677,7 +699,6 @@ z_index = 1
 texture = ExtResource( 9 )
 color = Color( 0.768627, 0.0862745, 0.0862745, 1 )
 energy = 0.41
-shadow_enabled = true
 
 [node name="Cameras" type="Node2D" parent="."]
 position = Vector2( 384, 376 )
@@ -704,12 +725,11 @@ position = Vector2( 1792, 16 )
 position = Vector2( 2496, 16 )
 
 [node name="Player" parent="." instance=ExtResource( 2 )]
-position = Vector2( 100.118, 277.213 )
-z_index = 2
+position = Vector2( 184, 448 )
+z_index = 3
 collision_mask = 2
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-visible = false
-color = Color( 0.172549, 0.172549, 0.172549, 1 )
+color = Color( 0.886275, 0.886275, 0.886275, 1 )
 
 [node name="Mountains1" parent="." instance=ExtResource( 10 )]
