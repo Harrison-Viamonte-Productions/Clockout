@@ -6,13 +6,11 @@ var move_step: Vector2;
 var next_zoom: Vector2;
 var next_pos: Vector2;
 var moving_to: bool = false;
-var moving_to_global: bool = false;
 var Util = Game.Util_Object.new(self);
 
 func _ready():
-	next_pos = global_position;
+	next_pos = position;
 	next_zoom = zoom;
-	moving_to_global = true;
 	Util._ready();
 
 func _physics_process(delta):
@@ -21,14 +19,9 @@ func _physics_process(delta):
 
 func interpolate_movement(delta):
 	if moving_to:
-		if moving_to_global:
-			global_position = global_position.linear_interpolate(next_pos, delta * 4.0);
-			if (global_position - next_pos).length() <= MIN_MOVE_PRECISION:
-				moving_to = false;
-		else:
-			position = position.linear_interpolate(next_pos, delta * 4.0);
-			if (position - next_pos).length() <= MIN_MOVE_PRECISION:
-				moving_to = false;
+		position = position.linear_interpolate(next_pos, delta * 4.0);
+		if (position - next_pos).length() <= MIN_MOVE_PRECISION:
+			moving_to = false;
 
 func interpolate_zoom(delta: float) -> void:
 	if	next_zoom != zoom:
@@ -52,41 +45,23 @@ func change_zoom_interpolated(new_scale: float, seconds: float) -> void:
 	move_step.y = (new_scale - zoom.y)/seconds;
 	next_zoom = Vector2(new_scale, new_scale);
 
-func move_to_point2d(new_pos: Position2D, interpolated: bool, global: bool = true):
-	moving_to_global = global;
-	if global:
-		if (interpolated):
-			moving_to = true;
-			next_pos.x = new_pos.global_position.x;
-			next_pos.y = new_pos.global_position.y;
-		else:
-			global_position.x = new_pos.global_position.x;
-			global_position.y = new_pos.global_position.y;
+func move_to(to: Vector2, interpolated: bool):
+	if interpolated:
+		moving_to = true;
+		next_pos.x = to.x;
+		next_pos.y = to.y;
 	else:
-		var new_pos_local: Vector2 = get_parent().global_position - new_pos.global_position;
-		if (interpolated):
-			moving_to = true;
-			next_pos.x = new_pos_local.x;
-			next_pos.y = new_pos_local.y;
-		else:
-			position.x = new_pos_local.x;
-			position.y = new_pos_local.y;
+		position.x = to.x;
+		position.y = to.y;
 
-func move_to(new_pos: Vector2, interpolated: bool, global: bool = true):
-	moving_to_global = global;
-	if global:
-		if (interpolated):
-			moving_to = true;
-			next_pos.x = new_pos.x;
-			next_pos.y = new_pos.y;
-		else:
-			global_position.x = new_pos.x;
-			global_position.y = new_pos.y;
-	else:
-		if (interpolated):
-			moving_to = true;
-			next_pos.x = new_pos.x;
-			next_pos.y = new_pos.y;
-		else:
-			position.x = new_pos.x;
-			position.y = new_pos.y;
+func move_from(from: Vector2, to: Vector2):
+	position = from;
+	move_to(to, true);
+
+func move_to_node2d(point: Node2D, interpolated: bool):
+	var to: Vector2 = point.global_position - get_parent().global_position;
+	move_to(to, interpolated);
+
+func move_from_node2d(point: Node2D, to: Vector2):
+	var from: Vector2 = point.global_position -  get_parent().global_position;
+	move_from(from, to);
