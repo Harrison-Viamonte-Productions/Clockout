@@ -16,3 +16,19 @@ func _ready():
 	init_global_pos = father_node.global_position;
 	init_rotation = father_node.rotation;
 	init_global_rotation = father_node.global_rotation;
+
+func position_can_be_reached(pos: Vector2, exclude_nodes: Array) -> bool:
+	var self_global_position: Vector2 = father_node.global_position;
+	var vector_to_point: Vector2 = pos - self_global_position;
+	var space_state = father_node.get_world_2d().direct_space_state;
+	var result = space_state.intersect_ray(self_global_position, self_global_position+vector_to_point, exclude_nodes, father_node.collision_mask);
+	if result:
+		return false;
+	else:
+		return true;
+
+func node_can_be_reached(node: Node2D, exclude_nodes: Array) -> bool:
+	return position_can_be_reached(node.global_position, exclude_nodes);
+
+func player_can_be_reached(exclude_nodes: Array = [father_node, Game.Player]) -> bool:
+	return node_can_be_reached(Game.Player, exclude_nodes);

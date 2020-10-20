@@ -76,6 +76,8 @@ crouch={
 2d_physics/layer_1="Player"
 2d_physics/layer_2="Tiles"
 2d_physics/layer_3="StaticBodies"
+2d_physics/layer_4="Enemies"
+2d_physics/layer_5="Enemy_clip"
 
 [rendering]
 

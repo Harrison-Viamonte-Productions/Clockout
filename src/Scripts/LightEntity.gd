@@ -3,7 +3,7 @@ extends Node2D
 export var light_broken: bool = false;
 
 func _ready():
-	$LightIcon.hide(); #Show only in the editor so we can see it
+	$LightIcon.hide(); #Showed only in the editor so we can see it
 	update_light();
 
 func update_light():
