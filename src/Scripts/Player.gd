@@ -99,6 +99,7 @@ func get_camera():
 	return $Camera;
 
 func respawn():
+	Game.set_active_camera($Camera);
 	self.global_position = Spawn.global_position;
 	self.velocity = Vector2.ZERO;
 

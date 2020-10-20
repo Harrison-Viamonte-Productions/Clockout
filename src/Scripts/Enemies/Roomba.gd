@@ -10,7 +10,7 @@ const ATTACK_DURATION: float = 2000.0; #msec
 const VIEW_ENEMY_DISTANCE: Vector2 = Vector2(350.0, 128.0);
 const RAYCAST_LENGTH: float = 35.0;
 const JUMP_SPEED: float = -400.0;
-const ACTIVE_OUTSIDE_SCREEN_TIME: float = 10.0#sec
+const ACTIVE_OUTSIDE_SCREEN_TIME: float = 15.0#sec
 const SIZE: Vector2 = Vector2(32.0, 32.0); #Useful for jump detection
 
 export var walk_direction: float = 1.0;
@@ -77,6 +77,9 @@ func set_inactive():
 func fall(delta):
 	if !self.is_on_floor():
 		motion.y += Game.GRAVITY*delta;
+	elif motion.y > 0.0:
+		motion.y = 0.0;
+		
 
 func move(delta):
 	motion.x = MOVE_SPEED*RUN_MULTIPLIER if attacking else MOVE_SPEED;
@@ -117,7 +120,7 @@ func check_attacks(delta):
 				walk_direction = -1.0;
 			else:
 				walk_direction = 1.0;
-			motion.y = JUMP_SPEED;
+			#motion.y = JUMP_SPEED;
 			attacking_countdown = ATTACK_DURATION;
 			attacking = true;
 			update_sprite();
@@ -159,17 +162,15 @@ func _on_player_exited():
 
 func can_jump_over(delta, pos: Vector2) -> bool:
 	var max_jump_time: float = -JUMP_SPEED/(2*Game.GRAVITY);
-	var current_global_position: Vector2 = global_position;
-	
 	if (max_jump_time <= 0.0):
 		return false; #negative time... should never happen.
-		
-	var get_max_jump_height: float = 0.5*Game.GRAVITY*pow(max_jump_time, 2.0)+JUMP_SPEED*max_jump_time;
-	print(get_max_jump_height-(SIZE.y/2.0)+4.0);
 
-	var new_pos = Vector2(pos.x, pos.y+get_max_jump_height-(SIZE.y/2.0)+4.0);
-	var vector_offset: Vector2 = Vector2(-walk_direction*(SIZE.x/2.0 - 4.0), -(SIZE.y/2.0)+4.0);
-	current_global_position += vector_offset;
+	var current_global_position: Vector2 = global_position;
+	var size_offset: Vector2 = Vector2((SIZE.x/2.0 - 4.0), (SIZE.y/2.0)-4.0); #4.0 added as a margin-error avoider
+	var get_max_jump_height: float = 0.5*Game.GRAVITY*pow(max_jump_time, 2.0)+JUMP_SPEED*max_jump_time;
+	var new_pos = Vector2(pos.x, pos.y+get_max_jump_height-size_offset.y);
+	current_global_position += Vector2(-walk_direction*size_offset.x, -size_offset.y);
+
 	var space_state = get_world_2d().direct_space_state;
 	var result = space_state.intersect_ray(current_global_position, new_pos, [self], collision_mask);
 	if result:
