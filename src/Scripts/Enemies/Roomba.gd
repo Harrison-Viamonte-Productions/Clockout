@@ -11,6 +11,7 @@ const VIEW_ENEMY_DISTANCE: Vector2 = Vector2(350.0, 128.0);
 const RAYCAST_LENGTH: float = 35.0;
 const JUMP_SPEED: float = -400.0;
 const ACTIVE_OUTSIDE_SCREEN_TIME: float = 10.0#sec
+const SIZE: Vector2 = Vector2(32.0, 32.0); #Useful for jump detection
 
 export var walk_direction: float = 1.0;
 export var never_dormant: bool = false;
@@ -86,7 +87,7 @@ func check_collisions(delta):
 	raycast_check_countdown-=delta*1000.0;
 	if raycast_check_countdown <= 0:
 		var current_global_position: Vector2 = global_position;
-		current_global_position.y += 8.0;
+		current_global_position.y += (SIZE.y/2.0)-4.0; #4.0 for a margin
 		var space_state = get_world_2d().direct_space_state;
 		var result = space_state.intersect_ray(current_global_position, current_global_position+walk_direction*Vector2(RAYCAST_LENGTH, 0), [self], collision_mask);
 		if result:
@@ -158,15 +159,19 @@ func _on_player_exited():
 
 func can_jump_over(delta, pos: Vector2) -> bool:
 	var max_jump_time: float = -JUMP_SPEED/(2*Game.GRAVITY);
+	var current_global_position: Vector2 = global_position;
 	
 	if (max_jump_time <= 0.0):
 		return false; #negative time... should never happen.
 		
 	var get_max_jump_height: float = 0.5*Game.GRAVITY*pow(max_jump_time, 2.0)+JUMP_SPEED*max_jump_time;
-	var pos_offset_x = walk_direction*8.0;
-	var new_pos = Vector2(pos.x-pos_offset_x, pos.y+get_max_jump_height);
+	print(get_max_jump_height-(SIZE.y/2.0)+4.0);
+
+	var new_pos = Vector2(pos.x, pos.y+get_max_jump_height-(SIZE.y/2.0)+4.0);
+	var vector_offset: Vector2 = Vector2(-walk_direction*(SIZE.x/2.0 - 4.0), -(SIZE.y/2.0)+4.0);
+	current_global_position += vector_offset;
 	var space_state = get_world_2d().direct_space_state;
-	var result = space_state.intersect_ray(global_position, new_pos, [self], collision_mask);
+	var result = space_state.intersect_ray(current_global_position, new_pos, [self], collision_mask);
 	if result:
 		return false;
 	else:
