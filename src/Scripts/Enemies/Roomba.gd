@@ -7,7 +7,7 @@ const MOVE_SPEED: float = 75.0
 const RAYCAST_CHECK_DELAY: float = 50.0; #msec
 const CHECKATTACK_DELAY: float = 350.0; #msec
 const ATTACK_DURATION: float = 2000.0; #msec
-const VIEW_ENEMY_DISTANCE: Vector2 = Vector2(350.0, 128.0);
+const VIEW_ENEMY_DISTANCE: Vector2 = Vector2(350.0, 300.0);
 const RAYCAST_LENGTH: float = 35.0;
 const JUMP_SPEED: float = -400.0;
 const ACTIVE_OUTSIDE_SCREEN_TIME: float = 15.0#sec
@@ -169,7 +169,8 @@ func can_jump_over(delta, pos: Vector2) -> bool:
 	var size_offset: Vector2 = Vector2((SIZE.x/2.0 - 4.0), (SIZE.y/2.0)-4.0); #4.0 added as a margin-error avoider
 	var get_max_jump_height: float = 0.5*Game.GRAVITY*pow(max_jump_time, 2.0)+JUMP_SPEED*max_jump_time;
 	var new_pos = Vector2(pos.x, pos.y+get_max_jump_height-size_offset.y);
-	current_global_position += Vector2(-walk_direction*size_offset.x, -size_offset.y);
+	current_global_position.y = new_pos.y;
+	#current_global_position += Vector2(-walk_direction*size_offset.x, -size_offset.y);
 
 	var space_state = get_world_2d().direct_space_state;
 	var result = space_state.intersect_ray(current_global_position, new_pos, [self], collision_mask);

@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=35 format=2]
 
 [ext_resource path="res://src/Levels/ModularScenes/Office1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/Entities/Enemies/Roomba.tscn" type="PackedScene" id=2]
@@ -16,6 +16,8 @@
 [ext_resource path="res://src/Transitions/TransitionScene.tscn" type="PackedScene" id=14]
 [ext_resource path="res://src/GUI/PlayerSpawn.tscn" type="PackedScene" id=15]
 [ext_resource path="res://src/Tiles/func_tiles.tres" type="TileSet" id=16]
+[ext_resource path="res://src/Levels/ModularScenes/StorageTest.tscn" type="PackedScene" id=17]
+[ext_resource path="res://assets/lightmaps/radiuslight2.png" type="Texture" id=18]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
@@ -65,6 +67,15 @@ polygon = PoolVector2Array( 1920, 352, 1984, 352, 1984, 160, 1920, 160, 1920, 35
 closed = false
 cull_mode = 2
 polygon = PoolVector2Array( 2432, -32, 2432, 32, 2624, 32, 2624, -32 )
+
+[sub_resource type="OccluderPolygon2D" id=14]
+polygon = PoolVector2Array( 6912, -672, 8704, -672, 8704, 160, 8896, 160, 8896, -96, 9664, -96, 9664, 288, 9728, 288, 9728, -160, 9664, -160, 8832, -160, 8832, 96, 8768, 96, 8768, -672, 8768, -800, 6848, -800, 6848, -544, 6912, -544 )
+
+[sub_resource type="OccluderPolygon2D" id=15]
+polygon = PoolVector2Array( 7872, -288, 6080, -288, 6080, 224, 7424, 224, 7424, 288, 6016, 288, 6016, -352, 7872, -352 )
+
+[sub_resource type="OccluderPolygon2D" id=16]
+polygon = PoolVector2Array( 8256, -352, 8256, -544, 8576, -544, 8576, 288, 8192, 288 )
 
 [node name="DemoLevel" type="Node2D"]
 modulate = Color( 0.811765, 0.811765, 0.811765, 1 )
@@ -504,7 +515,10 @@ tile_set = ExtResource( 16 )
 collision_layer = 16
 collision_mask = 8
 format = 1
-tile_data = PoolIntArray( -393181, 0, 0, -393179, 0, 0, -327645, 0, 0, -327643, 0, 0, -196609, 0, 0, -262109, 0, 0, -262107, 0, 0, -262095, 0, 0, -131073, 0, 0, -196573, 0, 0, -196571, 0, 0, -196559, 0, 0, -65537, 0, 0, -131037, 0, 0, -131035, 0, 0, -131023, 0, 0, 65535, 0, 0, 35, 0, 0, 37, 0, 0, 46, 0, 0, 131071, 0, 0, 65571, 0, 0, 65573, 0, 0, 65582, 0, 0, 393215, 0, 0, 458751, 0, 0, 524287, 0, 0 )
+tile_data = PoolIntArray( -720774, 0, 0, -655238, 0, 0, -589702, 0, 0, -524166, 0, 0, -458630, 0, 0, -393181, 0, 0, -393179, 0, 0, -327645, 0, 0, -327643, 0, 0, -196609, 0, 0, -262109, 0, 0, -262107, 0, 0, -262095, 0, 0, -131073, 0, 0, -196573, 0, 0, -196571, 0, 0, -196559, 0, 0, -65537, 0, 0, -131037, 0, 0, -131035, 0, 0, -131023, 0, 0, 65535, 0, 0, 35, 0, 0, 37, 0, 0, 46, 0, 0, 131071, 0, 0, 65571, 0, 0, 65573, 0, 0, 65582, 0, 0, 393215, 0, 0, 458751, 0, 0, 524287, 0, 0 )
+
+[node name="Storage" parent="Tiles" instance=ExtResource( 17 )]
+position = Vector2( 5984, -192 )
 
 [node name="Entities" type="Node2D" parent="."]
 position = Vector2( -79, 0 )
@@ -646,6 +660,23 @@ position = Vector2( 3700.72, 554.126 )
 [node name="Roomba9" parent="Entities/Enemies" instance=ExtResource( 2 )]
 position = Vector2( 4654.82, 574.63 )
 
+[node name="Roomba10" parent="Entities/Enemies" instance=ExtResource( 2 )]
+position = Vector2( 7183, 192 )
+
+[node name="Roomba11" parent="Entities/Enemies" instance=ExtResource( 2 )]
+position = Vector2( 7887, -64 )
+
+[node name="Roomba12" parent="Entities/Enemies" instance=ExtResource( 2 )]
+position = Vector2( 7215, -448 )
+
+[node name="Roomba13" parent="Entities/Enemies" instance=ExtResource( 2 )]
+position = Vector2( 9455, 256 )
+
+[node name="Misc" type="Node2D" parent="Entities"]
+
+[node name="Teleport1" type="Position2D" parent="Entities/Misc"]
+position = Vector2( 6287, 64 )
+
 [node name="StaticEntities" type="Node2D" parent="."]
 position = Vector2( -648, -86.5 )
 
@@ -672,6 +703,15 @@ occluder = SubResource( 12 )
 
 [node name="LightOccluder2D6" type="LightOccluder2D" parent="LightOcluders"]
 occluder = SubResource( 13 )
+
+[node name="LightOccluder2D7" type="LightOccluder2D" parent="LightOcluders"]
+occluder = SubResource( 14 )
+
+[node name="LightOccluder2D8" type="LightOccluder2D" parent="LightOcluders"]
+occluder = SubResource( 15 )
+
+[node name="LightOccluder2D9" type="LightOccluder2D" parent="LightOcluders"]
+occluder = SubResource( 16 )
 
 [node name="Lights" type="Node2D" parent="."]
 visible = false
@@ -742,6 +782,55 @@ texture = ExtResource( 9 )
 color = Color( 0.768627, 0.0862745, 0.0862745, 1 )
 energy = 0.41
 
+[node name="Light9" parent="Lights" instance=ExtResource( 3 )]
+position = Vector2( 8168, -457.5 )
+scale = Vector2( 4.25, 3 )
+z_index = 1
+texture = ExtResource( 18 )
+color = Color( 0.768627, 0.0862745, 0.0862745, 1 )
+shadow_enabled = true
+light_broken = true
+
+[node name="Light10" parent="Lights" instance=ExtResource( 3 )]
+position = Vector2( 7752, -457.5 )
+scale = Vector2( 4.25, 3 )
+z_index = 1
+texture = ExtResource( 18 )
+color = Color( 0.768627, 0.0862745, 0.0862745, 1 )
+shadow_enabled = true
+
+[node name="Light11" parent="Lights" instance=ExtResource( 3 )]
+position = Vector2( 7032, -9.50002 )
+scale = Vector2( 4.375, 3.5 )
+z_index = 1
+texture = ExtResource( 18 )
+color = Color( 0.509804, 0.694118, 0.721569, 1 )
+shadow_enabled = true
+
+[node name="Light12" parent="Lights" instance=ExtResource( 3 )]
+position = Vector2( 8984, -505.5 )
+scale = Vector2( 3.875, 2.75 )
+z_index = 1
+texture = ExtResource( 18 )
+color = Color( 0.509804, 0.694118, 0.721569, 1 )
+shadow_enabled = true
+
+[node name="Light13" parent="Lights" instance=ExtResource( 3 )]
+position = Vector2( 9291, 18.5 )
+rotation = 1.5708
+scale = Vector2( 2.59929, 0.95074 )
+z_index = 1
+color = Color( 0.509804, 0.694118, 0.721569, 1 )
+shadow_enabled = true
+
+[node name="Light14" parent="Lights" instance=ExtResource( 3 )]
+position = Vector2( 9287, -364.5 )
+rotation = 1.5708
+scale = Vector2( 2.59929, 0.95074 )
+z_index = 1
+color = Color( 0.509804, 0.694118, 0.721569, 1 )
+shadow_enabled = true
+
 [node name="Cameras" type="Node2D" parent="."]
 position = Vector2( 384, 376 )
 
@@ -767,11 +856,11 @@ position = Vector2( 1792, 16 )
 position = Vector2( 2496, 16 )
 
 [node name="PlayerSpawn" parent="." instance=ExtResource( 15 )]
-position = Vector2( 4240.14, 289.195 )
+position = Vector2( 224, 416 )
 z_index = 3
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]
-color = Color( 0.878431, 0.878431, 0.878431, 1 )
+color = Color( 0.611765, 0.611765, 0.611765, 1 )
 
 [node name="Mountains1" parent="." instance=ExtResource( 10 )]
 

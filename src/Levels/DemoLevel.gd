@@ -3,6 +3,7 @@ extends Node2D
 export var map_limit_start: Vector2 = Vector2.ZERO;
 export var map_limit_end: Vector2 = Vector2.ZERO;
 
+var player_inside_storage: bool = false;
 var is_night: bool = false;
 var CameraPaths: Array;
 onready var LevelStaticCamera = $Cameras/LevelCamera1; #Static camera used for camera_move_to
@@ -28,7 +29,8 @@ func _on_player_outside():
 	Game.ActiveCamera.change_zoom_interpolated(1.5, 0.5);
 
 func _on_player_inside():
-	Game.ActiveCamera.change_zoom_interpolated(1.0, 0.5);
+	if !player_inside_storage:
+		Game.ActiveCamera.change_zoom_interpolated(1.0, 0.5);
 
 func select_camera(cameraStr: String):
 	var CameraPathNode: NodePath = NodePath(str(self.get_path()) + "/" + cameraStr);
@@ -65,13 +67,24 @@ func entering_building_effect():
 	else:
 		set_day();
 	
-	Game.Player.respawn();
+	#Game.Player.respawn();
+	player_inside_storage = true;
+	$PlayerSpawn.global_position = $Entities/Misc/Teleport1.global_position;
+	Game.Player.global_position = $Entities/Misc/Teleport1.global_position;
+	#new Camera limits
+	map_limit_start.x = 5888;
+	map_limit_start.y = -928;
+	map_limit_end.x = 9728;
+	map_limit_end.y = 610;
+	
+	Game.ActiveCamera.update_limits(map_limit_start, map_limit_end);
+	LevelStaticCamera.update_limits(map_limit_start, map_limit_end);
 
 func set_night():
 	$Lights.visible = true;
 	$LightOcluders.visible = true;
-	$CanvasModulate.color = Color("2e2e2e");
-	$Mountains1/CanvasModulate.color = Color("2e2e2e");
+	$CanvasModulate.color = Color("4e4e4e");
+	$Mountains1/CanvasModulate.color = Color("4e4e4e");
 	
 func set_day():
 	$Lights.visible = false;
