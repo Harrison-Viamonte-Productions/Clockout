@@ -77,6 +77,7 @@ func entering_building_effect():
 	map_limit_end.x = 9728;
 	map_limit_end.y = 610;
 	
+	$Tiles/Rain.visible = false;
 	Game.ActiveCamera.update_limits(map_limit_start, map_limit_end);
 	LevelStaticCamera.update_limits(map_limit_start, map_limit_end);
 
