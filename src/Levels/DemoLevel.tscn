@@ -69,7 +69,7 @@ cull_mode = 2
 polygon = PoolVector2Array( 2432, -32, 2432, 32, 2624, 32, 2624, -32 )
 
 [sub_resource type="OccluderPolygon2D" id=14]
-polygon = PoolVector2Array( 6912, -672, 8704, -672, 8704, 160, 8896, 160, 8896, -96, 9664, -96, 9664, 288, 9728, 288, 9728, -160, 9664, -160, 8832, -160, 8832, 96, 8768, 96, 8768, -672, 8768, -800, 6848, -800, 6848, -544, 6912, -544 )
+polygon = PoolVector2Array( 6912, -672, 8704, -672, 8704, 160, 8896, 160, 8896, -96, 9664, -96, 9664, 96, 9792, 96, 9792, -544, 9472, -544, 9472, -736, 9792, -736, 9792, -800, 9408, -800, 9408, -480, 9664, -480, 9664, -160, 8832, -160, 8832, 96, 8768, 96, 8768, -672, 8768, -800, 6848, -800, 6848, -544, 6912, -544 )
 
 [sub_resource type="OccluderPolygon2D" id=15]
 polygon = PoolVector2Array( 7872, -288, 6080, -288, 6080, 224, 7424, 224, 7424, 288, 6016, 288, 6016, -352, 7872, -352 )
@@ -681,7 +681,6 @@ position = Vector2( 6287, 64 )
 position = Vector2( -648, -86.5 )
 
 [node name="LightOcluders" type="Node2D" parent="."]
-visible = false
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="LightOcluders"]
 position = Vector2( -648, -150.5 )
@@ -714,7 +713,6 @@ occluder = SubResource( 15 )
 occluder = SubResource( 16 )
 
 [node name="Lights" type="Node2D" parent="."]
-visible = false
 position = Vector2( -648, -86.5 )
 
 [node name="Light1" parent="Lights" instance=ExtResource( 3 )]
@@ -791,6 +789,15 @@ color = Color( 0.768627, 0.0862745, 0.0862745, 1 )
 shadow_enabled = true
 light_broken = true
 
+[node name="Light15" parent="Lights" instance=ExtResource( 3 )]
+position = Vector2( 10280, -553.5 )
+scale = Vector2( 2.25, 2.5 )
+z_index = 1
+texture = ExtResource( 18 )
+color = Color( 0.768627, 0.0862745, 0.0862745, 1 )
+shadow_enabled = true
+light_broken = true
+
 [node name="Light10" parent="Lights" instance=ExtResource( 3 )]
 position = Vector2( 7752, -457.5 )
 scale = Vector2( 4.25, 3 )
@@ -856,7 +863,7 @@ position = Vector2( 1792, 16 )
 position = Vector2( 2496, 16 )
 
 [node name="PlayerSpawn" parent="." instance=ExtResource( 15 )]
-position = Vector2( 224, 416 )
+position = Vector2( 4992, 448 )
 z_index = 3
 
 [node name="CanvasModulate" type="CanvasModulate" parent="."]

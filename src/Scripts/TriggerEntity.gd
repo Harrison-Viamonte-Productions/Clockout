@@ -35,6 +35,10 @@ func get_node_by_string(node_string: String) -> Node:
 	return nodeReturn;
 
 func _ready():
+	update_trigger_data();
+
+func update_trigger_data():
+	disconnect_all_methods();
 	if call_function_enter.length() > 1 || call_function_exit.length() > 1:
 		nodeCaller = get_node_by_string(node_caller); # By default
 		activatedBy = get_node_by_string(activated_by); # By default
@@ -123,3 +127,13 @@ func convert_array_args_to_tween_args(array_args: Array) -> Array:
 			break;
 		tween_array[i] = array_args[i];
 	return tween_array;
+	
+func disconnect_all_methods():
+	if self.is_connected("body_entered", self,  "on_body_entered"):
+		self.disconnect_method("body_entered");
+	if self.is_connected("area_entered", self,  "on_area_entered"):
+		self.disconnect_method("area_entered");
+	if self.is_connected("body_exited", self,  "on_body_exited"):
+		self.disconnect_method("body_exited");
+	if self.is_connected("area_exited", self,  "on_area_exited"):
+		self.disconnect_method("area_exited");

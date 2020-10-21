@@ -8,13 +8,17 @@ const MAX_JUMPS: int = 2
 const JUMP_DELAY_MS: int = 250
 const JUMP_ADD_DURATION_MS: int = 750
 const DAMAGE_PROTECTION_SEC: float = 1.5; #Seconds of damage protection
+const SNAP_VECTOR: Vector2 = Vector2(0, 32.0);
+const IMPULSE_FRICTION: float = 1.25;
 
 var jump_count : int = 0
 var jump_add_time_ms : int = 0
 var next_jump_time : int = 0
 var velocity : Vector2  = Vector2.ZERO
+var velocity_impulse: Vector2 = Vector2.ZERO;
 var is_crouched: bool = false;
 var damage_protection: bool = false;
+var is_jumping: bool = false;
 
 export var health: int = 3;
 var initial_health: int = 3;
@@ -41,7 +45,21 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	update_velocity(delta)
 	update_collision_box()
-	move_and_slide(velocity, Vector2.UP)
+	
+	if !is_jumping:
+		move_and_slide_with_snap(velocity, 32*Vector2.DOWN, 1*Vector2.UP);
+	else:
+		move_and_slide(velocity, Vector2.UP)
+	
+	if abs(velocity_impulse.x) > 0.005:
+		velocity_impulse.x = velocity_impulse.x/IMPULSE_FRICTION;
+	else:
+		velocity_impulse.x = 0.0;
+		
+	if abs(velocity_impulse.y) > 0.005:
+		velocity_impulse.y = velocity_impulse.y/IMPULSE_FRICTION;
+	else:
+		velocity_impulse.y = 0.0;
 
 func update_velocity(delta: float ) -> void:
 	var time = OS.get_ticks_msec()
@@ -60,17 +78,19 @@ func update_collision_box():
 		crouch_collision_box.disabled = true
 
 func fall(delta: float) -> void:
-	velocity.y += Game.GRAVITY*delta
+	velocity.y += Game.GRAVITY*delta;
 
 func jump(time: int, delta: float) -> void:
 	if is_on_floor() or is_on_ceiling():
 		if is_on_floor():
 			jump_count = 0
 		velocity.y = 0
+		is_jumping = false;
 	elif jump_count == 0:
 		jump_count = 1
 	
 	if Input.is_action_just_pressed("jump") and (is_on_floor() or jump_count < MAX_JUMPS) and time > next_jump_time:
+		is_jumping = true;
 		velocity.y = JUMP_SPEED
 		jump_count += 1
 		next_jump_time = time + JUMP_DELAY_MS
@@ -138,3 +158,6 @@ func killed(attacker: Node2D):
 
 func update_gui():
 	Game.GUI.update_health(health);
+
+func apply_impulse(impulse: Vector2):
+	move_and_slide(impulse, Vector2.UP, true)

@@ -74,7 +74,7 @@ func entering_building_effect():
 	#new Camera limits
 	map_limit_start.x = 5888;
 	map_limit_start.y = -928;
-	map_limit_end.x = 9728;
+	map_limit_end.x = 10368;
 	map_limit_end.y = 610;
 	
 	$Tiles/Rain.visible = false;
