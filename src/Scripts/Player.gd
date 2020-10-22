@@ -1,15 +1,19 @@
 class_name Player
 extends KinematicBody2D
 
+#Movement constants
+
 const ACCELERATION: int = 8
 const MOVE_SPEED: float = 200.0
 const JUMP_SPEED: float = -450.0
 const MAX_JUMPS: int = 2
 const JUMP_DELAY_MS: int = 250
 const JUMP_ADD_DURATION_MS: int = 750
+
+# Other constants
+
 const DAMAGE_PROTECTION_SEC: float = 1.5; #Seconds of damage protection
 const SNAP_VECTOR: Vector2 = Vector2(0, 32.0);
-const IMPULSE_FRICTION: float = 1.25;
 
 var jump_count : int = 0
 var jump_add_time_ms : int = 0
@@ -20,21 +24,24 @@ var is_crouched: bool = false;
 var damage_protection: bool = false;
 var is_jumping: bool = false;
 
-export var health: int = 3;
-var initial_health: int = 3;
-
 onready var stand_collision_box: CollisionPolygon2D = $CollisionNormal
 onready var crouch_collision_box: CollisionPolygon2D = $CollisionCrouch
 onready var up_raycast: RayCast2D = $UpRayCast;
 onready var up_raycast2: RayCast2D = $UpRayCast2;
 
+#Export var
+export var health: int = 3;
+var initial_health: int = 3;
 
 var Spawn: Node2D = null;
+
+var Util = Game.Util_Object.new(self);
 
 func _enter_tree():
 	Game.Player = self;
 
 func _ready() -> void:
+	Util._ready();
 	initial_health = health;
 	var mapLimits = Game.CurrentMap.get_world_limits();
 	$Camera.update_limits(mapLimits.start, mapLimits.end);
@@ -47,19 +54,9 @@ func _physics_process(delta: float) -> void:
 	update_collision_box()
 	
 	if !is_jumping:
-		move_and_slide_with_snap(velocity, 32*Vector2.DOWN, 1*Vector2.UP);
+		move_and_slide_with_snap(velocity, 32.0*Vector2.DOWN, 1*Vector2.UP);
 	else:
 		move_and_slide(velocity, Vector2.UP)
-	
-	if abs(velocity_impulse.x) > 0.005:
-		velocity_impulse.x = velocity_impulse.x/IMPULSE_FRICTION;
-	else:
-		velocity_impulse.x = 0.0;
-		
-	if abs(velocity_impulse.y) > 0.005:
-		velocity_impulse.y = velocity_impulse.y/IMPULSE_FRICTION;
-	else:
-		velocity_impulse.y = 0.0;
 
 func update_velocity(delta: float ) -> void:
 	var time = OS.get_ticks_msec()
@@ -120,7 +117,13 @@ func get_camera():
 
 func respawn():
 	Game.set_active_camera($Camera);
-	self.global_position = Spawn.global_position;
+	
+	if typeof(Spawn) != TYPE_NIL:
+		self.global_position = Spawn.global_position;
+	else:
+		self.global_position = Util.init_global_pos;
+		Game.print_warning("¡No PlayerSpawn found for respawning!");
+		
 	self.velocity = Vector2.ZERO;
 
 func hurt_effect():
@@ -158,6 +161,3 @@ func killed(attacker: Node2D):
 
 func update_gui():
 	Game.GUI.update_health(health);
-
-func apply_impulse(impulse: Vector2):
-	move_and_slide(impulse, Vector2.UP, true)

@@ -17,7 +17,6 @@ polygon = PoolVector2Array( -160, -64, -160, -128, 160, -128, 160, 128, -224, 12
 [node name="Elevator" type="KinematicBody2D"]
 collision_layer = 2
 collision_mask = 2147483649
-collision/safe_margin = 0.12
 script = ExtResource( 3 )
 speed = 500.0
 
@@ -57,7 +56,6 @@ shape = SubResource( 1 )
 position = Vector2( 0, 128 )
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
-visible = false
 polygon = PoolVector2Array( -224, 128, 160, 128, 160, -128, -160, -128, -160, -64, -224, -64, -224, -192, 224, -192, 224, 192, -224, 192 )
 
 [node name="Light" type="Node2D" parent="."]

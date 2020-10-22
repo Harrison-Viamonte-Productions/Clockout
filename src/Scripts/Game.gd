@@ -20,3 +20,6 @@ func interpolate_colors(delta):
 func set_active_camera(newCamera):
 	ActiveCamera = newCamera;
 	ActiveCamera.current = true;
+
+func print_warning(text: String):
+	print("[WARNING] %s" % text);

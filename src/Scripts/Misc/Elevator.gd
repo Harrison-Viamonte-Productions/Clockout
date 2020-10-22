@@ -5,7 +5,6 @@ export var automatic: bool = true;
 export var speed: float = 100.0;
 export var acel_time: float = 1.0;
 export var lights: bool = false;
-#export var time: float = 0.0; #If used, it replaces speed
 
 var current_floor: int = 0;
 var next_floor: int = 0;
@@ -42,27 +41,27 @@ func move_to_floor(new_floor: int):
 	next_floor = new_floor;
 	
 func move(delta):
-	var move_speed: float = get_speed(delta);
-	if position.x < floors_position[next_floor].x:
-		position.x = clamp(position.x + move_speed*delta, position.x, floors_position[next_floor].x);
-	else:
-		position.x = clamp(position.x - move_speed*delta, floors_position[next_floor].x, position.x);
-
-	if position.y < floors_position[next_floor].y:
-		position.y = clamp(position.y + move_speed*delta, position.y, floors_position[next_floor].y);
-	else:
-		position.y = clamp(position.y - move_speed*delta, floors_position[next_floor].y, position.y);
-		
-func get_speed(delta):
+	var move_velocity: Vector2 = get_velocity(delta);
+	position = normalize_pos(position, position+move_velocity*delta);
 	
+func normalize_pos(old_pos: Vector2, new_pos: Vector2) -> Vector2:
+	var normalized_pos: Vector2 = new_pos;
+	if ((old_pos.x <= floors_position[next_floor].x) && (new_pos.x > floors_position[next_floor].x)) || ((old_pos.x >= floors_position[next_floor].x) && (new_pos.x < floors_position[next_floor].x)):
+		normalized_pos.x = floors_position[next_floor].x;
+	if ((old_pos.y <= floors_position[next_floor].y) && (new_pos.y > floors_position[next_floor].y)) || ((old_pos.y >= floors_position[next_floor].y) && (new_pos.y < floors_position[next_floor].y)):
+		normalized_pos.y = floors_position[next_floor].y;
+	return normalized_pos;
+
+func get_velocity(delta) -> Vector2:
+	var speed_mult_vec: Vector2 = (floors_position[next_floor]-floors_position[current_floor]).normalized();
 	if acel_time <= 0.0:
-		return speed;
+		return speed*speed_mult_vec;
 	else: #movement accelerated
 		var hmid: float = distance_between_floors(next_floor, current_floor)/2.0;
 		var h: float = hmid - abs(hmid - (floors_position[next_floor]-position).length());
 		var v: float = sqrt(abs(2.0*h*speed))/acel_time;
 		v = clamp(v, 1.0, speed); #clamp is vital because this function is based on velocity and not time!! 
-		return v;
+		return v*speed_mult_vec;
 
 func distance_between_floors(floor1: int, floor2: int):
 	return (floors_position[floor1]-floors_position[floor2]).length();

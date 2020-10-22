@@ -67,14 +67,13 @@ func entering_building_effect():
 	else:
 		set_day();
 	
-	#Game.Player.respawn();
 	player_inside_storage = true;
 	$PlayerSpawn.global_position = $Entities/Misc/Teleport1.global_position;
 	Game.Player.global_position = $Entities/Misc/Teleport1.global_position;
 	#new Camera limits
 	map_limit_start.x = 5888;
-	map_limit_start.y = -928;
-	map_limit_end.x = 10368;
+	map_limit_start.y = -1376;
+	map_limit_end.x = 11904;
 	map_limit_end.y = 610;
 	
 	$Tiles/Rain.visible = false;
