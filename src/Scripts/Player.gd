@@ -9,6 +9,8 @@ const JUMP_SPEED: float = -450.0
 const MAX_JUMPS: int = 2
 const JUMP_DELAY_MS: int = 250
 const JUMP_ADD_DURATION_MS: int = 750
+const AIR_FRICTION: float = 25.0;
+const FLOOR_FRICTION: float = 500.0;
 
 # Other constants
 
@@ -19,10 +21,14 @@ var jump_count : int = 0
 var jump_add_time_ms : int = 0
 var next_jump_time : int = 0
 var velocity : Vector2  = Vector2.ZERO
-var velocity_impulse: Vector2 = Vector2.ZERO;
 var is_crouched: bool = false;
 var damage_protection: bool = false;
 var is_jumping: bool = false;
+
+#friction and impulse code
+var was_on_floor: bool = false;
+var velocity_impulse: Vector2 = Vector2.ZERO;
+var last_floor_velocity: Vector2 = Vector2.ZERO;
 
 onready var stand_collision_box: CollisionPolygon2D = $CollisionNormal
 onready var crouch_collision_box: CollisionPolygon2D = $CollisionCrouch
@@ -52,11 +58,34 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	update_velocity(delta)
 	update_collision_box()
+	friction(delta)
 	
 	if !is_jumping:
-		move_and_slide_with_snap(velocity, 32.0*Vector2.DOWN, 1*Vector2.UP);
+		move_and_slide_with_snap(velocity + velocity_impulse, 32.0*Vector2.DOWN, 1*Vector2.UP);
 	else:
-		move_and_slide(velocity, Vector2.UP)
+		move_and_slide(velocity + velocity_impulse, Vector2.UP)
+
+func friction(delta: float) -> void:
+	if is_on_floor():
+		last_floor_velocity = get_floor_velocity();
+	elif was_on_floor && !is_on_floor():
+		velocity_impulse = last_floor_velocity;
+	was_on_floor = is_on_floor();
+
+	var friction: float = FLOOR_FRICTION if (is_on_floor() || is_on_ceiling()) else AIR_FRICTION;
+	if abs(velocity_impulse.x) <=  friction*delta:
+		velocity_impulse.x = 0.0;
+	elif velocity_impulse.x > 0.0:
+		velocity_impulse.x -= friction*delta;
+	elif  velocity_impulse.x < 0.0:
+		velocity_impulse.x += friction*delta;
+		
+	if abs(velocity_impulse.y) <= friction*delta:
+		velocity_impulse.y = 0.0;
+	elif velocity_impulse.y > 0.0:
+		velocity_impulse.y -= friction*delta;
+	elif  velocity_impulse.y < 0.0:
+		velocity_impulse.y += friction*delta;
 
 func update_velocity(delta: float ) -> void:
 	var time = OS.get_ticks_msec()
@@ -77,6 +106,7 @@ func update_collision_box():
 func fall(delta: float) -> void:
 	velocity.y += Game.GRAVITY*delta;
 
+
 func jump(time: int, delta: float) -> void:
 	if is_on_floor() or is_on_ceiling():
 		if is_on_floor():
@@ -88,7 +118,8 @@ func jump(time: int, delta: float) -> void:
 	
 	if Input.is_action_just_pressed("jump") and (is_on_floor() or jump_count < MAX_JUMPS) and time > next_jump_time:
 		is_jumping = true;
-		velocity.y = JUMP_SPEED
+
+		velocity.y = JUMP_SPEED;
 		jump_count += 1
 		next_jump_time = time + JUMP_DELAY_MS
 		jump_add_time_ms = time + JUMP_ADD_DURATION_MS

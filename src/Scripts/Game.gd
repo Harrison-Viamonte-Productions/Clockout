@@ -23,3 +23,15 @@ func set_active_camera(newCamera):
 
 func print_warning(text: String):
 	print("[WARNING] %s" % text);
+
+
+func get_data_from_json(filename: String):
+	var file: File = File.new();
+	
+	assert(file.file_exists(filename), ("¡The file %s doesn't exists!" % filename));
+	
+	file.open(filename, File.READ); #Assumes the file exists
+	var text = file.get_as_text();
+	var data = parse_json(text);
+	file.close();
+	return data;

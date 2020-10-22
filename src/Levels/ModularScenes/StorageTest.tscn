@@ -39,13 +39,13 @@ tile_data = PoolIntArray( -655349, 15, 0, -655348, 15, 0, -589813, 15, 0, -58981
 [node name="Elevator" parent="." instance=ExtResource( 2 )]
 position = Vector2( 4000, 320 )
 z_index = 1
-floors_position = [ Vector2( 4000, -512 ) ]
+positions = [ Vector2( 4000, -512 ) ]
 acel_time = 1.5
 lights = true
 
 [node name="Elevator2" parent="." instance=ExtResource( 2 )]
 position = Vector2( 4576, -960 )
 z_index = 1
-floors_position = [ Vector2( 5600, 512 ), Vector2( 5600, -960 ), Vector2( 4576, 512 ) ]
+positions = [ Vector2( 5600, 512 ), Vector2( 5600, -960 ), Vector2( 4576, 512 ) ]
 acel_time = 1.5
 lights = true
