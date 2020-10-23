@@ -2,7 +2,6 @@ class_name Player
 extends KinematicBody2D
 
 #Movement constants
-
 const ACCELERATION: int = 8
 const MOVE_SPEED: float = 200.0
 const JUMP_SPEED: float = -450.0
@@ -13,7 +12,6 @@ const AIR_FRICTION: float = 25.0;
 const FLOOR_FRICTION: float = 500.0;
 
 # Other constants
-
 const DAMAGE_PROTECTION_SEC: float = 1.5; #Seconds of damage protection
 const SNAP_VECTOR: Vector2 = Vector2(0, 32.0);
 

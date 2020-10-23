@@ -2,7 +2,6 @@ extends Object
 
 #Features shared for MOST of the entities
 const FLOAT_TOLERANCE: float = 0.005; #near insignificant error for float
-
 var father_node: Node2D;
 var init_pos: Vector2;
 var init_global_pos: Vector2;

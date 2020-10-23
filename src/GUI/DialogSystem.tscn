@@ -4,9 +4,10 @@
 [ext_resource path="res://assets/ui/gradient_background.png" type="Texture" id=2]
 [ext_resource path="res://assets/ui/characters/playercc0.png" type="Texture" id=3]
 [ext_resource path="res://assets/ui/little_boxes1.png" type="Texture" id=4]
-[ext_resource path="res://src/GUI/DialogSystem.gd" type="Script" id=5]
+[ext_resource path="res://src/Scripts/GUI/DialogSystem.gd" type="Script" id=5]
 [ext_resource path="res://src/Animations/show_message2.tres" type="Animation" id=6]
 [ext_resource path="res://src/Animations/GUIhide_message.tres" type="Animation" id=7]
+
 
 [sub_resource type="DynamicFont" id=1]
 size = 15

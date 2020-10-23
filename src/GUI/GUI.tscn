@@ -2,11 +2,12 @@
 
 [ext_resource path="res://assets/uipack_fixed/PNG/grey_button12.png" type="Texture" id=1]
 [ext_resource path="res://assets/fonts/PixelOperator8-Bold.ttf" type="DynamicFontData" id=2]
-[ext_resource path="res://src/Scripts/GUI.gd" type="Script" id=3]
+[ext_resource path="res://src/Scripts/GUI/GUI.gd" type="Script" id=3]
 [ext_resource path="res://assets/fonts/PixelOperatorMonoHB8.ttf" type="DynamicFontData" id=4]
 [ext_resource path="res://src/Animations/show_message.tres" type="Animation" id=5]
 [ext_resource path="res://src/Animations/hide_message.tres" type="Animation" id=6]
 [ext_resource path="res://src/GUI/DialogSystem.tscn" type="PackedScene" id=7]
+
 
 [sub_resource type="DynamicFont" id=1]
 size = 18
