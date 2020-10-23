@@ -66,6 +66,9 @@ func _physics_process(delta: float) -> void:
 		move_and_slide(velocity + velocity_impulse, Vector2.UP)
 
 func friction(delta: float) -> void:
+	if is_on_floor() || is_on_wall():
+		velocity_impulse = Vector2.ZERO; #disable friction on floor and wall by now		
+	
 	if is_on_floor():
 		last_floor_velocity = get_floor_velocity();
 	elif was_on_floor && !is_on_floor():
