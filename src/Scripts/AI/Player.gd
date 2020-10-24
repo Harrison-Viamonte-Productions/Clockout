@@ -186,7 +186,7 @@ func disable_damage_protection():
 	damage_protection = false;
 
 func killed(attacker: Node2D):
-	Game.GUI.info_message(attacker.DEATH_MESSAGE % "Player_name");
+	Game.GUI.info_message(Game.get_str(attacker.DEATH_MESSAGE) % ["Player_name", attacker.NAME]);
 	respawn();
 	health = initial_health;
 	update_gui();

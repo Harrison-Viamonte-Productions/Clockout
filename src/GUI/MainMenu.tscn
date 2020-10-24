@@ -222,10 +222,9 @@ __meta__ = {
 }
 
 [node name="OptionsContainer" type="PanelContainer" parent="."]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = 1000.0
+margin_left = 288.0
 margin_top = 32.0
-margin_right = 1640.0
+margin_right = 927.995
 margin_bottom = 384.0
 custom_styles/panel = SubResource( 3 )
 __meta__ = {
@@ -285,10 +284,31 @@ margin_bottom = 32.0
 text = "1280x720"
 flat = true
 
-[node name="Keys1" type="HBoxContainer" parent="OptionsContainer/OptionsMenu/VBoxContainer"]
+[node name="Languages" type="HBoxContainer" parent="OptionsContainer/OptionsMenu/VBoxContainer"]
 margin_top = 72.0
 margin_right = 576.0
 margin_bottom = 104.0
+rect_min_size = Vector2( 0, 32 )
+
+[node name="Label" type="Label" parent="OptionsContainer/OptionsMenu/VBoxContainer/Languages"]
+margin_top = 3.0
+margin_right = 150.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 150, 0 )
+custom_fonts/font = SubResource( 1 )
+text = "LANGUAGE:"
+
+[node name="Langs" type="OptionButton" parent="OptionsContainer/OptionsMenu/VBoxContainer/Languages"]
+margin_left = 154.0
+margin_right = 282.0
+margin_bottom = 32.0
+text = "Select language"
+flat = true
+
+[node name="Keys1" type="HBoxContainer" parent="OptionsContainer/OptionsMenu/VBoxContainer"]
+margin_top = 108.0
+margin_right = 576.0
+margin_bottom = 140.0
 rect_min_size = Vector2( 0, 32 )
 custom_constants/separation = 23
 
@@ -332,9 +352,9 @@ custom_fonts/font = SubResource( 1 )
 text = "PRESS KEY"
 
 [node name="Keys2" type="HBoxContainer" parent="OptionsContainer/OptionsMenu/VBoxContainer"]
-margin_top = 108.0
+margin_top = 144.0
 margin_right = 576.0
-margin_bottom = 140.0
+margin_bottom = 176.0
 rect_min_size = Vector2( 0, 32 )
 custom_constants/separation = 23
 
@@ -378,9 +398,9 @@ custom_fonts/font = SubResource( 1 )
 text = "PRESS KEY"
 
 [node name="Keys3" type="HBoxContainer" parent="OptionsContainer/OptionsMenu/VBoxContainer"]
-margin_top = 144.0
+margin_top = 180.0
 margin_right = 576.0
-margin_bottom = 176.0
+margin_bottom = 212.0
 rect_min_size = Vector2( 0, 32 )
 custom_constants/separation = 23
 
@@ -424,9 +444,9 @@ custom_fonts/font = SubResource( 1 )
 text = "PRESS KEY"
 
 [node name="Keys4" type="HBoxContainer" parent="OptionsContainer/OptionsMenu/VBoxContainer"]
-margin_top = 180.0
+margin_top = 216.0
 margin_right = 576.0
-margin_bottom = 212.0
+margin_bottom = 248.0
 rect_min_size = Vector2( 0, 32 )
 custom_constants/separation = 23
 

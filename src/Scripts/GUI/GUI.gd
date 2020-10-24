@@ -1,10 +1,17 @@
 extends CanvasLayer
 
 func _ready():
+	add_to_group("has_lang_strings");
 	$DialogSystem.visible = false;
 	$InfoMessages/InfoMessage.visible = false
 	$MessageTimer.connect("timeout", self, "hide_message");
 	Game.GUI = self;
+	
+	update_lang_strings();
+
+func update_lang_strings():
+	$DialogSystem/HBoxContainer/Continue.text = Game.get_str("#str0101");
+
 
 func _process(delta):
 	$CenterContainer/HBoxContainer/VBoxContainer/FPSLabel.text = "FPS: " + str(Engine.get_frames_per_second());
@@ -14,6 +21,7 @@ func hide_message():
 	$MessageTimer.stop();
 
 func display_message(message: String, time: float = 5.0):
+	message = Game.get_str(message);
 	#$MessageTimer.stop();
 	#$DialogSystem/Mensaje.text = message;
 	#$DialogSystem/AnimationPlayer.play("show_message");
@@ -28,7 +36,7 @@ func message_hided():
 	$DialogSystem.visible = false;
 
 func update_health(new_health: int):
-	$CenterContainer/HBoxContainer/VBoxContainer/Health.text = "Health: %s" % str(new_health);
+	$CenterContainer/HBoxContainer/VBoxContainer/Health.text = Game.get_str("#str0100") + ": " + str(new_health);
 
 func info_message(msg: String, time: float = 5.0):
 	$InfoMessages/InfoMessage.text = msg;

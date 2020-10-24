@@ -1,0 +1,20 @@
+{
+	//Main menu
+	"str0001":	"NUEVA PARTIDA",
+	"str0002": 	"CARGAR PARTIDA",
+	"str0003":	"GUARDAR PARTIDA",
+	"str0004":	"OPCIONES",
+	"str0005":	"SALIR DEL JUEGO",
+	"str0006":	"PANTALLA COMPLETA",
+	"str0007":	"RESOLUCIÓN",
+	"str0008":	"APLICAR CAMBIOS",
+	"str0009":	"IDIOMA",
+	//GUI
+	"str0100": 	"VIDA",
+	"str0101":	"Continuar",
+	//Specific in-game strings
+	"str1000":	"Algo no está bien aquí...",
+	"str1001":	"......?",
+	"str1002":	"Nada como un poco de aire fresco.",
+	"str1003":	"%s fue asesinado por un %s"
+}

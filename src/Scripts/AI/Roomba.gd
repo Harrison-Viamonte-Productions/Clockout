@@ -1,6 +1,7 @@
 extends KinematicBody2D
 
-const DEATH_MESSAGE: String = "%s was killed by a Roomba";
+const NAME: String = "Roomba";
+const DEATH_MESSAGE: String = "#str1003";
 const ATTACK_DAMAGE: int = 1;
 const RUN_MULTIPLIER: float = 4.0;
 const MOVE_SPEED: float = 75.0

@@ -598,7 +598,7 @@ shape = SubResource( 7 )
 
 [node name="ShowMessage1" parent="Entities/Triggers" instance=ExtResource( 11 )]
 call_function_enter = "show_message"
-call_args_enter = [ "Something is not right here...", 3.0 ]
+call_args_enter = [ "#str1000", 3.0 ]
 trigger_once = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/ShowMessage1"]
@@ -608,7 +608,7 @@ shape = SubResource( 8 )
 [node name="ShowMessage2" parent="Entities/Triggers" instance=ExtResource( 11 )]
 position = Vector2( -1561, -575 )
 call_function_enter = "show_message"
-call_args_enter = [ "......?", 2.0 ]
+call_args_enter = [ "#str1001", 2.0 ]
 trigger_once = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/ShowMessage2"]
@@ -618,7 +618,7 @@ shape = SubResource( 8 )
 [node name="ShowMessage3" parent="Entities/Triggers" instance=ExtResource( 11 )]
 position = Vector2( 1199, 64 )
 call_function_enter = "show_message"
-call_args_enter = [ "Nothing like a bit of fresh air", 3.0 ]
+call_args_enter = [ "#str1002", 3.0 ]
 trigger_once = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/ShowMessage3"]

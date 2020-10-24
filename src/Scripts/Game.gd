@@ -2,6 +2,7 @@ extends Node2D
 
 const GRAVITY: float = 1200.0
 const VERSION: String = "0.1.5"; #Major, Minor, build count
+const LANG_FILES_FOLDER: String = "lang";
 
 var Player: Node = null;
 var CurrentMap: Node = null;
@@ -9,9 +10,15 @@ var GUI: Node = null;
 var ActiveCamera: Camera2D = null;
 var ViewportFX: Node = null; # Reference to the node that leads with transitions. Loaded per level
 var MainMenu:Node = null;
+var current_lang: String = "";
 
 #Objects (to avoid using classes)
 var Util_Object = preload("res://src/Scripts/Util.gd");
+var Lang = load("res://src/Scripts/Langs.gd").new();
+
+func _init():
+	Lang.load_langs(LANG_FILES_FOLDER);
+	current_lang = Lang.get_langs()[0];
 
 func _process(delta):
 	self.pause_mode = Node.PAUSE_MODE_PROCESS; #So we can use functions
@@ -27,16 +34,8 @@ func set_active_camera(newCamera):
 func print_warning(text: String):
 	print("[WARNING] %s" % text);
 
-
-func get_data_from_json(filename: String):
-	var file: File = File.new();
-	assert(file.file_exists(filename), ("¡The file %s doesn't exists!" % filename));
-	file.open(filename, File.READ); #Assumes the file exists
-	var text = file.get_as_text();
-	var data = parse_json(text);
-	file.close();
-	return data;
-
+func get_str(text: String) -> String:
+	return Lang.get_str(text, current_lang);
 
 func _input(event):
 	if typeof(CurrentMap) == TYPE_NIL || typeof(MainMenu) == TYPE_NIL:
@@ -49,3 +48,11 @@ func _input(event):
 		else:
 			CurrentMap.call_deferred("add_child", MainMenu);
 			get_tree().paused = true;
+
+func change_lang(new_lang: String):
+	if Lang.lang_exists(new_lang):
+		current_lang = new_lang;
+		update_lang_strings();
+
+func update_lang_strings():
+	get_tree().call_group("has_lang_strings", "update_lang_strings");

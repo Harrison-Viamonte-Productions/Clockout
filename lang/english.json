@@ -1,0 +1,20 @@
+{
+	//Main menu
+	"str0001":	"NEW GAME",
+	"str0002": 	"LOAD GAME",
+	"str0003":	"SAVE GAME",
+	"str0004":	"OPTIONS",
+	"str0005":	"QUIT GAME",
+	"str0006":	"FULLSCREEN",
+	"str0007":	"RESOLUTION",
+	"str0008":	"APPLY CHANGES",
+	"str0009":	"LANGUAGE",
+	//GUI
+	"str0100": 	"HEALTH",
+	"str0101":	"Continue",
+	//Specific in-game strings
+	"str1000":	"Something is not right here...",
+	"str1001":	"......?",
+	"str1002":	"Nothing like a bit of fresh air",
+	"str1003":	"%s was killed by a %s"
+}
