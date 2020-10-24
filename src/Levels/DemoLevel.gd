@@ -1,4 +1,4 @@
-extends Node2D
+extends "res://src/Scripts/DefaultLevel.gd"
 
 export var map_limit_start: Vector2 = Vector2.ZERO;
 export var map_limit_end: Vector2 = Vector2.ZERO;

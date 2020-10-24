@@ -35,10 +35,10 @@ func interpolate_zoom(delta: float) -> void:
 			zoom.y = clamp(zoom.y + move_step.y*delta, next_zoom.y, zoom.y);
 
 func update_limits(start: Vector2, end:Vector2) -> void:
-	limit_left = start.x;
-	limit_top = start.y;
-	limit_right = end.x;
-	limit_bottom = end.y;
+	limit_left = int(start.x);
+	limit_top = int(start.y);
+	limit_right = int(end.x);
+	limit_bottom = int(end.y);
 
 func change_zoom_interpolated(new_scale: float, seconds: float) -> void:
 	move_step.x = (new_scale - zoom.x)/seconds;

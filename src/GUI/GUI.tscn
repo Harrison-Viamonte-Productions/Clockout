@@ -8,7 +8,6 @@
 [ext_resource path="res://src/Animations/hide_message.tres" type="Animation" id=6]
 [ext_resource path="res://src/GUI/DialogSystem.tscn" type="PackedScene" id=7]
 
-
 [sub_resource type="DynamicFont" id=1]
 size = 18
 font_data = ExtResource( 2 )
@@ -36,7 +35,7 @@ texture = ExtResource( 1 )
 region_rect = Rect2( 39, 0, 10, 49 )
 modulate_color = Color( 0.0745098, 0.109804, 0.121569, 1 )
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=7]
 resource_name = "info_message_hide"
 length = 0.25
 step = 0.05
@@ -65,8 +64,7 @@ tracks/1/keys = {
 "values": [ Color( 0.313726, 0, 0, 1 ), Color( 0.313726, 0, 0, 0 ) ]
 }
 
-[sub_resource type="Animation" id=7]
-resource_name = "info_message_show"
+[sub_resource type="Animation" id=8]
 length = 0.25
 step = 0.05
 tracks/0/type = "value"
@@ -235,7 +233,7 @@ __meta__ = {
 visible = false
 
 [node name="InfoMessagesAnims" type="AnimationPlayer" parent="."]
-anims/info_message_hide = SubResource( 8 )
-anims/info_message_show = SubResource( 7 )
+anims/info_message_hide = SubResource( 7 )
+anims/info_message_show = SubResource( 8 )
 
 [node name="Tween" type="Tween" parent="."]

@@ -8,7 +8,6 @@
 [ext_resource path="res://src/Animations/show_message2.tres" type="Animation" id=6]
 [ext_resource path="res://src/Animations/GUIhide_message.tres" type="Animation" id=7]
 
-
 [sub_resource type="DynamicFont" id=1]
 size = 15
 font_data = ExtResource( 1 )

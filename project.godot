@@ -21,7 +21,7 @@ _global_script_class_icons={
 [application]
 
 config/name="Clockout"
-run/main_scene="res://src/Levels/DemoLevel.tscn"
+run/main_scene="res://src/GUI/MainMenu.tscn"
 config/icon="res://icon.png"
 
 [autoload]
