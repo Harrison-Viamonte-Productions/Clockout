@@ -91,4 +91,6 @@ func set_day():
 	$LightOcluders.visible = false;
 	$CanvasModulate.color = Color("e6e6e6");
 	$Mountains1/CanvasModulate.color = Color("e6e6e6");
-	
+
+func call_elevator(to_floor: int):
+	$Tiles/Storage/Elevator.move_to_pos(to_floor);

@@ -45,9 +45,9 @@ format = 1
 tile_data = PoolIntArray( -655349, 15, 0, -655348, 15, 0, -589813, 15, 0, -589812, 15, 0, -524277, 15, 0, -524276, 15, 0, -458741, 15, 0, -458740, 15, 0, -393205, 15, 0, -393204, 15, 0, -327669, 15, 0, -327668, 15, 0 )
 
 [node name="Elevator" parent="." instance=ExtResource( 2 )]
-position = Vector2( 4000, 320 )
+position = Vector2( 4000, -512 )
 z_index = 1
-positions = [ Vector2( 4000, -512 ) ]
+positions = [ Vector2( 4000, 320 ) ]
 acel_time = 1.5
 start_on = false
 lights = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://src/Levels/ModularScenes/Office1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/Entities/Enemies/Roomba.tscn" type="PackedScene" id=2]
@@ -18,6 +18,7 @@
 [ext_resource path="res://src/Tiles/func_tiles.tres" type="TileSet" id=16]
 [ext_resource path="res://src/Levels/ModularScenes/StorageTest.tscn" type="PackedScene" id=17]
 [ext_resource path="res://assets/lightmaps/radiuslight2.png" type="Texture" id=18]
+[ext_resource path="res://src/Entities/Misc/ElevatorButton.tscn" type="PackedScene" id=19]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
@@ -43,41 +44,44 @@ extents = Vector2( 32, 96 )
 [sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 40, 160 )
 
-[sub_resource type="OccluderPolygon2D" id=9]
-closed = false
-cull_mode = 1
-polygon = PoolVector2Array( 3013.86, -22.2298, 3144, -73.5, 3144, -265.5, 3208, -265.5, 3208, -73.5 )
+[sub_resource type="RectangleShape2D" id=9]
+extents = Vector2( 32, 32 )
 
 [sub_resource type="OccluderPolygon2D" id=10]
 closed = false
 cull_mode = 1
-polygon = PoolVector2Array( 1856, -160, 1856, -352, 1920, -352, 1920, -160, 2150.35, -68.9169 )
+polygon = PoolVector2Array( 3013.86, -22.2298, 3144, -73.5, 3144, -265.5, 3208, -265.5, 3208, -73.5 )
 
 [sub_resource type="OccluderPolygon2D" id=11]
 closed = false
-cull_mode = 2
-polygon = PoolVector2Array( 640, 160, 640, 352, 704, 352, 704, 160 )
+cull_mode = 1
+polygon = PoolVector2Array( 1856, -160, 1856, -352, 1920, -352, 1920, -160, 2150.35, -68.9169 )
 
 [sub_resource type="OccluderPolygon2D" id=12]
 closed = false
 cull_mode = 2
-polygon = PoolVector2Array( 1920, 352, 1984, 352, 1984, 160, 1920, 160, 1920, 352 )
+polygon = PoolVector2Array( 640, 160, 640, 352, 704, 352, 704, 160 )
 
 [sub_resource type="OccluderPolygon2D" id=13]
 closed = false
 cull_mode = 2
-polygon = PoolVector2Array( 2432, -32, 2432, 32, 2624, 32, 2624, -32 )
+polygon = PoolVector2Array( 1920, 352, 1984, 352, 1984, 160, 1920, 160, 1920, 352 )
 
 [sub_resource type="OccluderPolygon2D" id=14]
-polygon = PoolVector2Array( 6912, -672, 8704, -672, 8704, 160, 8896, 160, 8896, -96, 9664, -96, 9664, 96, 9792, 96, 9792, -544, 9344, -544, 9344, -480, 9664, -480, 9664, -160, 8832, -160, 8832, 96, 8768, 96, 8768, -672, 8768, -800, 6848, -800, 6848, -544, 6912, -544 )
+closed = false
+cull_mode = 2
+polygon = PoolVector2Array( 2432, -32, 2432, 32, 2624, 32, 2624, -32 )
 
 [sub_resource type="OccluderPolygon2D" id=15]
-polygon = PoolVector2Array( 7872, -288, 6080, -288, 6080, 224, 7424, 224, 7424, 288, 6016, 288, 6016, -352, 7872, -352 )
+polygon = PoolVector2Array( 6912, -672, 8704, -672, 8704, 160, 8896, 160, 8896, -96, 9664, -96, 9664, 96, 9792, 96, 9792, -544, 9344, -544, 9344, -480, 9664, -480, 9664, -160, 8832, -160, 8832, 96, 8768, 96, 8768, -672, 8768, -800, 6848, -800, 6848, -544, 6912, -544 )
 
 [sub_resource type="OccluderPolygon2D" id=16]
-polygon = PoolVector2Array( 8256, -544, 8576, -544, 8576, 288, 8256, 288 )
+polygon = PoolVector2Array( 7872, -288, 6080, -288, 6080, 224, 7424, 224, 7424, 288, 6016, 288, 6016, -352, 7872, -352 )
 
 [sub_resource type="OccluderPolygon2D" id=17]
+polygon = PoolVector2Array( 8256, -544, 8576, -544, 8576, 288, 8256, 288 )
+
+[sub_resource type="OccluderPolygon2D" id=18]
 polygon = PoolVector2Array( 9792, -736, 9408, -736, 9408, -800, 9792, -800 )
 
 [node name="DemoLevel" type="Node2D"]
@@ -528,6 +532,7 @@ position = Vector2( -79, 0 )
 z_index = 2
 
 [node name="Triggers" type="Node2D" parent="Entities"]
+visible = false
 
 [node name="Trigger1" parent="Entities/Triggers" instance=ExtResource( 11 )]
 call_function_enter = "_on_player_outside"
@@ -597,9 +602,9 @@ position = Vector2( 824, 264 )
 shape = SubResource( 7 )
 
 [node name="ShowMessage1" parent="Entities/Triggers" instance=ExtResource( 11 )]
+trigger_once = true
 call_function_enter = "show_message"
 call_args_enter = [ "#str1000", 3.0 ]
-trigger_once = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/ShowMessage1"]
 position = Vector2( 2255, 384 )
@@ -607,9 +612,9 @@ shape = SubResource( 8 )
 
 [node name="ShowMessage2" parent="Entities/Triggers" instance=ExtResource( 11 )]
 position = Vector2( -1561, -575 )
+trigger_once = true
 call_function_enter = "show_message"
 call_args_enter = [ "#str1001", 2.0 ]
-trigger_once = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/ShowMessage2"]
 position = Vector2( 2255, 384 )
@@ -617,9 +622,9 @@ shape = SubResource( 8 )
 
 [node name="ShowMessage3" parent="Entities/Triggers" instance=ExtResource( 11 )]
 position = Vector2( 1199, 64 )
+trigger_once = true
 call_function_enter = "show_message"
 call_args_enter = [ "#str1002", 3.0 ]
-trigger_once = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/ShowMessage3"]
 position = Vector2( 2255, 384 )
@@ -627,8 +632,8 @@ shape = SubResource( 8 )
 
 [node name="DoorTrigger" parent="Entities/Triggers" instance=ExtResource( 11 )]
 position = Vector2( 3111, 0 )
-call_function_enter = "enter_building"
 trigger_once = true
+call_function_enter = "enter_building"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/DoorTrigger"]
 position = Vector2( 2255, 384 )
@@ -680,6 +685,24 @@ position = Vector2( 9455, 256 )
 [node name="Teleport1" type="Position2D" parent="Entities/Misc"]
 position = Vector2( 6287, 64 )
 
+[node name="CallFloor1" parent="Entities/Misc" instance=ExtResource( 19 )]
+position = Vector2( 9807, 192 )
+wait_time = 4.0
+call_function = "call_elevator"
+call_args = [ 1 ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Misc/CallFloor1"]
+shape = SubResource( 9 )
+
+[node name="CallFloor2" parent="Entities/Misc" instance=ExtResource( 19 )]
+position = Vector2( 9807, -640 )
+wait_time = 4.0
+call_function = "call_elevator"
+call_args = [ 0 ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Misc/CallFloor2"]
+shape = SubResource( 9 )
+
 [node name="StaticEntities" type="Node2D" parent="."]
 position = Vector2( -648, -86.5 )
 
@@ -687,36 +710,36 @@ position = Vector2( -648, -86.5 )
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="LightOcluders"]
 position = Vector2( -648, -150.5 )
-occluder = SubResource( 9 )
+occluder = SubResource( 10 )
 
 [node name="LightOccluder2D2" type="LightOccluder2D" parent="LightOcluders"]
 position = Vector2( 0, -64 )
-occluder = SubResource( 10 )
+occluder = SubResource( 11 )
 
 [node name="LightOccluder2D3" type="LightOccluder2D" parent="LightOcluders"]
-occluder = SubResource( 11 )
+occluder = SubResource( 12 )
 
 [node name="LightOccluder2D4" type="LightOccluder2D" parent="LightOcluders"]
 position = Vector2( 640, 0 )
-occluder = SubResource( 11 )
-
-[node name="LightOccluder2D5" type="LightOccluder2D" parent="LightOcluders"]
 occluder = SubResource( 12 )
 
-[node name="LightOccluder2D6" type="LightOccluder2D" parent="LightOcluders"]
+[node name="LightOccluder2D5" type="LightOccluder2D" parent="LightOcluders"]
 occluder = SubResource( 13 )
 
-[node name="LightOccluder2D7" type="LightOccluder2D" parent="LightOcluders"]
+[node name="LightOccluder2D6" type="LightOccluder2D" parent="LightOcluders"]
 occluder = SubResource( 14 )
 
-[node name="LightOccluder2D8" type="LightOccluder2D" parent="LightOcluders"]
+[node name="LightOccluder2D7" type="LightOccluder2D" parent="LightOcluders"]
 occluder = SubResource( 15 )
 
-[node name="LightOccluder2D9" type="LightOccluder2D" parent="LightOcluders"]
+[node name="LightOccluder2D8" type="LightOccluder2D" parent="LightOcluders"]
 occluder = SubResource( 16 )
 
-[node name="LightOccluder2D10" type="LightOccluder2D" parent="LightOcluders"]
+[node name="LightOccluder2D9" type="LightOccluder2D" parent="LightOcluders"]
 occluder = SubResource( 17 )
+
+[node name="LightOccluder2D10" type="LightOccluder2D" parent="LightOcluders"]
+occluder = SubResource( 18 )
 
 [node name="Lights" type="Node2D" parent="."]
 position = Vector2( -648, -86.5 )

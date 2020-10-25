@@ -28,8 +28,9 @@ func _physics_process(delta):
 func move_to_pos(new_pos_index: int):
 	if new_pos_index < 0 || new_pos_index >= positions.size(): 
 		new_pos_index = 0;
+	if (new_pos_index == current_pos_index && next_pos_index != new_pos_index):
+		current_pos_index = next_pos_index;
 	next_pos_index = new_pos_index;
-
 
 func next_pos_reached():
 	current_pos_index = next_pos_index;

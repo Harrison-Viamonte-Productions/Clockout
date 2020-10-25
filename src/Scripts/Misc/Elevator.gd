@@ -29,5 +29,8 @@ func next_pos_reached():
 	current_pos_index = next_pos_index;
 	$Trigger.trigger_enabled = true;
 
+func move_to_next_floor():
+	move_to_pos(current_pos_index+1);
+
 func _on_player_leave():
 	pass;
