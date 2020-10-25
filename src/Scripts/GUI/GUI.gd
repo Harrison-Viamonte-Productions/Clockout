@@ -12,7 +12,6 @@ func _ready():
 func update_lang_strings():
 	$DialogSystem/HBoxContainer/Continue.text = Game.get_str("#str0101");
 
-
 func _process(delta):
 	$CenterContainer/HBoxContainer/VBoxContainer/FPSLabel.text = "FPS: " + str(Engine.get_frames_per_second());
 

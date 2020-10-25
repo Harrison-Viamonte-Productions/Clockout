@@ -3,6 +3,7 @@ extends Node2D
 const GRAVITY: float = 1200.0
 const VERSION: String = "0.1.5"; #Major, Minor, build count
 const LANG_FILES_FOLDER: String = "lang";
+const CONFIG_FILE: String = "game_config.cfg";
 
 var Player: Node = null;
 var CurrentMap: Node = null;
@@ -15,10 +16,13 @@ var current_lang: String = "";
 #Objects (to avoid using classes)
 var Util_Object = preload("res://src/Scripts/Util.gd");
 var Lang = load("res://src/Scripts/Langs.gd").new();
+var Config = load("res://src/Scripts/ConfigManager.gd").new();
 
 func _init():
 	Lang.load_langs(LANG_FILES_FOLDER);
+	Config.load_from_file(CONFIG_FILE);
 	current_lang = Lang.get_langs()[0];
+	self.call_deferred("update_settings");
 
 func _process(delta):
 	self.pause_mode = Node.PAUSE_MODE_PROCESS; #So we can use functions
@@ -56,3 +60,11 @@ func change_lang(new_lang: String):
 
 func update_lang_strings():
 	get_tree().call_group("has_lang_strings", "update_lang_strings");
+	
+func update_settings():
+	OS.window_fullscreen = Config.get_value("fullscreen");
+	OS.set_window_size(Config.get_value("resolution"));
+	change_lang(Config.get_value("language"));
+
+func save_settings():
+	Config.save_to_file(CONFIG_FILE);

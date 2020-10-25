@@ -37,6 +37,7 @@ func _ready():
 	$OptionsContainer/OptionsMenu/VBoxContainer/Keys3.visible = false;
 	$OptionsContainer/OptionsMenu/VBoxContainer/Keys4.visible = false;
 	
+	update_from_config();
 	update_lang_strings();
 
 func update_lang_strings():
@@ -63,6 +64,9 @@ func load_resolutions():
 		ResolutionsOptions.add_item(res);
 	ResolutionsOptions.select(0);
 
+func get_string_from_resoltion(res_vec: Vector2) -> String:
+	return (str(int(res_vec.x)) + "x" + str(int(res_vec.y)));
+
 func get_resolution_from_string(res_str: String) -> Vector2:
 	var str_array: PoolStringArray = res_str.split("x");
 	return Vector2(int(str_array[0]),int(str_array[1]));
@@ -87,14 +91,30 @@ func open_loadgame_dialog():
 
 func new_game():
 	get_tree().change_scene("res://src/Levels/DemoLevel.tscn");
-	
+
 func apply_config_changes():
-	OS.window_fullscreen = FullScreenCheckbox.pressed;
-	OS.set_window_size(get_resolution_from_string(resolutions[ResolutionsOptions.selected]));
-	Game.change_lang(LangsOptions.get_item_text(LangsOptions.selected));
+	Game.Config.set_value("fullscreen", FullScreenCheckbox.pressed);
+	Game.Config.set_value("resolution", get_resolution_from_string(resolutions[ResolutionsOptions.selected]));
+	Game.Config.set_value("language", LangsOptions.get_item_text(LangsOptions.selected));
+	Game.update_settings();
+	Game.save_settings();
 
 func set_ingame_mode():
 	$BackgroundImage.modulate.a = 0.85;
 	$BackgroundImage.modulate.r = 0.0;
 	$BackgroundImage.modulate.g = 0.0;
 	$BackgroundImage.modulate.b = 0.0;
+	
+func update_from_config():
+	FullScreenCheckbox.pressed = Game.Config.get_value("fullscreen");
+	var resolutionStr: String = get_string_from_resoltion(Game.Config.get_value("resolution"));
+	for i in range(resolutions.size()):
+		if resolutionStr == resolutions[i]:
+			ResolutionsOptions.selected = i;
+			break;
+
+	var langs_data: Array = Game.Lang.get_langs();
+	for i in range(langs_data.size()):
+		if langs_data[i] == Game.Config.get_value("language"):
+			LangsOptions.selected = i;
+			break;

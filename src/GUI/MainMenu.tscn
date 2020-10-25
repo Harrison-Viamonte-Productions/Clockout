@@ -10,10 +10,10 @@
 [ext_resource path="res://assets/fonts/PixelOperator.ttf" type="DynamicFontData" id=8]
 [ext_resource path="res://src/Animations/mainmenu/show_options.tres" type="Animation" id=9]
 
-[sub_resource type="ButtonGroup" id=2]
+[sub_resource type="ButtonGroup" id=1]
 resource_name = "MenuButtons"
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="DynamicFont" id=2]
 size = 25
 font_data = ExtResource( 2 )
 
@@ -87,7 +87,7 @@ margin_right = 210.0
 margin_bottom = 55.0
 focus_next = NodePath("../LoadGame")
 focus_previous = NodePath("../../QuitGame/QuitGame")
-group = SubResource( 2 )
+group = SubResource( 1 )
 texture_normal = ExtResource( 5 )
 texture_pressed = ExtResource( 4 )
 texture_hover = ExtResource( 3 )
@@ -99,7 +99,7 @@ __meta__ = {
 [node name="ButtonLabel" type="Label" parent="Buttons/NewGame"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "NEW GAME"
 align = 1
 valign = 1
@@ -113,7 +113,7 @@ margin_right = 210.0
 margin_bottom = 122.0
 focus_next = NodePath("../SaveGame")
 focus_previous = NodePath("../NewGame")
-group = SubResource( 2 )
+group = SubResource( 1 )
 texture_normal = ExtResource( 5 )
 texture_pressed = ExtResource( 4 )
 texture_hover = ExtResource( 3 )
@@ -125,7 +125,7 @@ __meta__ = {
 [node name="ButtonLabel" type="Label" parent="Buttons/LoadGame"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "LOAD GAME"
 align = 1
 valign = 1
@@ -139,7 +139,7 @@ margin_right = 210.0
 margin_bottom = 189.0
 focus_next = NodePath("../Options")
 focus_previous = NodePath("../LoadGame")
-group = SubResource( 2 )
+group = SubResource( 1 )
 texture_normal = ExtResource( 5 )
 texture_pressed = ExtResource( 4 )
 texture_hover = ExtResource( 3 )
@@ -151,7 +151,7 @@ __meta__ = {
 [node name="ButtonLabel" type="Label" parent="Buttons/SaveGame"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "SAVE GAME"
 align = 1
 valign = 1
@@ -165,7 +165,7 @@ margin_right = 210.0
 margin_bottom = 256.0
 focus_next = NodePath("../../QuitGame/QuitGame")
 focus_previous = NodePath("../SaveGame")
-group = SubResource( 2 )
+group = SubResource( 1 )
 texture_normal = ExtResource( 5 )
 texture_pressed = ExtResource( 4 )
 texture_hover = ExtResource( 3 )
@@ -177,7 +177,7 @@ __meta__ = {
 [node name="ButtonLabel" type="Label" parent="Buttons/Options"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "OPTIONS"
 align = 1
 valign = 1
@@ -201,7 +201,7 @@ margin_right = 210.0
 margin_bottom = 55.0
 focus_next = NodePath("../../Buttons/NewGame")
 focus_previous = NodePath("../../Buttons/Options")
-group = SubResource( 2 )
+group = SubResource( 1 )
 texture_normal = ExtResource( 5 )
 texture_pressed = ExtResource( 4 )
 texture_hover = ExtResource( 3 )
@@ -213,7 +213,7 @@ __meta__ = {
 [node name="ButtonLabel" type="Label" parent="QuitGame/QuitGame"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "QUIT GAME"
 align = 1
 valign = 1
@@ -222,9 +222,10 @@ __meta__ = {
 }
 
 [node name="OptionsContainer" type="PanelContainer" parent="."]
-margin_left = 288.0
+modulate = Color( 1, 1, 1, 0 )
+margin_left = 1000.0
 margin_top = 32.0
-margin_right = 927.995
+margin_right = 1640.0
 margin_bottom = 384.0
 custom_styles/panel = SubResource( 3 )
 __meta__ = {
@@ -232,7 +233,7 @@ __meta__ = {
 }
 
 [node name="OptionsMenu" type="Control" parent="OptionsContainer"]
-margin_right = 639.995
+margin_right = 640.0
 margin_bottom = 352.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="OptionsContainer/OptionsMenu"]
@@ -254,7 +255,7 @@ margin_top = 3.0
 margin_right = 150.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 150, 0 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "FULLSCREEN:"
 
 [node name="FullScreenCheckBox" type="CheckBox" parent="OptionsContainer/OptionsMenu/VBoxContainer/FullScreen"]
@@ -274,7 +275,7 @@ margin_top = 3.0
 margin_right = 150.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 150, 0 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "RESOLUTION:"
 
 [node name="Resolutions" type="OptionButton" parent="OptionsContainer/OptionsMenu/VBoxContainer/Resolutions"]
@@ -295,7 +296,7 @@ margin_top = 3.0
 margin_right = 150.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 150, 0 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "LANGUAGE:"
 
 [node name="Langs" type="OptionButton" parent="OptionsContainer/OptionsMenu/VBoxContainer/Languages"]
@@ -321,14 +322,14 @@ margin_top = 3.0
 margin_right = 150.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 150, 0 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "KEY UP:"
 
 [node name="Button" type="Button" parent="OptionsContainer/OptionsMenu/VBoxContainer/Keys1/Key UP"]
 margin_left = 154.0
 margin_right = 276.0
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "PRESS KEY"
 
 [node name="Key DOWN" type="HBoxContainer" parent="OptionsContainer/OptionsMenu/VBoxContainer/Keys1"]
@@ -341,14 +342,14 @@ margin_top = 3.0
 margin_right = 150.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 150, 0 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "KEY DOWN:"
 
 [node name="Button" type="Button" parent="OptionsContainer/OptionsMenu/VBoxContainer/Keys1/Key DOWN"]
 margin_left = 154.0
 margin_right = 276.0
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "PRESS KEY"
 
 [node name="Keys2" type="HBoxContainer" parent="OptionsContainer/OptionsMenu/VBoxContainer"]
@@ -367,14 +368,14 @@ margin_top = 3.0
 margin_right = 150.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 150, 0 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "KEY LEFT:"
 
 [node name="Button" type="Button" parent="OptionsContainer/OptionsMenu/VBoxContainer/Keys2/Key Left"]
 margin_left = 154.0
 margin_right = 276.0
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "PRESS KEY"
 
 [node name="Key Right" type="HBoxContainer" parent="OptionsContainer/OptionsMenu/VBoxContainer/Keys2"]
@@ -387,14 +388,14 @@ margin_top = 3.0
 margin_right = 150.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 150, 0 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "KEY RIGHT:"
 
 [node name="Button" type="Button" parent="OptionsContainer/OptionsMenu/VBoxContainer/Keys2/Key Right"]
 margin_left = 154.0
 margin_right = 276.0
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "PRESS KEY"
 
 [node name="Keys3" type="HBoxContainer" parent="OptionsContainer/OptionsMenu/VBoxContainer"]
@@ -413,14 +414,14 @@ margin_top = 3.0
 margin_right = 150.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 150, 0 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "KEY JUMP:"
 
 [node name="Button" type="Button" parent="OptionsContainer/OptionsMenu/VBoxContainer/Keys3/Key JUMP"]
 margin_left = 154.0
 margin_right = 276.0
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "PRESS KEY"
 
 [node name="Key CROUCH" type="HBoxContainer" parent="OptionsContainer/OptionsMenu/VBoxContainer/Keys3"]
@@ -433,14 +434,14 @@ margin_top = 3.0
 margin_right = 150.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 150, 0 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "KEY CROUCH:"
 
 [node name="Button" type="Button" parent="OptionsContainer/OptionsMenu/VBoxContainer/Keys3/Key CROUCH"]
 margin_left = 154.0
 margin_right = 276.0
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "PRESS KEY"
 
 [node name="Keys4" type="HBoxContainer" parent="OptionsContainer/OptionsMenu/VBoxContainer"]
@@ -459,14 +460,14 @@ margin_top = 3.0
 margin_right = 150.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 150, 0 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "KEY SELECT:"
 
 [node name="Button" type="Button" parent="OptionsContainer/OptionsMenu/VBoxContainer/Keys4/Key SELECT"]
 margin_left = 154.0
 margin_right = 276.0
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "PRESS KEY"
 
 [node name="Key CROUCH" type="HBoxContainer" parent="OptionsContainer/OptionsMenu/VBoxContainer/Keys4"]
@@ -479,14 +480,14 @@ margin_top = 3.0
 margin_right = 150.0
 margin_bottom = 29.0
 rect_min_size = Vector2( 150, 0 )
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "KEY ATTACK:"
 
 [node name="Button" type="Button" parent="OptionsContainer/OptionsMenu/VBoxContainer/Keys4/Key CROUCH"]
 margin_left = 154.0
 margin_right = 276.0
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "PRESS KEY"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="OptionsContainer/OptionsMenu"]
@@ -503,10 +504,10 @@ __meta__ = {
 }
 
 [node name="ApplyChanges" type="Button" parent="OptionsContainer/OptionsMenu/HBoxContainer"]
-margin_left = 200.0
-margin_right = 374.0
+margin_left = 201.0
+margin_right = 375.0
 margin_bottom = 32.0
-custom_fonts/font = SubResource( 1 )
+custom_fonts/font = SubResource( 2 )
 text = "APPLY CHANGES"
 
 [node name="VersionLabel" type="Label" parent="."]
