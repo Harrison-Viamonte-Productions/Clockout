@@ -26,11 +26,7 @@ func _init():
 
 func _process(delta):
 	self.pause_mode = Node.PAUSE_MODE_PROCESS; #So we can use functions
-	interpolate_colors(delta);
 	
-func interpolate_colors(delta):
-	pass;
-
 func set_active_camera(newCamera):
 	ActiveCamera = newCamera;
 	ActiveCamera.current = true;

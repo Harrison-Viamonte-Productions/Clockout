@@ -37,6 +37,16 @@ onready var up_raycast2: RayCast2D = $UpRayCast2;
 export var health: int = 3;
 var initial_health: int = 3;
 
+#Key combo system
+const BUFFER_CLEAN_DELAY: float = 0.35; #seconds
+var action_buffer_countdown: float = BUFFER_CLEAN_DELAY;
+var actions_buffer: Array = [];
+var actions_buffer_max: int = 6; #MAX combo size
+var combos: Dictionary = {
+	"combo_example1": ["move_up", "move_up", "move_left", "move_down"],
+	"combo_example2": ["move_left", "move_right", "use", "jump"]
+};
+
 var Spawn: Node2D = null;
 
 var Util = Game.Util_Object.new(self);
@@ -193,3 +203,55 @@ func killed(attacker: Node2D):
 
 func update_gui():
 	Game.GUI.update_health(health);
+
+#############################
+# COMBO SYSTEM CODE: START ##
+############################
+
+func _process(delta):
+	action_buffer_countdown-= delta;
+	if action_buffer_countdown <= 0.0:
+		if actions_buffer.size() > 0:
+			actions_buffer.pop_back();
+		action_buffer_countdown = BUFFER_CLEAN_DELAY;
+
+func _input(event):
+	if event is InputEventKey && event.is_pressed() && !event.is_echo():
+		var action_pressed: String = get_action_name_from_scancode(event.scancode);
+		if action_pressed.length() > 1:
+			action_buffer_countdown = BUFFER_CLEAN_DELAY;
+			actions_buffer.push_front(action_pressed);
+			if actions_buffer.size() >= actions_buffer_max:
+				actions_buffer.pop_back();
+			var combo_name: String = check_combo();
+			if combo_name.length() > 1:
+				execute_combo(combo_name);
+
+func check_combo() -> String:
+	for key in combos: 
+		if actions_buffer.size() >=  combos[key].size():
+			var combo_achieved: bool = true;
+			var combo_size: int = combos[key].size();
+			for i in range(combo_size):
+				#(combo_size-1)-i: this is because otherwise the combo is readed in the wrong order.
+				if actions_buffer[i] != combos[key][(combo_size-1)-i]:
+					combo_achieved = false;
+					break;
+			if combo_achieved:
+				return key;
+	return "";
+
+func get_action_name_from_scancode(scancode: int) -> String:
+	var actions: Array = InputMap.get_actions();
+	for action in actions:
+		var keys: Array = InputMap.get_action_list(action);
+		for key in keys:
+			if key is InputEventKey && key.scancode == scancode:
+				return action;
+	return "";
+
+func execute_combo(combo_name: String): 
+	print(combo_name);
+#############################
+# COMBO SYSTEM CODE: END ##
+############################
