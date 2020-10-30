@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=2]
+[gd_scene load_steps=40 format=2]
 
 [ext_resource path="res://src/Levels/ModularScenes/Office1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/Entities/Enemies/Roomba.tscn" type="PackedScene" id=2]
@@ -19,6 +19,8 @@
 [ext_resource path="res://src/Levels/ModularScenes/StorageTest.tscn" type="PackedScene" id=17]
 [ext_resource path="res://assets/lightmaps/radiuslight2.png" type="Texture" id=18]
 [ext_resource path="res://src/Entities/Misc/ElevatorButton.tscn" type="PackedScene" id=19]
+[ext_resource path="res://src/Entities/Enemies/Skins/roomba_cute.tres" type="SpriteFrames" id=20]
+[ext_resource path="res://src/Entities/Misc/BrekeableComputer.tscn" type="PackedScene" id=21]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
@@ -132,7 +134,7 @@ cell_size = Vector2( 16, 16 )
 collision_layer = 0
 collision_mask = 2147483648
 format = 1
-tile_data = PoolIntArray( 655377, 536870939, 0, 655383, 27, 0, 917515, 536870931, 0, 917520, 24, 0, 917524, 536870938, 0, 917528, 536870936, 0, 917533, 19, 0 )
+tile_data = PoolIntArray( 917515, 536870931, 0, 917520, 24, 0, 917524, 536870938, 0, 917528, 536870936, 0, 917533, 19, 0 )
 
 [node name="front_decals1_nonsolid" type="TileMap" parent="Tiles/Inside/Floor1/Office2"]
 tile_set = ExtResource( 5 )
@@ -643,42 +645,70 @@ shape = SubResource( 8 )
 
 [node name="Roomba" parent="Entities/Enemies" instance=ExtResource( 2 )]
 position = Vector2( 1423, -56.5 )
+aggressive = true
+can_jump = true
 
 [node name="Roomba2" parent="Entities/Enemies" instance=ExtResource( 2 )]
 position = Vector2( 1101.81, -58.6486 )
+aggressive = true
+can_jump = true
 
 [node name="Roomba4" parent="Entities/Enemies" instance=ExtResource( 2 )]
 position = Vector2( 1138.54, 132.243 )
+aggressive = true
+can_jump = true
 
 [node name="Roomba5" parent="Entities/Enemies" instance=ExtResource( 2 )]
 position = Vector2( 2892.88, -59.0503 )
+aggressive = true
+can_jump = true
 
 [node name="Roomba6" parent="Entities/Enemies" instance=ExtResource( 2 )]
 position = Vector2( 2862.37, 129.26 )
+aggressive = true
+can_jump = true
 
 [node name="Roomba7" parent="Entities/Enemies" instance=ExtResource( 2 )]
 position = Vector2( 1966, 517.5 )
+harmless = true
+chase = true
+skin = ExtResource( 20 )
 
 [node name="Roomba3" parent="Entities/Enemies" instance=ExtResource( 2 )]
 position = Vector2( 1901.81, -57.2535 )
+aggressive = true
+can_jump = true
 
 [node name="Roomba8" parent="Entities/Enemies" instance=ExtResource( 2 )]
 position = Vector2( 3700.72, 554.126 )
+aggressive = true
+can_jump = true
 
 [node name="Roomba9" parent="Entities/Enemies" instance=ExtResource( 2 )]
 position = Vector2( 4654.82, 574.63 )
+aggressive = true
+can_jump = true
 
 [node name="Roomba10" parent="Entities/Enemies" instance=ExtResource( 2 )]
 position = Vector2( 7183, 192 )
+aggressive = true
+can_jump = true
 
 [node name="Roomba11" parent="Entities/Enemies" instance=ExtResource( 2 )]
 position = Vector2( 7887, -64 )
+aggressive = true
+can_jump = true
 
 [node name="Roomba12" parent="Entities/Enemies" instance=ExtResource( 2 )]
 position = Vector2( 7215, -448 )
+aggressive = true
+can_jump = true
 
 [node name="Roomba13" parent="Entities/Enemies" instance=ExtResource( 2 )]
 position = Vector2( 9455, 256 )
+harmless = true
+chase = true
+skin = ExtResource( 20 )
 
 [node name="Misc" type="Node2D" parent="Entities"]
 
@@ -704,7 +734,19 @@ call_args = [ 0 ]
 shape = SubResource( 9 )
 
 [node name="StaticEntities" type="Node2D" parent="."]
-position = Vector2( -648, -86.5 )
+position = Vector2( 8, 64 )
+z_index = 2
+
+[node name="BrekeableComputer" parent="StaticEntities" instance=ExtResource( 21 )]
+position = Vector2( 936, 376 )
+scale = Vector2( -1, 1 )
+solid = false
+health = 3
+
+[node name="BrekeableComputer2" parent="StaticEntities" instance=ExtResource( 21 )]
+position = Vector2( 1032, 376 )
+solid = false
+health = 3
 
 [node name="LightOcluders" type="Node2D" parent="."]
 

@@ -37,6 +37,9 @@ onready var up_raycast2: RayCast2D = $UpRayCast2;
 export var health: int = 3;
 var initial_health: int = 3;
 
+onready var CurrentWeapon: Node2D = $Sprite/Weapon;
+onready var tween: Tween = $Tween;
+
 #Key combo system
 const BUFFER_CLEAN_DELAY: float = 0.35; #seconds
 var action_buffer_countdown: float = BUFFER_CLEAN_DELAY;
@@ -62,6 +65,7 @@ func _ready() -> void:
 	Game.set_active_camera($Camera);
 	Engine.set_target_fps(Engine.get_iterations_per_second())
 	update_gui()
+	CurrentWeapon.disable_damage()
 
 func _physics_process(delta: float) -> void:
 	update_velocity(delta)
@@ -183,9 +187,14 @@ func hurt(attacker: Node2D, damage: int):
 	if health <= 0:
 		killed(attacker);
 
+func start_attack():
+	CurrentWeapon.enable_damage();
+
+func end_attack():
+	CurrentWeapon.disable_damage();
+
 func enable_damage_protection():
 	damage_protection = true; #Protect the player from receiving damage for a moment
-	var tween: Tween = $Tween;
 	if tween.is_active():
 		tween.remove(self, "disable_damage_protection");
 	tween.interpolate_callback(self, DAMAGE_PROTECTION_SEC, "disable_damage_protection");
@@ -216,6 +225,12 @@ func _process(delta):
 		action_buffer_countdown = BUFFER_CLEAN_DELAY;
 
 func _input(event):
+	if event is InputEventKey && Input.is_action_just_pressed("attack"):
+		$WeaponAnims.play("attack_forward");
+		if tween.is_active():
+			tween.remove(self, "end_attack");
+		tween.interpolate_callback(self, 0.4, "end_attack");
+		tween.start();
 	if event is InputEventKey && event.is_pressed() && !event.is_echo():
 		var action_pressed: String = get_action_name_from_scancode(event.scancode);
 		if action_pressed.length() > 1:

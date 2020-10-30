@@ -4,6 +4,7 @@ const GRAVITY: float = 1200.0
 const VERSION: String = "0.1.5"; #Major, Minor, build count
 const LANG_FILES_FOLDER: String = "lang";
 const CONFIG_FILE: String = "game_config.cfg";
+const PLAYER_ATTACK_LAYER: int = 32;
 
 var Player: Node = null;
 var CurrentMap: Node = null;
