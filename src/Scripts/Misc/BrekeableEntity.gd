@@ -1,5 +1,4 @@
 extends "res://src/Scripts/Misc/StaticEntityDefault.gd"
-
 const DAMAGE_PROTECTION_TIME: float = 0.5; #secs
 
 export var health: int = 1;

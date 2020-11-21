@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://src/Scripts/AI/Player.gd" type="Script" id=1]
 [ext_resource path="res://assets/player/stand1.png" type="Texture" id=2]
@@ -20,11 +20,6 @@ animations = [ {
 "name": "idle",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 9 ) ],
-"loop": true,
-"name": "crouch",
-"speed": 5.0
-}, {
 "frames": [ ExtResource( 10 ), ExtResource( 8 ) ],
 "loop": true,
 "name": "crouch_walk",
@@ -33,6 +28,11 @@ animations = [ {
 "frames": [ ExtResource( 3 ), ExtResource( 7 ) ],
 "loop": true,
 "name": "walk",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 9 ) ],
+"loop": true,
+"name": "crouch",
 "speed": 5.0
 } ]
 
@@ -66,7 +66,7 @@ tracks/1/keys = {
 "values": [ true, false, true, true ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=4]
 length = 0.3
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:modulate")
@@ -107,8 +107,7 @@ tracks/2/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=4]
-resource_name = "idle"
+[sub_resource type="Animation" id=5]
 length = 0.1
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:modulate")
@@ -135,8 +134,41 @@ tracks/1/keys = {
 "values": [ true, true ]
 }
 
-[sub_resource type="Animation" id=5]
-resource_name = "attack_forward"
+[sub_resource type="Animation" id=8]
+resource_name = "respawn"
+length = 0.35
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.35 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=3]
+resource_name = "teleport"
+length = 0.35
+step = 0.05
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.35 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=6]
 length = 0.3
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite/Weapon:position")
@@ -180,8 +212,7 @@ tracks/2/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=6]
-resource_name = "raise"
+[sub_resource type="Animation" id=7]
 length = 0.75
 step = 0.25
 tracks/0/type = "value"
@@ -217,7 +248,6 @@ __meta__ = {
 }
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
-self_modulate = Color( 0.701961, 0.701961, 0.701961, 1 )
 frames = SubResource( 1 )
 animation = "idle"
 script = ExtResource( 4 )
@@ -268,11 +298,13 @@ collision_mask = 6
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/damage_protection = SubResource( 2 )
-anims/hurt = SubResource( 3 )
-anims/idle = SubResource( 4 )
+anims/hurt = SubResource( 4 )
+anims/idle = SubResource( 5 )
+anims/respawn = SubResource( 8 )
+anims/teleport = SubResource( 3 )
 
 [node name="WeaponAnims" type="AnimationPlayer" parent="."]
-anims/attack_forward = SubResource( 5 )
-anims/raise = SubResource( 6 )
+anims/attack_forward = SubResource( 6 )
+anims/raise = SubResource( 7 )
 
 [node name="Tween" type="Tween" parent="."]

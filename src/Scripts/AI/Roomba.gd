@@ -30,7 +30,6 @@ export var chase: bool = false;
 export var skin: SpriteFrames = preload("res://src/Entities/Enemies/Skins/roomba_normal.tres");
 export var health: int = 2;
 
-
 #- aggressive / speedup
 #- chase/turn around (follow you)
 #- jump
@@ -78,6 +77,7 @@ func _physics_process(delta):
 		impulse.x += delta*friction;
 	if abs(impulse.x) <= delta*friction:
 		impulse.x = 0.0;
+
 	check_dormant(delta);
 	check_collisions(delta);
 	check_attacks(delta);
@@ -149,7 +149,6 @@ func fall(delta):
 			motion.y = 0.0;
 		if  impulse.y > 0.0:
 			impulse.y = 0.0;
-		
 
 func move(delta):
 	motion.x = MOVE_SPEED*RUN_MULTIPLIER if (attacking || runaway) else MOVE_SPEED;

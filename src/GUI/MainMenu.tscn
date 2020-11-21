@@ -108,6 +108,7 @@ __meta__ = {
 }
 
 [node name="LoadGame" type="TextureButton" parent="Buttons"]
+visible = false
 margin_top = 67.0
 margin_right = 210.0
 margin_bottom = 122.0
@@ -136,9 +137,10 @@ __meta__ = {
 }
 
 [node name="SaveGame" type="TextureButton" parent="Buttons"]
-margin_top = 134.0
+visible = false
+margin_top = 67.0
 margin_right = 210.0
-margin_bottom = 189.0
+margin_bottom = 122.0
 focus_next = NodePath("../Options")
 focus_previous = NodePath("../LoadGame")
 group = SubResource( 1 )
@@ -162,9 +164,9 @@ __meta__ = {
 }
 
 [node name="Options" type="TextureButton" parent="Buttons"]
-margin_top = 201.0
+margin_top = 67.0
 margin_right = 210.0
-margin_bottom = 256.0
+margin_bottom = 122.0
 focus_next = NodePath("../../QuitGame/QuitGame")
 focus_previous = NodePath("../SaveGame")
 group = SubResource( 1 )

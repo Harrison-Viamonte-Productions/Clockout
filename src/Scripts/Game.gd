@@ -19,6 +19,8 @@ var Util_Object = preload("res://src/Scripts/Util.gd");
 var Lang = load("res://src/Scripts/Langs.gd").new();
 var Config = load("res://src/Scripts/ConfigManager.gd").new();
 
+var threatLevel: int = 0; # Maybe I want to move this into a different place later.
+
 func _init():
 	Lang.load_langs(LANG_FILES_FOLDER);
 	Config.load_from_file(CONFIG_FILE);

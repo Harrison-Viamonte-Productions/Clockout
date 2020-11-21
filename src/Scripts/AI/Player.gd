@@ -1,7 +1,7 @@
 class_name Player
 extends KinematicBody2D
 
-#Movement constants
+# Movement constants
 const ACCELERATION: int = 8
 const MOVE_SPEED: float = 200.0
 const JUMP_SPEED: float = -450.0
@@ -14,6 +14,7 @@ const FLOOR_FRICTION: float = 500.0;
 # Other constants
 const DAMAGE_PROTECTION_SEC: float = 1.5; #Seconds of damage protection
 const SNAP_VECTOR: Vector2 = Vector2(0, 32.0);
+const RESPAWN_TIME: float = 1.0;
 
 var jump_count : int = 0
 var jump_add_time_ms : int = 0
@@ -104,10 +105,11 @@ func friction(delta: float) -> void:
 
 func update_velocity(delta: float ) -> void:
 	var time = OS.get_ticks_msec()
-	jump(time, delta)
+	if is_alive():
+		jump(time, delta)
+		run()
+		crouch()
 	fall(delta)
-	run()
-	crouch()
 	$Sprite.update_animation(velocity, is_crouched);
 
 func update_collision_box():
@@ -162,6 +164,8 @@ func get_camera():
 	return $Camera;
 
 func respawn():
+	health = initial_health;
+	$AnimationPlayer.play("respawn");
 	Game.set_active_camera($Camera);
 	
 	if typeof(Spawn) != TYPE_NIL:
@@ -169,7 +173,6 @@ func respawn():
 	else:
 		self.global_position = Util.init_global_pos;
 		Game.print_warning("¡No PlayerSpawn found for respawning!");
-		
 	self.velocity = Vector2.ZERO;
 
 func hurt_effect():
@@ -178,7 +181,7 @@ func hurt_effect():
 	$AnimationPlayer.play("hurt");
 
 func hurt(attacker: Node2D, damage: int):
-	if damage_protection:
+	if damage_protection || !is_alive():
 		return;
 	health-= damage;
 	update_gui();
@@ -206,9 +209,18 @@ func disable_damage_protection():
 
 func killed(attacker: Node2D):
 	Game.GUI.info_message(Game.get_str(attacker.DEATH_MESSAGE) % ["Player_name", attacker.NAME]);
-	respawn();
-	health = initial_health;
+	if tween.is_active():
+		tween.remove(Game.ViewportFX, "fade_in_out");
+		tween.remove(self, "respawn");
+	tween.interpolate_callback(Game.ViewportFX, RESPAWN_TIME, "fade_in_out", 1.0, 0.5);
+	tween.interpolate_callback(self, RESPAWN_TIME+1.0, "respawn");
+	tween.start();
+	$AnimationPlayer.play("teleport");
+	#respawn();
 	update_gui();
+
+func is_alive() -> bool:
+	return health > 0
 
 func update_gui():
 	Game.GUI.update_health(health);
