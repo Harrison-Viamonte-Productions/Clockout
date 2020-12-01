@@ -1,29 +1,16 @@
 extends "res://src/Scripts/DefaultLevel.gd"
 
-export var map_limit_start: Vector2 = Vector2.ZERO;
-export var map_limit_end: Vector2 = Vector2.ZERO;
-
 var player_inside_storage: bool = false;
 var is_night: bool = false;
 var CameraPaths: Array;
 onready var LevelStaticCamera = $Cameras/LevelCamera1; #Static camera used for camera_move_to
 
-func _enter_tree():
-	Game.CurrentMap = self;
-	
 func _ready():
 	$Tiles/FuncTiles.visible = false;
 	set_day();
 	Game.ViewportFX = $Transitions;
 	LevelStaticCamera.update_limits(map_limit_start, map_limit_end);
 	CameraPaths = $Cameras/CameraPath.get_children();
-
-func get_world_limits() -> Dictionary:
-	var limits: Dictionary = {
-		"start": map_limit_start,
-		"end": map_limit_end
-	};
-	return limits;
 
 func _on_player_outside():
 	Game.ActiveCamera.change_zoom_interpolated(1.5, 0.5);

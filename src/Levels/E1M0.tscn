@@ -1,0 +1,100 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://src/Levels/E1M0.gd" type="Script" id=1]
+[ext_resource path="res://src/Levels/Backgrounds/Mountains1.tscn" type="PackedScene" id=2]
+[ext_resource path="res://src/Entities/Misc/ServerMachine.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/Entities/Misc/LightEntity.tscn" type="PackedScene" id=4]
+[ext_resource path="res://src/Entities/PlayerSpawn.tscn" type="PackedScene" id=7]
+[ext_resource path="res://src/Transitions/TransitionScene.tscn" type="PackedScene" id=9]
+[ext_resource path="res://assets/lightmaps/white_light.png" type="Texture" id=16]
+[ext_resource path="res://src/Tiles/game_tiles.tres" type="TileSet" id=17]
+[ext_resource path="res://src/Tiles/light_tiles.tres" type="TileSet" id=18]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+blend_mode = 1
+
+[node name="E1M0" type="Node2D"]
+modulate = Color( 0.811765, 0.811765, 0.811765, 1 )
+script = ExtResource( 1 )
+map_limit_start = Vector2( 0, -600 )
+map_limit_end = Vector2( 5730, 610 )
+
+[node name="Tiles" type="Node2D" parent="."]
+position = Vector2( 256, 320 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Hall1" type="Node2D" parent="Tiles"]
+
+[node name="back1_nonsolid" type="TileMap" parent="Tiles/Hall1"]
+tile_set = ExtResource( 17 )
+collision_layer = 0
+collision_mask = 0
+format = 1
+tile_data = PoolIntArray( -65540, 1, 0, -65539, 1, 0, -65538, 1, 0, -65537, 1, 0, -131072, 1, 0, -131071, 1, 0, -131070, 1, 0, -131069, 1, 0, -131068, 1, 0, -131067, 1, 0, -131066, 1, 0, -131065, 1, 0, -131064, 1, 0, -131063, 1, 0, -131062, 1, 0, -131061, 1, 0, -4, 1, 0, -3, 1, 0, -2, 1, 0, -1, 1, 0, -65536, 1, 0, -65535, 1, 0, -65534, 1, 0, -65533, 1, 0, -65532, 1, 0, -65531, 1, 0, -65530, 1, 0, -65529, 1, 0, -65528, 1, 0, -65527, 1, 0, -65526, 1, 0, -65525, 1, 0, 65532, 1, 0, 65533, 1, 0, 65534, 1, 0, 65535, 1, 0, 0, 102, 0, 1, 103, 0, 3, 102, 0, 4, 1, 0, 5, 1, 0, 6, 1, 0, 7, 1, 0, 8, 1, 0, 9, 1, 0, 10, 102, 0, 11, 1, 0, 131068, 1, 0, 131069, 1, 0, 131070, 1, 0, 131071, 1, 0, 65540, 1, 0, 65541, 1, 0, 65542, 1, 0, 65543, 1, 0, 65544, 1, 0, 65545, 1, 0, 65547, 1, 0, 196604, 1, 0, 196605, 1, 0, 196606, 1, 0, 196607, 1, 0, 131072, 1, 0, 131073, 1, 0, 131074, 1, 0, 131075, 1, 0, 131076, 1, 0, 131077, 1, 0, 131078, 1, 0, 131079, 1, 0, 131080, 1, 0, 131081, 1, 0, 131082, 1, 0, 131083, 1, 0 )
+
+[node name="back2_decalsnonsolid" type="TileMap" parent="Tiles/Hall1"]
+tile_set = ExtResource( 17 )
+collision_layer = 0
+collision_mask = 2147483649
+format = 1
+tile_data = PoolIntArray( -65538, 67, 0, -131071, 67, 0, -131068, 67, 0 )
+
+[node name="walls_solid" type="TileMap" parent="Tiles/Hall1"]
+tile_set = ExtResource( 17 )
+collision_layer = 2
+collision_mask = 9
+format = 1
+tile_data = PoolIntArray( -196612, 91, 0, -196611, 91, 0, -196610, 91, 0, -196609, 91, 0, -262144, 91, 0, -262143, 91, 0, -262142, 91, 0, -262141, 91, 0, -262140, 91, 0, -262139, 91, 0, -262138, 91, 0, -262137, 91, 0, -262136, 91, 0, -262135, 91, 0, -262134, 91, 0, -262133, 91, 0, -131076, 83, 0, -131075, 29, 0, -131074, 29, 0, -131073, 29, 0, -196608, 29, 0, -196607, 29, 0, -196606, 29, 0, -196605, 29, 0, -196604, 29, 0, -196603, 29, 0, -196602, 29, 0, -196601, 29, 0, -196600, 29, 0, -196599, 29, 0, -196598, 29, 0, -196597, 29, 0, 262140, -1073741737, 0, 262141, -1073741737, 0, 262142, -1073741737, 0, 262143, -1073741737, 0, 196608, -1073741737, 0, 196609, -1073741737, 0, 196610, -1073741737, 0, 196611, -1073741737, 0, 196612, -1073741737, 0, 196613, -1073741737, 0, 196614, -1073741737, 0, 196615, -1073741737, 0, 196616, -1073741737, 0, 196617, -1073741737, 0, 196618, -1073741737, 0, 196619, -1073741737, 0, 327676, 1610612827, 0, 327677, 1610612827, 0, 327678, 1610612827, 0, 327679, 1610612827, 0, 262144, 1610612827, 0, 262145, 1610612827, 0, 262146, 1610612827, 0, 262147, 1610612827, 0, 262148, 1610612827, 0, 262149, 1610612827, 0, 262150, 1610612827, 0, 262151, 1610612827, 0, 262152, 1610612827, 0, 262153, 1610612827, 0, 262154, 1610612827, 0, 262155, 1610612827, 0, 393212, 1610612827, 0, 393213, 1610612827, 0, 393214, 1610612827, 0, 393215, 1610612827, 0, 327680, 1610612827, 0, 327681, 1610612827, 0, 327682, 1610612827, 0, 327683, 1610612827, 0, 327684, 1610612827, 0, 327685, 1610612827, 0, 327686, 1610612827, 0, 327687, 1610612827, 0, 327688, 1610612827, 0, 327689, 1610612827, 0, 327690, 1610612827, 0, 327691, 1610612827, 0, 458748, 28, 0, 458749, 28, 0, 458750, 28, 0, 458751, 28, 0, 393216, 28, 0, 393217, 28, 0, 393218, 28, 0, 393219, 28, 0, 393220, 28, 0, 393221, 28, 0, 393222, 28, 0, 393223, 28, 0, 393224, 28, 0, 393225, 28, 0, 393226, 28, 0, 393227, 28, 0, 524284, 28, 0, 524285, 28, 0, 524286, 28, 0, 524287, 28, 0, 458752, 28, 0, 458753, 28, 0, 458754, 28, 0, 458755, 28, 0, 458756, 28, 0, 458757, 28, 0, 458758, 28, 0, 458759, 28, 0, 458760, 28, 0, 458761, 28, 0, 458762, 28, 0, 458763, 28, 0 )
+
+[node name="lights" type="TileMap" parent="Tiles/Hall1"]
+material = SubResource( 1 )
+tile_set = ExtResource( 18 )
+format = 1
+tile_data = PoolIntArray( -131075, 1610612736, 0, -131074, 1610612736, 0, -131073, 1610612736, 0, -196608, 1610612736, 0, -196607, 1610612736, 0, -196606, 1610612736, 0, -196605, 1610612736, 0, -196604, 1610612736, 0, -196603, 1610612736, 0, -196602, 1610612736, 0, -196601, 1610612736, 0, -196600, 1610612736, 0, -196599, 1610612736, 0, -196598, 1610612736, 0, -196597, 1610612736, 0 )
+
+[node name="Entities" type="Node2D" parent="."]
+position = Vector2( -79, 0 )
+z_index = 2
+
+[node name="StaticEntity" parent="Entities" instance=ExtResource( 3 )]
+position = Vector2( 207, 384 )
+solid = false
+
+[node name="StaticEntity2" parent="Entities" instance=ExtResource( 3 )]
+position = Vector2( 719, 384 )
+solid = false
+
+[node name="StaticEntity3" parent="Entities" instance=ExtResource( 3 )]
+position = Vector2( 847, 384 )
+solid = false
+
+[node name="StaticEntities" type="Node2D" parent="."]
+position = Vector2( 8, 64 )
+z_index = 2
+
+[node name="Lights" type="Node2D" parent="."]
+position = Vector2( -648, -86.5 )
+
+[node name="LightEntity" parent="Lights" instance=ExtResource( 4 )]
+position = Vector2( 1160, 438.5 )
+scale = Vector2( 8, 2.5 )
+texture = ExtResource( 16 )
+energy = 0.4
+
+[node name="Cameras" type="Node2D" parent="."]
+position = Vector2( 384, 376 )
+
+[node name="PlayerSpawn" parent="." instance=ExtResource( 7 )]
+position = Vector2( 192, 384 )
+z_index = 3
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+color = Color( 0.611765, 0.611765, 0.611765, 1 )
+
+[node name="Mountains1" parent="." instance=ExtResource( 2 )]
+
+[node name="Transitions" parent="." instance=ExtResource( 9 )]
+
+[node name="Tween" type="Tween" parent="."]

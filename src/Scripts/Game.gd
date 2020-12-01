@@ -18,7 +18,9 @@ var current_lang: String = "";
 var Util_Object = preload("res://src/Scripts/Util.gd");
 var Lang = load("res://src/Scripts/Langs.gd").new();
 var Config = load("res://src/Scripts/ConfigManager.gd").new();
+var Network = load("res://src/Scripts/Netcode/NetBase.gd").new();
 
+# Game specific vars
 var threatLevel: int = 0; # Maybe I want to move this into a different place later.
 
 func _init():
@@ -30,9 +32,10 @@ func _init():
 func _process(delta):
 	self.pause_mode = Node.PAUSE_MODE_PROCESS; #So we can use functions
 	
-func set_active_camera(newCamera):
+func set_active_camera(newCamera: Node):
 	ActiveCamera = newCamera;
 	ActiveCamera.current = true;
+	print("set camera to: " + str(newCamera));
 
 func print_warning(text: String):
 	print("[WARNING] %s" % text);

@@ -300,7 +300,7 @@ cell_size = Vector2( 32, 32 )
 collision_layer = 0
 collision_mask = 0
 format = 1
-tile_data = PoolIntArray( 65540, -1610612722, 0, 65542, -1610612724, 0, 65544, -1610612724, 0, 65546, -1610612724, 0, 65548, -1610612724, 0, 65550, -1610612724, 0, 65552, 14, 0 )
+tile_data = PoolIntArray( 65540, -1610612722, 0, 65542, -1610612724, 0, 65544, -1610612724, 0, 65546, -1610612724, 0, 65548, -1610612724, 0, 65550, -1610612724, 0, 65552, 14, 0, 196618, 69, 0 )
 
 [node name="walls_solid" type="TileMap" parent="Tiles/Inside/Floor2/Office2"]
 tile_set = ExtResource( 5 )
