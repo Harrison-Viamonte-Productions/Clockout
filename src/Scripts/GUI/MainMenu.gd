@@ -11,25 +11,37 @@ var resolutions: Array = [
 ];
 
 onready var ResolutionsOptions: OptionButton = $OptionsContainer/OptionsMenu/VBoxContainer/Resolutions/Resolutions;
+onready var MaxPlayerOptions: OptionButton = $OptionsContainer/MultiplayerMenu/VBoxContainer/MaxPlayers/Players;
 onready var FullScreenCheckbox: CheckBox = $OptionsContainer/OptionsMenu/VBoxContainer/FullScreen/FullScreenCheckBox;
 onready var LangsOptions: OptionButton = $OptionsContainer/OptionsMenu/VBoxContainer/Languages/Langs;
+onready var StartServerBtn: Button = $OptionsContainer/MultiplayerMenu/HBoxContainer/StartServer;
+onready var JoinButtonBtn: Button = $OptionsContainer/MultiplayerMenu/HBoxContainer2/JoinServer;
+onready var SvPlayersCmb: OptionButton = $OptionsContainer/MultiplayerMenu/VBoxContainer/MaxPlayers/Players;
+onready var ServerIp: TextEdit = $OptionsContainer/MultiplayerMenu/VBoxContainer2/ServerIP/ServerIP;
 
 var options_dialog_shown: bool = false; 
 
 func _ready():
 	add_to_group("has_lang_strings");
 	
+	StartServerBtn.connect("pressed", self, "start_server");
+	JoinButtonBtn.connect("pressed", self, "join_server");
 	$Buttons/NewGame.connect("pressed", self, "new_game");
 	$QuitGame/QuitGame.connect("pressed", self, "quit_game");
 	$Buttons/Options.connect("pressed", self, "open_options_dialog");
-	$Buttons/LoadGame.connect("pressed", self, "open_loadgame_dialog");
+	$Buttons/Multiplayer.connect("pressed", self, "open_multiplayer_dialog");
 	$Buttons/SaveGame.connect("pressed", self, "open_savegame_dialog");
 	
 	$OptionsContainer/OptionsMenu/HBoxContainer/ApplyChanges.connect("pressed", self, "apply_config_changes");
 	
+	MaxPlayerOptions.clear();
+	for i in range(2, Game.Network.MAX_PLAYERS+1):
+		MaxPlayerOptions.add_item(str(i));
+	MaxPlayerOptions.select(0);
+	
 	load_langs();
 	load_resolutions();
-	
+
 	$VersionLabel.text = ("VERSION: %s" % Game.VERSION);
 	#unused yet
 	$OptionsContainer/OptionsMenu/VBoxContainer/Keys1.visible = false;
@@ -42,7 +54,7 @@ func _ready():
 
 func update_lang_strings():
 	$Buttons/NewGame/ButtonLabel.text = Game.get_str("#str0001");
-	$Buttons/LoadGame/ButtonLabel.text = Game.get_str("#str0002");
+	$Buttons/Multiplayer/ButtonLabel.text = Game.get_str("#str0010");
 	$Buttons/SaveGame/ButtonLabel.text = Game.get_str("#str0003");
 	$Buttons/Options/ButtonLabel.text = Game.get_str("#str0004");
 	$QuitGame/QuitGame/ButtonLabel.text = Game.get_str("#str0005");
@@ -75,19 +87,23 @@ func quit_game():
 	get_tree().quit();
 
 func open_options_dialog():
-	if !options_dialog_shown:
-		$AnimationPlayer.play("show_options");
-		options_dialog_shown = true;
+	#if !options_dialog_shown:
+	$AnimationPlayer.play("show_options");
+	$OptionsContainer/MultiplayerMenu.hide();
+	$OptionsContainer/OptionsMenu.show();
+	options_dialog_shown = true;
 
 func open_savegame_dialog():
 	if options_dialog_shown:
 		$AnimationPlayer.play("hide_options");
 		options_dialog_shown = false;
 		
-func open_loadgame_dialog():
-	if options_dialog_shown:
-		$AnimationPlayer.play("hide_options");
-		options_dialog_shown = false;
+func open_multiplayer_dialog():
+	#if !options_dialog_shown:
+	$AnimationPlayer.play("show_options");
+	$OptionsContainer/MultiplayerMenu.show();
+	$OptionsContainer/OptionsMenu.hide();
+	options_dialog_shown = true;
 
 func new_game():
 	get_tree().change_scene("res://src/Levels/DemoLevel.tscn");
@@ -98,6 +114,13 @@ func apply_config_changes():
 	Game.Config.set_value("language", LangsOptions.get_item_text(LangsOptions.selected));
 	Game.update_settings();
 	Game.save_settings();
+
+func start_server():
+	var sv_maxPlayers: int = int(SvPlayersCmb.get_item_text(SvPlayersCmb.selected));
+	Game.Network.host_server(sv_maxPlayers, "res://src/Levels/DemoLevel.tscn");
+	
+func join_server():
+	Game.Network.join_server(ServerIp.text);
 
 func set_ingame_mode():
 	$BackgroundImage.modulate.a = 0.85;

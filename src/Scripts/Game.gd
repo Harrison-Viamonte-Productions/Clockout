@@ -29,6 +29,9 @@ func _init():
 	current_lang = Lang.get_langs()[0];
 	self.call_deferred("update_settings");
 
+func _ready():
+	Network.ready();
+
 func _process(delta):
 	self.pause_mode = Node.PAUSE_MODE_PROCESS; #So we can use functions
 	
@@ -70,3 +73,7 @@ func update_settings():
 
 func save_settings():
 	Config.save_to_file(CONFIG_FILE);
+
+remote func game_process_rpc(method_name: String, data): 
+	print("ruarua " + method_name);
+	Network.call(method_name, data);

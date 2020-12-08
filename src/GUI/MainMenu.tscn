@@ -107,8 +107,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="LoadGame" type="TextureButton" parent="Buttons"]
-visible = false
+[node name="Multiplayer" type="TextureButton" parent="Buttons"]
 margin_top = 67.0
 margin_right = 210.0
 margin_bottom = 122.0
@@ -123,13 +122,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="ButtonLabel" type="Label" parent="Buttons/LoadGame"]
+[node name="ButtonLabel" type="Label" parent="Buttons/Multiplayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -3.0
 margin_bottom = -3.0
 custom_fonts/font = SubResource( 2 )
-text = "LOAD GAME"
+text = "MULTIPLAYER"
 align = 1
 valign = 1
 __meta__ = {
@@ -138,9 +137,9 @@ __meta__ = {
 
 [node name="SaveGame" type="TextureButton" parent="Buttons"]
 visible = false
-margin_top = 67.0
+margin_top = 134.0
 margin_right = 210.0
-margin_bottom = 122.0
+margin_bottom = 189.0
 focus_next = NodePath("../Options")
 focus_previous = NodePath("../LoadGame")
 group = SubResource( 1 )
@@ -164,9 +163,9 @@ __meta__ = {
 }
 
 [node name="Options" type="TextureButton" parent="Buttons"]
-margin_top = 67.0
+margin_top = 134.0
 margin_right = 210.0
-margin_bottom = 122.0
+margin_bottom = 189.0
 focus_next = NodePath("../../QuitGame/QuitGame")
 focus_previous = NodePath("../SaveGame")
 group = SubResource( 1 )
@@ -226,10 +225,9 @@ __meta__ = {
 }
 
 [node name="OptionsContainer" type="PanelContainer" parent="."]
-modulate = Color( 1, 1, 1, 0 )
-margin_left = 1000.0
+margin_left = 288.0
 margin_top = 32.0
-margin_right = 1640.0
+margin_right = 928.0
 margin_bottom = 384.0
 custom_styles/panel = SubResource( 3 )
 __meta__ = {
@@ -237,6 +235,7 @@ __meta__ = {
 }
 
 [node name="OptionsMenu" type="Control" parent="OptionsContainer"]
+visible = false
 margin_right = 640.0
 margin_bottom = 352.0
 
@@ -513,6 +512,140 @@ margin_right = 375.0
 margin_bottom = 32.0
 custom_fonts/font = SubResource( 2 )
 text = "APPLY CHANGES"
+
+[node name="MultiplayerMenu" type="Control" parent="OptionsContainer"]
+margin_right = 640.0
+margin_bottom = 352.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OptionsContainer/MultiplayerMenu"]
+margin_left = 32.0
+margin_top = 32.0
+margin_right = 608.0
+margin_bottom = 100.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ServerSettings" type="HBoxContainer" parent="OptionsContainer/MultiplayerMenu/VBoxContainer"]
+margin_right = 576.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+
+[node name="Label" type="Label" parent="OptionsContainer/MultiplayerMenu/VBoxContainer/ServerSettings"]
+margin_top = 3.0
+margin_right = 184.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 150, 0 )
+custom_fonts/font = SubResource( 2 )
+text = "SERVER SETTINGS"
+
+[node name="MaxPlayers" type="HBoxContainer" parent="OptionsContainer/MultiplayerMenu/VBoxContainer"]
+margin_top = 36.0
+margin_right = 576.0
+margin_bottom = 68.0
+rect_min_size = Vector2( 0, 32 )
+
+[node name="Label" type="Label" parent="OptionsContainer/MultiplayerMenu/VBoxContainer/MaxPlayers"]
+margin_top = 3.0
+margin_right = 150.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 150, 0 )
+custom_fonts/font = SubResource( 2 )
+text = "MAX PLAYERS:"
+
+[node name="Players" type="OptionButton" parent="OptionsContainer/MultiplayerMenu/VBoxContainer/MaxPlayers"]
+margin_left = 154.0
+margin_right = 191.0
+margin_bottom = 32.0
+text = "2"
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OptionsContainer/MultiplayerMenu"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 32.0
+margin_top = -243.0
+margin_right = -32.0001
+margin_bottom = -211.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="StartServer" type="Button" parent="OptionsContainer/MultiplayerMenu/HBoxContainer"]
+margin_left = 207.0
+margin_right = 368.0
+margin_bottom = 32.0
+custom_fonts/font = SubResource( 2 )
+text = "START SERVER"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="OptionsContainer/MultiplayerMenu"]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 32.0
+margin_top = -112.0
+margin_right = -32.0001
+margin_bottom = -80.0
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="JoinServer" type="Button" parent="OptionsContainer/MultiplayerMenu/HBoxContainer2"]
+margin_left = 216.0
+margin_right = 360.0
+margin_bottom = 32.0
+custom_fonts/font = SubResource( 2 )
+text = "JOIN SERVER"
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="OptionsContainer/MultiplayerMenu"]
+margin_left = 32.0
+margin_top = 149.0
+margin_right = 608.0
+margin_bottom = 217.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ClientSettings" type="HBoxContainer" parent="OptionsContainer/MultiplayerMenu/VBoxContainer2"]
+margin_right = 576.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 32 )
+
+[node name="Label" type="Label" parent="OptionsContainer/MultiplayerMenu/VBoxContainer2/ClientSettings"]
+margin_top = 3.0
+margin_right = 180.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 150, 0 )
+custom_fonts/font = SubResource( 2 )
+text = "CLIENT SETTINGS"
+
+[node name="ServerIP" type="HBoxContainer" parent="OptionsContainer/MultiplayerMenu/VBoxContainer2"]
+margin_top = 36.0
+margin_right = 576.0
+margin_bottom = 68.0
+rect_min_size = Vector2( 0, 32 )
+
+[node name="Label" type="Label" parent="OptionsContainer/MultiplayerMenu/VBoxContainer2/ServerIP"]
+margin_top = 3.0
+margin_right = 150.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 150, 0 )
+custom_fonts/font = SubResource( 2 )
+text = "SERVER IP:"
+
+[node name="ServerIP" type="TextEdit" parent="OptionsContainer/MultiplayerMenu/VBoxContainer2/ServerIP"]
+margin_left = 154.0
+margin_right = 404.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 250, 0 )
+custom_fonts/font = SubResource( 2 )
+text = "192.168.0.1"
 
 [node name="VersionLabel" type="Label" parent="."]
 anchor_left = 1.0
