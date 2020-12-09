@@ -20,7 +20,7 @@ var local_player_id = NODENUM_NULL; # 0 = Server
 var netentities: Array;
 
 func ready():
-	clients_connected.clear();
+	clear();
 	Game.get_tree().connect("network_peer_connected", self, "_on_player_connected");
 	Game.get_tree().connect("network_peer_disconnected", self, "_on_player_disconnect");
 	Game.get_tree().connect("connected_to_server", self, "_cutie_joined_ok");
@@ -31,9 +31,9 @@ func ready():
 	timer.connect("timeout", self, "write_boop")
 	Game.add_child(timer)
 	timer.start()
-	clear();
 
 func clear():
+	clients_connected.clear();
 	player_count = 0;
 	for i in range(MAX_PLAYERS):
 		netentities.append(null); 
@@ -50,19 +50,42 @@ func _process(delta):
 
 #Jim from ID please implement on_cutie_joined
 func _on_player_connected(id):
-	# Called on both clients and server when a peer connects. Send my info to it.
-	clients_connected.append({netId = id, ingame = false})
-	player_count+=1;
+	add_client(id);
+	if is_server():
+		var PlayerToSpawn: Node2D = Game.add_player(id);
+		Game.spawn_player(PlayerToSpawn);
 
 #Jim from ID please on_cutie_leave
 func _on_player_disconnect(id):
-	clients_connected.remove(id);
+	clients_connected.remove(find_client_number_by_netid(id));
+	player_count-=1;
+
+func add_client(netid: int):
+	print("Adding client with at position %d with netid %d" % [clients_connected.size(), netid]);
+	clients_connected.append({netId = netid, ingame = false})
+	player_count+=1;
+	
+func find_client_number_by_netid(netid: int):
+	for i in range(clients_connected.size()):
+		if clients_connected[i].netId == netid:
+			return i;
+	
+	return -1;
+
+func find_player_number_by_netid(netid: int):
+	for i in range(Game.Players.size()):
+		if Game.Players[i] and Game.Players[i].netid == netid:
+			return i;
+	return -1;
 
 func server_process_client_question(id_client: int):
-	Game.rpc_id(id_client, "game_process_rpc", "client_receive_answer", [{map_name = "res://src/Levels/DemoLevel.tscn"}]);
+	Game.rpc_id(id_client, "game_process_rpc", "client_receive_answer", [{map_name = "res://src/Levels/DemoLevel.tscn", player_number = find_player_number_by_netid(id_client)}]);
 
 func client_receive_answer(receive_data: Dictionary):
+	print("player number: %d, uniqueid: %d" % [receive_data.player_number, Game.get_tree().get_network_unique_id()]);
+	#spawn the player in-game in the local machine :3
 	Game.get_tree().change_scene(receive_data.map_name);
+	Game.add_player(Game.get_tree().get_network_unique_id(), receive_data.player_number);
 
 func clear_players():
 	var is_server: bool = false;
@@ -97,6 +120,7 @@ func host_server(maxPlayers: int, mapName: String, serverPort: int = SERVER_PORT
 	var host = NetworkedMultiplayerENet.new();
 	print(host.create_server(serverPort, maxPlayers));
 	Game.get_tree().set_network_peer(host);
+	add_client(SERVER_NETID); #adding server as friend client always
 	Game.get_tree().change_scene(mapName);
 
 func join_server(ip: String):

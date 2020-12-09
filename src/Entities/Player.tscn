@@ -248,7 +248,7 @@ __meta__ = {
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
-animation = "idle"
+animation = "crouch_walk"
 script = ExtResource( 4 )
 
 [node name="Weapon" type="Area2D" parent="Sprite"]
@@ -274,7 +274,6 @@ polygon = PoolVector2Array( -36.92, 79.156, -36.92, 23.156, -12.92, -16.844, 15.
 disabled = true
 
 [node name="Camera" parent="." instance=ExtResource( 6 )]
-current = true
 drag_margin_h_enabled = true
 drag_margin_v_enabled = true
 smoothing_speed = 8.0

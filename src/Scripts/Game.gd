@@ -16,6 +16,7 @@ var MainMenu:Node = null;
 var current_lang: String = "";
 
 #Objects (to avoid using classes)
+var Boop_Object = preload("res://src/Scripts/Netcode/Boop.gd");
 var Util_Object = preload("res://src/Scripts/Util.gd");
 var Lang = load("res://src/Scripts/Langs.gd").new();
 var Config = load("res://src/Scripts/ConfigManager.gd").new();
@@ -29,6 +30,7 @@ func _init():
 	Config.load_from_file(CONFIG_FILE);
 	current_lang = Lang.get_langs()[0];
 	self.call_deferred("update_settings");
+	Players.resize(Network.MAX_PLAYERS);
 
 func _ready():
 	Network.ready();
@@ -79,6 +81,8 @@ func get_closest_player_to(node: Node2D) -> Node2D:
 	var closestPlayer: Node2D = null;
 	var current_dist: float = float(Util_Object.BIG_INT); #Big number
 	for Player in Players:
+		if !Player:
+			continue;
 		var test_dist: float = node.global_position.distance_to(Player.global_position);
 		if current_dist > test_dist:
 			current_dist = test_dist;
@@ -91,13 +95,26 @@ func get_local_player() -> Node2D:
 remote func game_process_rpc(method_name: String, data: Array): 
 	Network.callv(method_name, data);
 
-func add_player(netid: int):
+func add_player(netid: int, forceid: int = -1) -> Node2D:
+	var free_player_index: int = 0;
+	for i in range(Players.size()):
+		if Players[i]:
+			free_player_index += 1;
+			continue;
+		break;
+	
 	var player_instance = PlayerNode.instance();
-	player_instance.node_id = Players.size();
+	
+	if forceid != -1:
+		free_player_index = forceid;
+
+	player_instance.node_id = free_player_index;
 	player_instance.netid = netid;
 	Game.Network.register_synced_node(player_instance, player_instance.node_id);
 	#Game.Network.netentities[player_instance.id] = player_instance;
-	Players.append(player_instance);
+	Players[free_player_index] = player_instance;
+	
+	return Players[free_player_index];
 
 func spawn_player(player: Node2D):
 	player.Spawn = SpawnPoints[0];
@@ -105,3 +122,10 @@ func spawn_player(player: Node2D):
 	player.z_index = SpawnPoints[0].z_index;
 	player.z_as_relative = SpawnPoints[0].z_as_relative;
 	player.Spawn.get_parent().call_deferred("add_child", player);
+
+func get_active_players() -> Array:
+	var result: Array = [];
+	for i in range(Players.size()):
+		if Players[i]:
+			result.append(Players[i]);
+	return result;

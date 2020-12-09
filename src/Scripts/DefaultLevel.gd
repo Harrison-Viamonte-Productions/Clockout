@@ -8,11 +8,13 @@ func _enter_tree():
 	Game.CurrentMap = self;
 	Game.SpawnPoints.clear();
 	Game.add_player(Game.Network.SERVER_NETID); #server player always exists
+	print("I reach this...");
 
 func _ready():
 	
 	for p in Game.Players:
-		Game.spawn_player(p);
+		if p:
+			Game.spawn_player(p);
 
 	Game.MainMenu = MainMenuScene.instance();
 	Game.MainMenu.set_ingame_mode();

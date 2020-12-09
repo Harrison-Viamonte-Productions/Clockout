@@ -157,3 +157,6 @@ func normalize_position(old_pos: Vector2, new_pos: Vector2, end_pos: Vector2) ->
 		normalized_pos.y = end_pos.y;
 	
 	return normalized_pos;
+
+func stepify_vec2(vec2: Vector2, precision: float) -> Vector2 :
+	return Vector2(stepify(vec2.x, precision),stepify(vec2.y, precision));

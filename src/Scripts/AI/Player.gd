@@ -52,8 +52,12 @@ var combos: Dictionary = {
 };
 
 var Spawn: Node2D = null;
+
+#Netcode stuff start
 var netid: int = -1;
-var node_id: int = -1;
+var node_id: int = -1
+var NetBoop = Game.Boop_Object.new(self);
+#Netcode stuff ends
 
 var Util = Game.Util_Object.new(self);
 
@@ -67,9 +71,10 @@ func _ready() -> void:
 	initial_health = health;
 	var mapLimits = Game.CurrentMap.get_world_limits();
 	$Camera.update_limits(mapLimits.start, mapLimits.end);
-	Game.set_active_camera($Camera);
-	Engine.set_target_fps(Engine.get_iterations_per_second())
-	update_gui()
+	if is_local_player():
+		Game.set_active_camera($Camera);
+		update_gui();
+	Engine.set_target_fps(Engine.get_iterations_per_second()) #Do this in other place later
 	CurrentWeapon.disable_damage()
 
 func _physics_process(delta: float) -> void:
@@ -301,18 +306,38 @@ func execute_combo(combo_name: String):
 
 func server_send_boop() -> void:
 	# todo: some pre-check to see if sending the boop is really necessary
-	var boopData = { velocity = Vector3(), position = Vector3(), rotation = Vector3()}
-	boopData.velocity = self.velocity;
-	boopData.position = self.position;
-	boopData.rotation = self.rotation;
-	Game.Network.send_rpc_unreliable("client_process_boop", [self.node_id, boopData]);
-	print("send boop: ");
+	var boopData = { velocity = Vector2(), position = Vector2(), rotation = Vector2()}
+	 #stepify iis important to avoid that an insignificant varition of data can lead to a new boop/snapshot
+	boopData.velocity = Util.stepify_vec2(self.velocity, 0.01);
+	boopData.position = Util.stepify_vec2(self.position, 0.01);
+	boopData.rotation = stepify(self.rotation, 0.01);
+	if NetBoop.delta_boop_changed(boopData):
+		Game.Network.send_rpc_unreliable("client_process_boop", [self.node_id, boopData]);
 	#Game.rpc_unreliable("client_process_boop", self.node_id, self.NODE_TYPE, boopData);
-	
+
+func client_send_boop() -> void:
+	if !get_tree() or !is_local_player():
+		return;
+	var boopData = { velocity = Vector2(), position = Vector2(), rotation = Vector2()}
+	boopData.velocity = Util.stepify_vec2(self.velocity, 0.01);
+	boopData.position = Util.stepify_vec2(self.position, 0.01);
+	boopData.rotation = stepify(self.rotation, 0.01);
+	if NetBoop.delta_boop_changed(boopData):
+		Game.Network.send_rpc_unreliable_id(Game.Network.SERVER_NETID, "server_process_boop", [self.node_id, boopData]);
+
 func client_process_boop(boopData) -> void:
+	if !get_tree() or is_local_player():
+		return;
 	self.velocity = boopData.velocity;
 	self.position = boopData.position;
-	self.rotation = boopData.rotation ;
+	self.rotation = boopData.rotation;
+	
+func server_process_boop(boopData) -> void:
+	if !get_tree() or is_local_player():
+		return;
+	self.velocity = boopData.velocity;
+	self.position = boopData.position;
+	self.rotation = boopData.rotation;
 
 func is_local_player() -> bool:
 	return !Game.Network.is_multiplayer() or (netid == get_tree().get_network_unique_id());

@@ -297,4 +297,5 @@ func can_jump_over(delta, pos: Vector2) -> bool:
 		return true;
 
 func enemy_can_be_reached() -> bool:
-	return Util.node_can_be_reached(currentEnemy, Game.Players + [self]);
+	
+	return Util.node_can_be_reached(currentEnemy, Game.get_active_players() + [self]);
