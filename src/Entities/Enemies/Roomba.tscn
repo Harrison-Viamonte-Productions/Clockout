@@ -4,10 +4,10 @@
 [ext_resource path="res://src/Scripts/AI/Roomba.gd" type="Script" id=4]
 [ext_resource path="res://assets/particles/Smoke_particle1.png" type="Texture" id=8]
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 21.4297, 21.1736 )
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=2]
 resource_name = "death"
 length = 0.25
 step = 0.05
@@ -96,21 +96,21 @@ initial_velocity = 25.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="PlayerDetection" type="Area2D" parent="."]
 collision_layer = 8
 collision_mask = 33
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="PlayerDetection"]
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="VisibilityNotifier2D" type="VisibilityNotifier2D" parent="."]
 visible = false
 rect = Rect2( -25, -25, 50, 50 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/death = SubResource( 4 )
+anims/death = SubResource( 2 )
 anims/hurt = SubResource( 3 )
 
 [node name="Tween" type="Tween" parent="."]
