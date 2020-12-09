@@ -8,7 +8,7 @@ var player_inside: bool = false;
 func update_trigger_data():
 	.update_trigger_data();
 	if call_function.length() > 1:
-		if has_node_type(Game.Player, PhysicsBody2D): #activated only by player
+		if has_node_type(Game.Players[0], PhysicsBody2D): #activated only by player
 			self.connect("body_entered", self,  "on_body_entered");
 			self.connect("body_exited", self, "on_body_exited")
 		else:
@@ -16,19 +16,19 @@ func update_trigger_data():
 			self.connect("area_exited", self,  "on_area_exited");
 
 func on_body_entered(body):
-	if Game.Player == body:
+	if Game.Players[0] == body:
 		on_player_entered();
 
 func on_body_exited(body):
-	if Game.Player == body:
+	if Game.Players[0] == body:
 		on_player_exited();
 
 func on_area_entered(area):
-	if Game.Player == area:
+	if Game.Players[0] == area:
 		on_player_entered();
 
 func on_area_exited(area):
-	if Game.Player == area:
+	if Game.Players[0] == area:
 		on_player_exited();
 		
 func on_player_entered():

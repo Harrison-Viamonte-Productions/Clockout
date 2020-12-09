@@ -17,6 +17,7 @@ var client_latency: float = 0.0;
 var ping_counter = 0.0;
 var LevelScene: Node = null;
 var local_player_id = NODENUM_NULL; # 0 = Server
+var netentities: Array;
 
 func ready():
 	clients_connected.clear();
@@ -30,11 +31,16 @@ func ready():
 	timer.connect("timeout", self, "write_snapshot")
 	Game.add_child(timer)
 	timer.start()
+	clear();
+
+func clear():
+	player_count = 0;
+	for i in range(MAX_PLAYERS):
+		netentities.append(null); 
 
 func _cutie_joined_ok():
-	print("connected okidoki");
 	if !Game.is_network_master():
-		Game.rpc_id(SERVER_NETID, "game_process_rpc", "server_process_client_question", Game.get_tree().get_network_unique_id());
+		Game.rpc_id(SERVER_NETID, "game_process_rpc", "server_process_client_question", [Game.get_tree().get_network_unique_id()]);
 
 func _process(delta):
 	if Game.get_tree().has_network_peer() && !Game.is_network_master():
@@ -53,8 +59,7 @@ func _on_player_disconnect(id):
 	clients_connected.remove(id);
 
 func server_process_client_question(id_client: int):
-	print("ruaruarua");
-	Game.rpc_id(id_client, "game_process_rpc", "client_receive_answer", {map_name = "res://src/Levels/DemoLevel.tscn"});
+	Game.rpc_id(id_client, "game_process_rpc", "client_receive_answer", [{map_name = "res://src/Levels/DemoLevel.tscn"}]);
 
 func client_receive_answer(receive_data: Dictionary):
 	Game.get_tree().change_scene(receive_data.map_name);
@@ -93,7 +98,6 @@ func host_server(maxPlayers: int, mapName: String, serverPort: int = SERVER_PORT
 	print(host.create_server(serverPort, maxPlayers));
 	Game.get_tree().set_network_peer(host);
 	Game.get_tree().change_scene(mapName);
-	#Game.get_tree().set_network_master(SERVER_NETID);
 
 func join_server(ip: String):
 	ip = ip.replace(" ", "");
@@ -101,16 +105,18 @@ func join_server(ip: String):
 	var host = NetworkedMultiplayerENet.new();
 	print(host.create_client(ip, SERVER_PORT));
 	Game.get_tree().set_network_peer(host);
-	#Game.get_tree().set_network_master(SERVER_NETID);
 
 # Some util funcs
+func is_multiplayer() -> bool:
+	return Game.get_tree().has_network_peer();
+	
 func is_client() -> bool:
 	if !Game.get_tree().has_network_peer() || Game.get_tree().is_network_server():
 		return false;
 	return true;
 	
 func is_server() -> bool:
-	if !Game.get_tree().is_network_server():
+	if Game.get_tree().has_network_peer() && !Game.get_tree().is_network_server():
 		return false;
 	return true;
 	
@@ -123,14 +129,59 @@ func is_local_player(playerEntity: Node) -> bool:
 func write_snapshot() -> void:
 	if !Game.get_tree().has_network_peer():
 		return;
-		
+
 	if Game.get_tree().is_network_server():
 		server_send_snapshot();
 	else:
 		client_send_snapshot();
 
 func server_send_snapshot() -> void:
-	pass;
+	if player_count <= 0:
+		return;
+	for entity in netentities:
+		if entity && entity.has_method("server_send_snapshot"):
+			entity.server_send_snapshot();
 	
 func client_send_snapshot() -> void:
-	pass;
+	for entity in netentities:
+		if entity && entity.has_method("client_send_snapshot"):
+			entity.client_send_snapshot();
+
+remote func client_process_snapshot(entityId, message) -> void:
+	if entityId < netentities.size() && netentities[entityId]:
+		if netentities[entityId].has_method("client_process_snapshot"):
+			netentities[entityId].client_process_snapshot(message);
+	#else: #Entity exists in server but not in client, lets spawn it
+	#	register_sycned_node_by_typenum(nodeNum, entityId);
+
+remote func server_process_snapshot(entityId, message) -> void:
+	if entityId < netentities.size() && netentities[entityId]:
+		if netentities[entityId].has_method("server_process_snapshot"):
+			netentities[entityId].server_process_snapshot(message);
+
+func send_rpc_id(id: int, method_name: String, args: Array) -> void:
+	Game.callv("rpc_id", [id, "game_process_rpc", method_name, args]);
+
+func send_rpc_unreliable_id(id: int, method_name: String, args: Array) -> void:
+	Game.callv("rpc_unreliable_id", [id, "game_process_rpc", method_name, args])
+	
+func send_rpc(method_name: String, args: Array) -> void:
+	Game.callv("rpc", ["game_process_rpc", method_name, args]);
+
+func send_rpc_unreliable(method_name: String, args: Array) -> void:
+	Game.callv("rpc_unreliable", ["game_process_rpc", method_name, args])
+
+func register_synced_node(nodeEntity: Node, forceId = NODENUM_NULL ) -> void:
+	var freeIndex = MAX_PLAYERS;
+
+	if forceId >= 0:
+		freeIndex = forceId;
+		print("Forcing id: " + str(freeIndex));
+	else:
+		while netentities[freeIndex]:
+			freeIndex+=1;
+
+	nodeEntity.node_id = freeIndex;
+	netentities[nodeEntity.node_id] = nodeEntity;
+
+	print("Registering entity [ID " + str(freeIndex) + "] : " + nodeEntity.get_class());

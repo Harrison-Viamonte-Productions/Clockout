@@ -16,6 +16,7 @@ const SIZE: Vector2 = Vector2(32.0, 32.0); #Useful for jump detection
 const CHASE_MIN_DISTANCE: float = 150.0;
 const CHASE_CHECK_DELAY: float = 250.0 #msec;
 const RUNAWAY_CHECK_DELAY: float = 250.0 #msec;
+const CLOSEST_PLAYER_CHECK_DELAY: float = 250.0;
 
 const IMPULSE_AIR_FRICTION: float = 100.0;
 const IMPULSE_FLOOR_FRICTION: float = 600.0;
@@ -41,6 +42,7 @@ var attacking_countdown = ATTACK_DURATION;
 var outside_screen_countdown = ACTIVE_OUTSIDE_SCREEN_TIME;
 var chase_check_countdown = CHASE_CHECK_DELAY;
 var runaway_check_countdown = RUNAWAY_CHECK_DELAY;
+var player_check_countdown = 0.0; #important to start from zero
 
 var attacking: bool = false;
 var player_inside_area: bool = false;
@@ -49,6 +51,7 @@ var active: bool = false;
 var is_on_screen: bool = false;
 var can_be_damaged: bool = true;
 var runaway: bool = false;
+var currentEnemy: Node2D = null; #Maybe change this in future.
 
 var motion: Vector2 = Vector2.ZERO;
 var impulse: Vector2 = Vector2.ZERO;
@@ -78,6 +81,7 @@ func _physics_process(delta):
 	if abs(impulse.x) <= delta*friction:
 		impulse.x = 0.0;
 
+	check_player(delta);
 	check_dormant(delta);
 	check_collisions(delta);
 	check_attacks(delta);
@@ -86,14 +90,20 @@ func _physics_process(delta):
 	fall(delta);
 	move(delta);
 
+func check_player(delta):
+	if player_check_countdown <= 0.0:
+		player_check_countdown = CLOSEST_PLAYER_CHECK_DELAY;
+		currentEnemy = Game.get_closest_player_to(self);
+		print(currentEnemy);
+
 func chase(delta):
 	if !self.chase || self.runaway:
 		return;
 	if chase_check_countdown <= 0.0:
 		chase_check_countdown = CHASE_CHECK_DELAY;
-		var dist_to_player: float = (Game.Player.global_position - self.global_position).length();
-		if dist_to_player > CHASE_MIN_DISTANCE && Util.player_can_be_reached():
-			if Game.Player.global_position.x > self.global_position.x:
+		var dist_to_player: float = (currentEnemy.global_position - self.global_position).length();
+		if dist_to_player > CHASE_MIN_DISTANCE && enemy_can_be_reached():
+			if currentEnemy.global_position.x > self.global_position.x:
 				walk_direction = 1.0;
 			else:
 				walk_direction = -1.0;
@@ -105,7 +115,7 @@ func chase(delta):
 
 func run_away_from_player():
 	self.runaway = true;
-	if Game.Player.global_position.x > self.global_position.x:
+	if currentEnemy.global_position.x > self.global_position.x:
 		walk_direction = -1.0;
 	else:
 		walk_direction = 1.0;
@@ -185,8 +195,8 @@ func check_attacks(delta):
 
 	attack_check_countdown-= delta*1000.0;
 	if (attack_check_countdown <= 0):
-		var vector_to_player: Vector2 = Game.Player.global_position - self.global_position;
-		if (abs(vector_to_player.x) <= VIEW_ENEMY_DISTANCE.x && abs(vector_to_player.y) <= VIEW_ENEMY_DISTANCE.y && Util.player_can_be_reached()):
+		var vector_to_player: Vector2 = currentEnemy.global_position - self.global_position;
+		if (abs(vector_to_player.x) <= VIEW_ENEMY_DISTANCE.x && abs(vector_to_player.y) <= VIEW_ENEMY_DISTANCE.y && enemy_can_be_reached()):
 			if vector_to_player.x < 0:
 				walk_direction = -1.0;
 			else:
@@ -202,7 +212,8 @@ func check_attacks(delta):
 func check_damage(delta):
 	if !player_inside_area || self.harmless:
 		return;
-	Game.Player.hurt(self, ATTACK_DAMAGE);
+	var closestPlayer: Node2D = Game.get_closest_player_to(self);
+	currentEnemy.hurt(self, ATTACK_DAMAGE);
 
 func update_sprite():
 	if attacking && $Sprite.animation != "attack":
@@ -217,12 +228,12 @@ func update_sprite():
 		$Sprite.stop();
 
 func _on_body_entered(body):
-	if Game.Player == body:
+	if currentEnemy == body:
 		player_inside_area = true;
 		_on_player_entered();
 		
 func _on_body_exited(body):
-	if Game.Player == body:
+	if currentEnemy == body:
 		player_inside_area = false;
 		_on_player_exited();
 
@@ -284,3 +295,6 @@ func can_jump_over(delta, pos: Vector2) -> bool:
 		return false;
 	else:
 		return true;
+
+func enemy_can_be_reached() -> bool:
+	return Util.node_can_be_reached(currentEnemy, Game.Players + [self]);

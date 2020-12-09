@@ -52,13 +52,17 @@ var combos: Dictionary = {
 };
 
 var Spawn: Node2D = null;
+var netid: int = -1;
+var node_id: int = -1;
 
 var Util = Game.Util_Object.new(self);
 
 func _enter_tree():
-	Game.Player = self;
+	if !Game.Players.has(self):
+		Game.Players.append(self);
 
 func _ready() -> void:
+	add_to_group("network_group"); # let's the Netcode know that we are a node that uses netcode
 	Util._ready();
 	initial_health = health;
 	var mapLimits = Game.CurrentMap.get_world_limits();
@@ -133,6 +137,9 @@ func jump(time: int, delta: float) -> void:
 	elif jump_count == 0:
 		jump_count = 1
 	
+	if !is_local_player():
+		return;
+	
 	if Input.is_action_just_pressed("jump") and (is_on_floor() or jump_count < MAX_JUMPS) and time > next_jump_time:
 		is_jumping = true;
 
@@ -145,13 +152,13 @@ func jump(time: int, delta: float) -> void:
 
 func run() -> void:
 	velocity.x = 0;
-	if Input.is_action_pressed("move_right"):
+	if Input.is_action_pressed("move_right") and is_local_player():
 		velocity.x += MOVE_SPEED;
-	if Input.is_action_pressed("move_left"):
+	if Input.is_action_pressed("move_left") and is_local_player():
 		velocity.x -= MOVE_SPEED;
 
 func crouch() -> void:
-	if Input.is_action_pressed("crouch"):
+	if Input.is_action_pressed("crouch") and is_local_player():
 		is_crouched = true
 		up_raycast.enabled = true
 		up_raycast2.enabled = true;
@@ -209,12 +216,15 @@ func disable_damage_protection():
 
 func killed(attacker: Node2D):
 	Game.GUI.info_message(Game.get_str(attacker.DEATH_MESSAGE) % ["Player_name", attacker.NAME]);
-	if tween.is_active():
-		tween.remove(Game.ViewportFX, "fade_in_out");
-		tween.remove(self, "respawn");
-	tween.interpolate_callback(Game.ViewportFX, RESPAWN_TIME, "fade_in_out", 1.0, 0.5);
-	tween.interpolate_callback(self, RESPAWN_TIME+1.0, "respawn");
-	tween.start();
+
+	if is_local_player():
+		if tween.is_active():
+			tween.remove(Game.ViewportFX, "fade_in_out");
+			tween.remove(self, "respawn");
+		tween.interpolate_callback(Game.ViewportFX, RESPAWN_TIME, "fade_in_out", 1.0, 0.5);
+		tween.interpolate_callback(self, RESPAWN_TIME+1.0, "respawn");
+		tween.start();
+
 	$AnimationPlayer.play("teleport");
 	#respawn();
 	update_gui();
@@ -223,10 +233,12 @@ func is_alive() -> bool:
 	return health > 0
 
 func update_gui():
+	if !is_local_player():
+		return;
 	Game.GUI.update_health(health);
 
 #############################
-# COMBO SYSTEM CODE: START ##
+# COMBO SYSTEM CODE		   ##
 ############################
 
 func _process(delta):
@@ -237,6 +249,9 @@ func _process(delta):
 		action_buffer_countdown = BUFFER_CLEAN_DELAY;
 
 func _input(event):
+	if	!is_local_player():
+		return;
+		
 	if event is InputEventKey && Input.is_action_just_pressed("attack"):
 		$WeaponAnims.play("attack_forward");
 		if tween.is_active():
@@ -279,6 +294,28 @@ func get_action_name_from_scancode(scancode: int) -> String:
 
 func execute_combo(combo_name: String): 
 	print(combo_name);
+	
 #############################
-# COMBO SYSTEM CODE: END ##
+# NETCODE SPECIFIC RELATED ##
 ############################
+
+func server_send_snapshot() -> void:
+	# todo: some pre-check to see if sending the snapshot is really necessary
+	var snapshotData = { velocity = Vector3(), position = Vector3(), rotation = Vector3()}
+	snapshotData.velocity = self.velocity;
+	snapshotData.position = self.position;
+	snapshotData.rotation = self.rotation;
+	Game.Network.send_rpc_unreliable("client_process_snapshot", [self.node_id, snapshotData]);
+	print("send snapshot: ");
+	#Game.rpc_unreliable("client_process_snapshot", self.node_id, self.NODE_TYPE, snapshotData);
+	
+func client_process_snapshot(snapshotData) -> void:
+	self.velocity = snapshotData.velocity;
+	self.position = snapshotData.position;
+	self.rotation = snapshotData.rotation ;
+
+func is_local_player() -> bool:
+	return !Game.Network.is_multiplayer() or (netid == get_tree().get_network_unique_id());
+
+func get_class():
+	return "Player";

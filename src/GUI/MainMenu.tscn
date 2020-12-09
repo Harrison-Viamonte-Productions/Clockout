@@ -597,8 +597,8 @@ __meta__ = {
 }
 
 [node name="JoinServer" type="Button" parent="OptionsContainer/MultiplayerMenu/HBoxContainer2"]
-margin_left = 216.0
-margin_right = 360.0
+margin_left = 215.0
+margin_right = 359.0
 margin_bottom = 32.0
 custom_fonts/font = SubResource( 2 )
 text = "JOIN SERVER"

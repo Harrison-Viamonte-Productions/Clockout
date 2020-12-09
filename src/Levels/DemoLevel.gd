@@ -33,8 +33,8 @@ func camera_move_to(path_index: int, interpolated: bool = true):
 	Game.set_active_camera(LevelStaticCamera);
 
 func reset_camera(interpolated: bool = false):
-	Game.Player.get_camera().move_from_node2d(Game.ActiveCamera, Game.Player.get_camera().Util.init_pos);
-	Game.set_active_camera(Game.Player.get_camera());
+	Game.get_local_player().get_camera().move_from_node2d(Game.ActiveCamera, Game.get_local_player().get_camera().Util.init_pos);
+	Game.set_active_camera(Game.get_local_player().get_camera());
 
 func show_message(msg: String, time: float) -> void:
 	Game.GUI.display_message(msg, time);
@@ -56,7 +56,7 @@ func entering_building_effect():
 	
 	player_inside_storage = true;
 	$PlayerSpawn.global_position = $Entities/Misc/Teleport1.global_position;
-	Game.Player.global_position = $Entities/Misc/Teleport1.global_position;
+	Game.get_local_player().global_position = $Entities/Misc/Teleport1.global_position;
 	#new Camera limits
 	map_limit_start.x = 5888;
 	map_limit_start.y = -1376;

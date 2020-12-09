@@ -24,6 +24,8 @@ func update_animation(velocity: Vector2, is_crouched:bool) -> void:
 			self.scale.x = -self.scale.x;
 
 func _input(event):
+	if !get_parent().is_local_player():
+		return;
 	if Input.is_action_pressed("move_left") || Input.is_action_pressed("move_right"):
 		anim_walking = true;
 	else:
