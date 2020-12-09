@@ -299,20 +299,20 @@ func execute_combo(combo_name: String):
 # NETCODE SPECIFIC RELATED ##
 ############################
 
-func server_send_snapshot() -> void:
-	# todo: some pre-check to see if sending the snapshot is really necessary
-	var snapshotData = { velocity = Vector3(), position = Vector3(), rotation = Vector3()}
-	snapshotData.velocity = self.velocity;
-	snapshotData.position = self.position;
-	snapshotData.rotation = self.rotation;
-	Game.Network.send_rpc_unreliable("client_process_snapshot", [self.node_id, snapshotData]);
-	print("send snapshot: ");
-	#Game.rpc_unreliable("client_process_snapshot", self.node_id, self.NODE_TYPE, snapshotData);
+func server_send_boop() -> void:
+	# todo: some pre-check to see if sending the boop is really necessary
+	var boopData = { velocity = Vector3(), position = Vector3(), rotation = Vector3()}
+	boopData.velocity = self.velocity;
+	boopData.position = self.position;
+	boopData.rotation = self.rotation;
+	Game.Network.send_rpc_unreliable("client_process_boop", [self.node_id, boopData]);
+	print("send boop: ");
+	#Game.rpc_unreliable("client_process_boop", self.node_id, self.NODE_TYPE, boopData);
 	
-func client_process_snapshot(snapshotData) -> void:
-	self.velocity = snapshotData.velocity;
-	self.position = snapshotData.position;
-	self.rotation = snapshotData.rotation ;
+func client_process_boop(boopData) -> void:
+	self.velocity = boopData.velocity;
+	self.position = boopData.position;
+	self.rotation = boopData.rotation ;
 
 func is_local_player() -> bool:
 	return !Game.Network.is_multiplayer() or (netid == get_tree().get_network_unique_id());

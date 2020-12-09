@@ -28,7 +28,7 @@ func ready():
 	var timer = Timer.new();
 	timer.set_wait_time(SNAPSHOT_DELAY);
 	timer.set_one_shot(false)
-	timer.connect("timeout", self, "write_snapshot")
+	timer.connect("timeout", self, "write_boop")
 	Game.add_child(timer)
 	timer.start()
 	clear();
@@ -126,38 +126,38 @@ func is_local_player(playerEntity: Node) -> bool:
 	return true;
 	
 # Snapshot stuff basic
-func write_snapshot() -> void:
+func write_boop() -> void:
 	if !Game.get_tree().has_network_peer():
 		return;
 
 	if Game.get_tree().is_network_server():
-		server_send_snapshot();
+		server_send_boop();
 	else:
-		client_send_snapshot();
+		client_send_boop();
 
-func server_send_snapshot() -> void:
+func server_send_boop() -> void:
 	if player_count <= 0:
 		return;
 	for entity in netentities:
-		if entity && entity.has_method("server_send_snapshot"):
-			entity.server_send_snapshot();
+		if entity && entity.has_method("server_send_boop"):
+			entity.server_send_boop();
 	
-func client_send_snapshot() -> void:
+func client_send_boop() -> void:
 	for entity in netentities:
-		if entity && entity.has_method("client_send_snapshot"):
-			entity.client_send_snapshot();
+		if entity && entity.has_method("client_send_boop"):
+			entity.client_send_boop();
 
-remote func client_process_snapshot(entityId, message) -> void:
+remote func client_process_boop(entityId, message) -> void:
 	if entityId < netentities.size() && netentities[entityId]:
-		if netentities[entityId].has_method("client_process_snapshot"):
-			netentities[entityId].client_process_snapshot(message);
+		if netentities[entityId].has_method("client_process_boop"):
+			netentities[entityId].client_process_boop(message);
 	#else: #Entity exists in server but not in client, lets spawn it
 	#	register_sycned_node_by_typenum(nodeNum, entityId);
 
-remote func server_process_snapshot(entityId, message) -> void:
+remote func server_process_boop(entityId, message) -> void:
 	if entityId < netentities.size() && netentities[entityId]:
-		if netentities[entityId].has_method("server_process_snapshot"):
-			netentities[entityId].server_process_snapshot(message);
+		if netentities[entityId].has_method("server_process_boop"):
+			netentities[entityId].server_process_boop(message);
 
 func send_rpc_id(id: int, method_name: String, args: Array) -> void:
 	Game.callv("rpc_id", [id, "game_process_rpc", method_name, args]);
