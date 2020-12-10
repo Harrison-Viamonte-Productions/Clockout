@@ -156,14 +156,18 @@ func jump(time: int, delta: float) -> void:
 		velocity.y += JUMP_SPEED*delta
 
 func run() -> void:
+	if !is_local_player():
+		return;
 	velocity.x = 0;
-	if Input.is_action_pressed("move_right") and is_local_player():
+	if Input.is_action_pressed("move_right"):
 		velocity.x += MOVE_SPEED;
-	if Input.is_action_pressed("move_left") and is_local_player():
+	if Input.is_action_pressed("move_left"):
 		velocity.x -= MOVE_SPEED;
 
 func crouch() -> void:
-	if Input.is_action_pressed("crouch") and is_local_player():
+	if !is_local_player():
+		return;
+	if Input.is_action_pressed("crouch"):
 		is_crouched = true
 		up_raycast.enabled = true
 		up_raycast2.enabled = true;
@@ -171,6 +175,16 @@ func crouch() -> void:
 		is_crouched = false
 		up_raycast.enabled = false;
 		up_raycast2.enabled = false;
+
+#friendly movement functions
+func crouch_cs() -> void:
+	is_crouched = true
+	up_raycast.enabled = true
+	up_raycast2.enabled = true;
+func uncrouch_cs() -> void:
+	is_crouched = false
+	up_raycast.enabled = false;
+	up_raycast2.enabled = false;
 
 func get_camera():
 	return $Camera;
@@ -306,19 +320,33 @@ func execute_combo(combo_name: String):
 
 func server_send_boop() -> void:
 	# todo: some pre-check to see if sending the boop is really necessary
-	var boopData = { velocity = Vector2(), position = Vector2(), rotation = Vector2()}
+	var boopData = {
+		 velocity = Vector2(),
+		 position = Vector2(),
+		 rotation = Vector2(),
+		 is_crouched = self.is_crouched,
+		 anim_playing = $Sprite.get_current_anim_playing(),
+		 is_jumping = self.is_jumping
+	};
+
 	 #stepify iis important to avoid that an insignificant varition of data can lead to a new boop/snapshot
 	boopData.velocity = Util.stepify_vec2(self.velocity, 0.01);
 	boopData.position = Util.stepify_vec2(self.position, 0.01);
 	boopData.rotation = stepify(self.rotation, 0.01);
 	if NetBoop.delta_boop_changed(boopData):
 		Game.Network.send_rpc_unreliable("client_process_boop", [self.node_id, boopData]);
-	#Game.rpc_unreliable("client_process_boop", self.node_id, self.NODE_TYPE, boopData);
 
 func client_send_boop() -> void:
 	if !get_tree() or !is_local_player():
 		return;
-	var boopData = { velocity = Vector2(), position = Vector2(), rotation = Vector2()}
+	var boopData = {
+		 velocity = Vector2(),
+		 position = Vector2(),
+		 rotation = Vector2(),
+		 is_crouched = self.is_crouched,
+		 anim_playing = $Sprite.get_current_anim_playing(),
+		 is_jumping = self.is_jumping
+	};
 	boopData.velocity = Util.stepify_vec2(self.velocity, 0.01);
 	boopData.position = Util.stepify_vec2(self.position, 0.01);
 	boopData.rotation = stepify(self.rotation, 0.01);
@@ -332,12 +360,31 @@ func client_process_boop(boopData) -> void:
 	self.position = boopData.position;
 	self.rotation = boopData.rotation;
 	
+	if self.is_crouched != boopData.is_crouched:
+		if boopData.is_crouched:
+			self.crouch_cs();
+		else:
+			self.uncrouch_cs();
+	self.is_jumping = boopData.is_jumping;
+	self.is_crouched = boopData.is_crouched
+	$Sprite.set_animation(boopData.anim_playing);
+	
 func server_process_boop(boopData) -> void:
 	if !get_tree() or is_local_player():
 		return;
 	self.velocity = boopData.velocity;
 	self.position = boopData.position;
 	self.rotation = boopData.rotation;
+	
+	if self.is_crouched != boopData.is_crouched:
+		if boopData.is_crouched:
+			self.crouch_cs();
+		else:
+			self.uncrouch_cs();
+			
+	self.is_jumping = boopData.is_jumping;
+	self.is_crouched = boopData.is_crouched
+	$Sprite.set_animation(boopData.anim_playing);
 
 func is_local_player() -> bool:
 	return !Game.Network.is_multiplayer() or (netid == get_tree().get_network_unique_id());

@@ -90,7 +90,7 @@ func get_closest_player_to(node: Node2D) -> Node2D:
 	return closestPlayer;
 
 func get_local_player() -> Node2D:
-	return Players[0]; #fix later
+	return Players[Network.local_player_id]; #fix later
 
 remote func game_process_rpc(method_name: String, data: Array): 
 	Network.callv(method_name, data);

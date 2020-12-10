@@ -26,7 +26,7 @@ func get_node_by_string(node_string: String) -> Node:
 		"$CurrentMap": 
 			nodeReturn = Game.CurrentMap;
 		"$Player":
-			nodeReturn = Game.Players[0]; #By now just player 1 activate this, fix in future!
+			nodeReturn = Game.Players[Game.Network.local_player_id]; #By now just local player activate this, triggers are clientside therefore by now....
 		"$Self":
 			nodeReturn = self;
 		"$Parent":

@@ -16,7 +16,7 @@ var pings: Array;
 var client_latency: float = 0.0;
 var ping_counter = 0.0;
 var LevelScene: Node = null;
-var local_player_id = NODENUM_NULL; # 0 = Server
+var local_player_id = 0; # 0 = Server
 var netentities: Array;
 
 func ready():
@@ -83,9 +83,11 @@ func server_process_client_question(id_client: int):
 
 func client_receive_answer(receive_data: Dictionary):
 	print("player number: %d, uniqueid: %d" % [receive_data.player_number, Game.get_tree().get_network_unique_id()]);
+	local_player_id = receive_data.player_number;
 	#spawn the player in-game in the local machine :3
-	Game.get_tree().change_scene(receive_data.map_name);
 	Game.add_player(Game.get_tree().get_network_unique_id(), receive_data.player_number);
+	Game.get_tree().change_scene(receive_data.map_name);
+
 
 func clear_players():
 	var is_server: bool = false;
@@ -183,6 +185,20 @@ remote func server_process_boop(entityId, message) -> void:
 		if netentities[entityId].has_method("server_process_boop"):
 			netentities[entityId].server_process_boop(message);
 
+func client_send_event(entityId, eventId, eventData=null, unreliable = false) -> void:
+	print("client sending event...");
+	if is_client():
+		if unreliable: # When it is not vital to the event to reach the server (not recommended unless necessary)
+			send_rpc_unreliable_id(SERVER_NETID, "server_process_event", [entityId, eventId, eventData]);
+		else:
+			send_rpc_id(SERVER_NETID, "server_process_event", [entityId, eventId, eventData]);
+
+remote func server_process_event(entityId, eventId, eventData) -> void:
+	print("server receiving event...");
+	if entityId < netentities.size() && netentities[entityId]:
+		if netentities[entityId].has_method("server_process_event"):
+			netentities[entityId].server_process_event(eventId, eventData);
+
 func send_rpc_id(id: int, method_name: String, args: Array) -> void:
 	Game.callv("rpc_id", [id, "game_process_rpc", method_name, args]);
 
@@ -197,15 +213,16 @@ func send_rpc_unreliable(method_name: String, args: Array) -> void:
 
 func register_synced_node(nodeEntity: Node, forceId = NODENUM_NULL ) -> void:
 	var freeIndex = MAX_PLAYERS;
-
 	if forceId >= 0:
 		freeIndex = forceId;
 		print("Forcing id: " + str(freeIndex));
 	else:
-		while netentities[freeIndex]:
+		while freeIndex < netentities.size() and netentities[freeIndex]:
 			freeIndex+=1;
+			
+	while freeIndex >= netentities.size(): #dinamic netenities array
+		netentities.append(null);
 
 	nodeEntity.node_id = freeIndex;
 	netentities[nodeEntity.node_id] = nodeEntity;
-
 	print("Registering entity [ID " + str(freeIndex) + "] : " + nodeEntity.get_class());
