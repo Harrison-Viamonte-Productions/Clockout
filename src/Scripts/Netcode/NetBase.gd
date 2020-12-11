@@ -327,7 +327,9 @@ func register_synced_node(nodeEntity: Node, forceId = NODENUM_NULL ) -> void:
 func unregister_synced_node(nodeEntity: Node):
 	if !is_multiplayer():
 		return;
-	print("Unregistering entity [ID " + str(nodeEntity.id) + "] : " + nodeEntity.get_class());
+	if nodeEntity.node_id >= netentities.size() or nodeEntity.node_id < 0:
+		return;
+	print("Unregistering entity [ID " + str(nodeEntity.node_id) + "] : " + nodeEntity.get_class());
 	netentities[nodeEntity.node_id] = null;
 
 func stop_networking() -> void:

@@ -65,3 +65,7 @@ func move_to_node2d(point: Node2D, interpolated: bool):
 func move_from_node2d(point: Node2D, to: Vector2):
 	var from: Vector2 = point.global_position -  get_parent().global_position;
 	move_from(from, to);
+
+func _exit_tree():
+	if Game.ActiveCamera == self:
+		Game.ActiveCamera = null;
