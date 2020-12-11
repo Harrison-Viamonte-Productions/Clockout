@@ -1,5 +1,12 @@
 extends Node2D
 
+######################################################################################################################################
+# IMPORTANT STUFF FFS: GODOT BUILD RELEASE IS GOING TO CRASH IF AN ENTITY WAS FREED (QUEUE_FREE)
+# BUT STILL IS REFERENCED BY SOME ARRAY IN THE SINGLETONS, SO IMPORTANT TO USE _EXIT_FREE TO REMOVE ANY REFERENCE FROM THAT ENTITY
+# FROM THE ARRAY'S SINGLETONS OR ANY OTHER REFERENCE...
+# THANK YOU GODOT FOR NOT CRASHING IN DEBUG AND NOT EVEN THROWING A WARNING/ERROR FOR THIS, THANK YOU SO MUCH, REALLY.
+######################################################################################################################################
+
 const GRAVITY: float = 1200.0
 const VERSION: String = "0.1.5"; #Major, Minor, build count
 const LANG_FILES_FOLDER: String = "lang";

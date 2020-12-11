@@ -425,3 +425,8 @@ func is_local_player() -> bool:
 
 func get_class():
 	return "Player";
+
+# TO AVOID CRASH IN RELEASE BUILD!
+func _exit_tree():
+	Game.Network.unregister_synced_node(self); #solve problem by now
+	Game.Players[node_id] = null;

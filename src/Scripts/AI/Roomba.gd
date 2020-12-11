@@ -417,3 +417,7 @@ func client_process_event(eventId : int, eventData) -> void:
 			self.killed();
 		_:
 			print("Warning: Received unkwown event");
+
+# TO AVOID CRASH IN RELEASE BUILD!
+func _exit_tree():
+	Game.Network.unregister_synced_node(self); #solve problem by now

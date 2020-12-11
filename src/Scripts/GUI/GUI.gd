@@ -51,3 +51,8 @@ func info_message(msg: String, time: float = 5.0):
 
 func info_message_hide():
 	$Parent/InfoMessagesAnims.play("info_message_hide");
+
+# TO AVOID CRASH IN RELEASE BUILD!
+func _exit_tree():
+	if Game.GUI == self:
+		Game.GUI = null;

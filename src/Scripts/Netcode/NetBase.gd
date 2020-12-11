@@ -77,10 +77,11 @@ func _cutie_joined_ok():
 		Game.rpc_id(SERVER_NETID, "game_process_rpc", "server_process_client_question", [Game.get_tree().get_network_unique_id()]);
 
 func _process(delta):
-	if Game.get_tree().has_network_peer() && !Game.is_network_master():
-		if ping_counter <=  0.0 || ping_counter > 2.0:
-			client_send_ping(); #resend, just in case.
-		ping_counter+=delta;
+	pass;
+	#if Game.get_tree().has_network_peer() && !Game.is_network_master():
+	#	if ping_counter <=  0.0 || ping_counter > 2.0:
+	#		client_send_ping(); #resend, just in case.
+	#	ping_counter+=delta;
 
 #Jim from ID please implement on_cutie_joined
 func _on_player_connected(id):
@@ -322,6 +323,12 @@ func register_synced_node(nodeEntity: Node, forceId = NODENUM_NULL ) -> void:
 	nodeEntity.node_id = freeIndex;
 	netentities[nodeEntity.node_id] = nodeEntity;
 	print("Registering entity [ID " + str(freeIndex) + "] : " + nodeEntity.get_class());
+
+func unregister_synced_node(nodeEntity: Node):
+	if !is_multiplayer():
+		return;
+	print("Unregistering entity [ID " + str(nodeEntity.id) + "] : " + nodeEntity.get_class());
+	netentities[nodeEntity.node_id] = null;
 
 func stop_networking() -> void:
 	Game.get_tree().call_deferred("set_network_peer", null);

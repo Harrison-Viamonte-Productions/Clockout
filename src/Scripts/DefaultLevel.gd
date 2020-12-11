@@ -27,3 +27,8 @@ func get_world_limits() -> Dictionary:
 		"end": map_limit_end
 	};
 	return limits;	
+
+# TO AVOID CRASH IN RELEASE BUILD!
+func _exit_tree():
+	if Game.CurrentMap == self:
+		Game.CurrentMap = null;
