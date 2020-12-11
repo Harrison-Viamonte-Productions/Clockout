@@ -32,7 +32,8 @@ func _ready():
 
 func _physics_process(delta):
 	if Game.Network.is_client():
-		self.position += current_velocity*delta;
+		var current_pos: Vector2 = self.position;
+		self.position = Util.normalize_position(current_pos, current_pos+current_velocity*delta, positions[next_pos_index]);
 		return; #by now let's let the server do ALL the physics and shit.
 	var old_pos = self.position;
 	if (current_pos_index != next_pos_index):
@@ -66,8 +67,8 @@ func start():
 		return; #by now let's let the server do ALL the physics and shit.
 	move_to_pos(current_pos_index+1);
 
-#############################
-# NETCODE SPECIFIC RELATED ##
+############################
+# NETCODE SPECIFIC RELATED #
 ############################
 
 func server_send_boop() -> void:
@@ -76,9 +77,10 @@ func server_send_boop() -> void:
 		 velocity = Vector2(),
 		 position = Vector2(),
 		 rotation = Vector2(),
-		 current_pos = self.current_pos_index
+		 current_pos = self.current_pos_index,
+		 next_pos = self.next_pos_index
 	};
-	 #stepify iis important to avoid that an insignificant varition of data can lead to a new boop/snapshot
+	#stepify iis important to avoid that an insignificant varition of data can lead to a new boop/snapshot
 	boopData.velocity = Util.stepify_vec2(self.current_velocity, 0.01);
 	boopData.position = Util.stepify_vec2(self.position, 0.01);
 	boopData.rotation = stepify(self.rotation, 0.01);
@@ -92,6 +94,7 @@ func client_process_boop(boopData) -> void:
 	self.position = boopData.position;
 	self.rotation = boopData.rotation;
 	self.current_pos_index = boopData.current_pos;
+	self.next_pos_index = boopData.next_pos;
 
 func server_process_event(eventId : int, eventData) -> void:
 	match eventId:

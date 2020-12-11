@@ -17,6 +17,7 @@ const CHASE_MIN_DISTANCE: float = 150.0;
 const CHASE_CHECK_DELAY: float = 250.0 #msec;
 const RUNAWAY_CHECK_DELAY: float = 250.0 #msec;
 const CLOSEST_PLAYER_CHECK_DELAY: float = 250.0;
+const IN_PLAYER_FOV_CHECK_DELAY: float = 250.0;
 
 const IMPULSE_AIR_FRICTION: float = 100.0;
 const IMPULSE_FLOOR_FRICTION: float = 600.0;
@@ -43,6 +44,7 @@ var outside_screen_countdown = ACTIVE_OUTSIDE_SCREEN_TIME;
 var chase_check_countdown = CHASE_CHECK_DELAY;
 var runaway_check_countdown = RUNAWAY_CHECK_DELAY;
 var player_check_countdown = 0.0; #important to start from zero
+var player_checkfov_countdown = IN_PLAYER_FOV_CHECK_DELAY;
 
 var attacking: bool = false;
 var player_inside_area: bool = false;
@@ -52,13 +54,27 @@ var is_on_screen: bool = false;
 var can_be_damaged: bool = true;
 var runaway: bool = false;
 var currentEnemy: Node2D = null; #Maybe change this in future.
+var running: bool = false;
 
 var motion: Vector2 = Vector2.ZERO;
 var impulse: Vector2 = Vector2.ZERO;
 
 onready var tween: Tween = $Tween;
 
+#Netcode stuff start
+var netid: int = -1;
+var node_id: int = -1
+var NetBoop = Game.Boop_Object.new(self);
+enum NET_EVENTS {
+	MOVE_TO_POS,
+	MAX_EVENTS 
+};
+#Netcode stuff ends
+
 func _ready():
+	add_to_group("enemies"); # let's the Netcode know that we are a node that uses netcode
+	currentEnemy = Game.get_local_player();
+	Game.Network.register_synced_node(self);
 	$PlayerDetection.connect("body_entered", self, "_on_body_entered");
 	$PlayerDetection.connect("body_exited", self, "_on_body_exited");
 	$PlayerDetection.connect("area_entered", self, "_on_area_entered");
@@ -70,6 +86,14 @@ func _ready():
 	$Sprite.play("walk");
 
 func _physics_process(delta):
+	if Game.Network.is_client():
+		cs_physics_think(delta);
+	else:
+		physics_think(delta);
+
+func physics_think(delta):
+	
+	check_if_in_player_pov(delta);
 	if !active && !never_dormant:
 		return;
 		
@@ -88,13 +112,37 @@ func _physics_process(delta):
 	check_damage(delta);
 	chase(delta);
 	fall(delta);
+	
+	running = attacking || runaway;
+	move(delta);
+
+func cs_physics_think(delta):
+	if !active && !never_dormant:
+		return;
+
+	var friction: float = IMPULSE_FLOOR_FRICTION if (is_on_floor() || is_on_ceiling()) else IMPULSE_AIR_FRICTION;
+	if impulse.x > 0.0:
+		impulse.x -= delta*friction;
+	elif impulse.x < 0.0:
+		impulse.x += delta*friction;
+	if abs(impulse.x) <= delta*friction:
+		impulse.x = 0.0;
+
+	#check_player(delta);
+	check_dormant(delta);
+	check_collisions(delta);
+	#check_attacks(delta);
+	check_damage(delta);
+	#chase(delta);
+	fall(delta);
 	move(delta);
 
 func check_player(delta):
 	if player_check_countdown <= 0.0:
 		player_check_countdown = CLOSEST_PLAYER_CHECK_DELAY;
 		currentEnemy = Game.get_closest_player_to(self);
-		print(currentEnemy);
+	else:
+		player_check_countdown-=delta*1000.0;
 
 func chase(delta):
 	if !self.chase || self.runaway:
@@ -123,12 +171,35 @@ func run_away_from_player():
 	$Sprite/CryParticles.emitting = true;
 	update_sprite();
 
-func _on_enter_screen():
-	active = true;
-	is_on_screen = true;
+func cs_run_away_from_player():
+	self.runaway = true;
+	$Sprite/RunParticles.emitting = true;
+	$Sprite/CryParticles.emitting = true;
 
+func check_if_in_player_pov(delta) -> void:
+	if player_checkfov_countdown > 0.0:
+		player_checkfov_countdown-= delta*1000.0;
+		return;
+	
+	player_checkfov_countdown = IN_PLAYER_FOV_CHECK_DELAY;
+	var in_player_screen: bool = false;
+	for i in range(Game.Players.size()):
+		if Game.Players[i] && Util.inside_camera_view(Game.Players[i].get_camera()):
+			in_player_screen = true;
+			break;
+	if in_player_screen:
+		active = true;
+		is_on_screen = true;
+	else:
+		is_on_screen = false;
+	
+func _on_enter_screen():
+	#active = true;
+	#is_on_screen = true;
+	pass;
 func _on_exit_screen():
-	is_on_screen = false;
+	#is_on_screen = false;
+	pass;
 
 func reset_countdowns():
 	#raycast_check_countdown = RAYCAST_CHECK_DELAY;
@@ -161,7 +232,7 @@ func fall(delta):
 			impulse.y = 0.0;
 
 func move(delta):
-	motion.x = MOVE_SPEED*RUN_MULTIPLIER if (attacking || runaway) else MOVE_SPEED;
+	motion.x = MOVE_SPEED*RUN_MULTIPLIER if running else MOVE_SPEED;
 	motion.x *= walk_direction;
 	self.move_and_slide(motion + impulse, Vector2.UP);
 
@@ -212,8 +283,8 @@ func check_attacks(delta):
 func check_damage(delta):
 	if !player_inside_area || self.harmless:
 		return;
-	var closestPlayer: Node2D = Game.get_closest_player_to(self);
-	currentEnemy.hurt(self, ATTACK_DAMAGE);
+	if currentEnemy == Game.get_local_player(): #by now only attack players, change this in future
+		currentEnemy.hurt(self, ATTACK_DAMAGE);
 
 func update_sprite():
 	if attacking && $Sprite.animation != "attack":
@@ -299,3 +370,48 @@ func can_jump_over(delta, pos: Vector2) -> bool:
 func enemy_can_be_reached() -> bool:
 	
 	return Util.node_can_be_reached(currentEnemy, Game.get_active_players() + [self]);
+	
+############################
+# NETCODE SPECIFIC RELATED #
+############################
+
+# TODO: Make this entity active when any player can see it, and not just the local player
+
+func server_send_boop() -> void:
+	if !active && !never_dormant:
+		return; #only send info for active entities :3
+	# todo: some pre-check to see if sending the boop is really necessary
+	var boopData = {
+		 walk_dir = 0.0,
+		 position = Vector2(),
+		 rotation = Vector2(),
+		 current_enemy = self.currentEnemy.node_id, #playerid
+		 running = self.running,
+		 attacking = self.attacking,
+		 runaway = self.runaway
+		
+	};
+	#stepify iis important to avoid that an insignificant varition of data can lead to a new boop/snapshot
+	boopData.walk_dir = stepify(self.walk_direction, 0.01);
+	boopData.position = Util.stepify_vec2(self.position, 0.01);
+	boopData.rotation = stepify(self.rotation, 0.01);
+	if NetBoop.delta_boop_changed(boopData):
+		Game.Network.send_rpc_unreliable("client_process_boop", [self.node_id, boopData]);
+
+func client_process_boop(boopData) -> void:
+	if !get_tree():
+		return;
+	self.walk_direction = boopData.walk_dir;
+	self.position = boopData.position;
+	self.rotation = boopData.rotation;
+	self.currentEnemy = Game.Players[boopData.current_enemy];
+	self.running = boopData.running;
+	self.attacking = boopData.attacking;
+	if (self.runaway != boopData.runaway) and boopData.runaway:
+		cs_run_away_from_player();
+	update_sprite();
+
+func server_process_event(eventId : int, eventData) -> void:
+	match eventId:
+		_:
+			print("Warning: Received unkwown event");

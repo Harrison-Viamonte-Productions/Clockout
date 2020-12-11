@@ -185,6 +185,14 @@ remote func server_process_boop(entityId, message) -> void:
 		if netentities[entityId].has_method("server_process_boop"):
 			netentities[entityId].server_process_boop(message);
 
+func net_send_event(entityId, eventId, eventData=null, unreliable = false) -> void:
+	if !is_multiplayer():
+		return;
+	if is_client():
+		client_send_event(entityId, eventId, eventData, unreliable);
+	else:
+		server_send_event(entityId, eventId, eventData, unreliable);
+
 func client_send_event(entityId, eventId, eventData=null, unreliable = false) -> void:
 	print("client sending event...");
 	if is_client():
@@ -193,11 +201,25 @@ func client_send_event(entityId, eventId, eventData=null, unreliable = false) ->
 		else:
 			send_rpc_id(SERVER_NETID, "server_process_event", [entityId, eventId, eventData]);
 
+func server_send_event(entityId, eventId, eventData=null, unreliable = false) -> void:
+	print("server sending event...");
+	if is_server():
+		if unreliable: # When it is not vital to the event to reach the server (not recommended unless necessary)
+			send_rpc_unreliable("client_process_event", [entityId, eventId, eventData]);
+		else:
+			send_rpc("client_process_event", [entityId, eventId, eventData]);
+
 remote func server_process_event(entityId, eventId, eventData) -> void:
 	print("server receiving event...");
 	if entityId < netentities.size() && netentities[entityId]:
 		if netentities[entityId].has_method("server_process_event"):
 			netentities[entityId].server_process_event(eventId, eventData);
+			
+remote func client_process_event(entityId, eventId, eventData) -> void:
+	print("client receiving event...");
+	if entityId < netentities.size() && netentities[entityId]:
+		if netentities[entityId].has_method("client_process_event"):
+			netentities[entityId].client_process_event(eventId, eventData);
 
 func send_rpc_id(id: int, method_name: String, args: Array) -> void:
 	Game.callv("rpc_id", [id, "game_process_rpc", method_name, args]);

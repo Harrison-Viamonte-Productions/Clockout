@@ -57,6 +57,10 @@ var Spawn: Node2D = null;
 var netid: int = -1;
 var node_id: int = -1
 var NetBoop = Game.Boop_Object.new(self);
+enum NET_EVENTS {
+	ATTACK,
+	MAX_EVENTS 
+};
 #Netcode stuff ends
 
 var Util = Game.Util_Object.new(self);
@@ -217,7 +221,11 @@ func hurt(attacker: Node2D, damage: int):
 		killed(attacker);
 
 func start_attack():
-	CurrentWeapon.enable_damage();
+	if !is_local_player() && Game.Network.is_client():
+		return;
+	Game.Network.net_send_event(self.node_id, NET_EVENTS.ATTACK, null);
+	if !Game.Network.is_client():
+		CurrentWeapon.enable_damage();
 
 func end_attack():
 	CurrentWeapon.disable_damage();
@@ -385,6 +393,33 @@ func server_process_boop(boopData) -> void:
 	self.is_jumping = boopData.is_jumping;
 	self.is_crouched = boopData.is_crouched
 	$Sprite.set_animation(boopData.anim_playing);
+
+func server_process_event(eventId : int, eventData) -> void:
+	match eventId:
+		NET_EVENTS.ATTACK:
+			if is_local_player():
+				return;
+			$WeaponAnims.play("attack_forward");
+			if tween.is_active():
+				tween.remove(self, "end_attack");
+			tween.interpolate_callback(self, 0.4, "end_attack");
+			tween.start();
+		_:
+			print("Warning: Received unkwown event");
+			
+func client_process_event(eventId : int, eventData) -> void:
+	match eventId:
+		NET_EVENTS.ATTACK:
+			if is_local_player():
+				return;
+			$WeaponAnims.play("attack_forward");
+			if tween.is_active():
+				tween.remove(self, "end_attack");
+			tween.interpolate_callback(self, 0.4, "end_attack");
+			tween.start();
+		_:
+			print("Warning: Received unkwown event");
+
 
 func is_local_player() -> bool:
 	return !Game.Network.is_multiplayer() or (netid == get_tree().get_network_unique_id());
