@@ -66,7 +66,7 @@ var netid: int = -1;
 var node_id: int = -1
 var NetBoop = Game.Boop_Object.new(self);
 enum NET_EVENTS {
-	MOVE_TO_POS,
+	KILLED,
 	MAX_EVENTS 
 };
 #Netcode stuff ends
@@ -313,7 +313,7 @@ func _on_area_entered(area):
 		hurt();
 
 func hurt():
-	if !can_be_damaged:
+	if !can_be_damaged or Game.Network.is_client(): #Disallow clientside damage in these entities by now
 		return;
 	impulse = Vector2(walk_direction*JUMP_SPEED, JUMP_SPEED*1.5);
 	health-=1;
@@ -338,7 +338,9 @@ func disable_damage():
 	can_be_damaged = false;
 
 func killed():
-	queue_free();
+	if Game.Network.is_server():
+		Game.Network.server_send_event(self.node_id, NET_EVENTS.KILLED, null);
+	call_deferred("queue_free");
 
 func _on_player_entered():
 	pass;
@@ -399,8 +401,6 @@ func server_send_boop() -> void:
 		Game.Network.send_rpc_unreliable("client_process_boop", [self.node_id, boopData]);
 
 func client_process_boop(boopData) -> void:
-	if !get_tree():
-		return;
 	self.walk_direction = boopData.walk_dir;
 	self.position = boopData.position;
 	self.rotation = boopData.rotation;
@@ -411,7 +411,9 @@ func client_process_boop(boopData) -> void:
 		cs_run_away_from_player();
 	update_sprite();
 
-func server_process_event(eventId : int, eventData) -> void:
+func client_process_event(eventId : int, eventData) -> void:
 	match eventId:
+		NET_EVENTS.KILLED:
+			self.killed();
 		_:
 			print("Warning: Received unkwown event");

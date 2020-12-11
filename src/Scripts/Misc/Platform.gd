@@ -88,8 +88,6 @@ func server_send_boop() -> void:
 		Game.Network.send_rpc_unreliable("client_process_boop", [self.node_id, boopData]);
 
 func client_process_boop(boopData) -> void:
-	if !get_tree():
-		return;
 	self.current_velocity = boopData.velocity;
 	self.position = boopData.position;
 	self.rotation = boopData.rotation;

@@ -162,6 +162,6 @@ func stepify_vec2(vec2: Vector2, precision: float) -> Vector2 :
 	return Vector2(stepify(vec2.x, precision),stepify(vec2.y, precision));
 
 func inside_camera_view(camera: Node2D) -> bool:
-	var screenSize: Vector2 = (Game.get_viewport().get_visible_rect().size); #ignore zoom
+	var screenSize: Vector2 = (Game.get_viewport().get_visible_rect().size); #FIXME: Find a more accurate way!!
 	var cameraRect: Rect2 = Rect2(camera.global_position-screenSize/2.0, screenSize);
 	return cameraRect.has_point(father_node.global_position)

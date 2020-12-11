@@ -106,7 +106,7 @@ func open_multiplayer_dialog():
 	options_dialog_shown = true;
 
 func new_game():
-	get_tree().change_scene("res://src/Levels/DemoLevel.tscn");
+	Game.start_new_game();
 
 func apply_config_changes():
 	Game.Config.set_value("fullscreen", FullScreenCheckbox.pressed);

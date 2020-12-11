@@ -65,10 +65,6 @@ enum NET_EVENTS {
 
 var Util = Game.Util_Object.new(self);
 
-func _enter_tree():
-	if !Game.Players.has(self):
-		Game.Players.append(self);
-
 func _ready() -> void:
 	add_to_group("network_group"); # let's the Netcode know that we are a node that uses netcode
 	Util._ready();
@@ -76,8 +72,11 @@ func _ready() -> void:
 	var mapLimits = Game.CurrentMap.get_world_limits();
 	$Camera.update_limits(mapLimits.start, mapLimits.end);
 	if is_local_player():
+		Game.GUI = $Camera/GUI;
 		Game.set_active_camera($Camera);
 		update_gui();
+	else:
+		$Camera/GUI.hide_gui();
 	Engine.set_target_fps(Engine.get_iterations_per_second()) #Do this in other place later
 	CurrentWeapon.disable_damage()
 
@@ -138,6 +137,9 @@ func fall(delta: float) -> void:
 
 
 func jump(time: int, delta: float) -> void:
+	if !is_local_player():
+		return;
+
 	if is_on_floor() or is_on_ceiling():
 		if is_on_floor():
 			jump_count = 0
@@ -145,9 +147,6 @@ func jump(time: int, delta: float) -> void:
 		is_jumping = false;
 	elif jump_count == 0:
 		jump_count = 1
-	
-	if !is_local_player():
-		return;
 	
 	if Input.is_action_just_pressed("jump") and (is_on_floor() or jump_count < MAX_JUMPS) and time > next_jump_time:
 		is_jumping = true;
@@ -221,11 +220,9 @@ func hurt(attacker: Node2D, damage: int):
 		killed(attacker);
 
 func start_attack():
-	if !is_local_player() && Game.Network.is_client():
-		return;
-	Game.Network.net_send_event(self.node_id, NET_EVENTS.ATTACK, null);
-	if !Game.Network.is_client():
-		CurrentWeapon.enable_damage();
+	if is_local_player() or Game.Network.is_server():
+		Game.Network.net_send_event(self.node_id, NET_EVENTS.ATTACK, null);
+	CurrentWeapon.enable_damage();
 
 func end_attack():
 	CurrentWeapon.disable_damage();
@@ -345,7 +342,7 @@ func server_send_boop() -> void:
 		Game.Network.send_rpc_unreliable("client_process_boop", [self.node_id, boopData]);
 
 func client_send_boop() -> void:
-	if !get_tree() or !is_local_player():
+	if !is_local_player():
 		return;
 	var boopData = {
 		 velocity = Vector2(),
@@ -362,7 +359,7 @@ func client_send_boop() -> void:
 		Game.Network.send_rpc_unreliable_id(Game.Network.SERVER_NETID, "server_process_boop", [self.node_id, boopData]);
 
 func client_process_boop(boopData) -> void:
-	if !get_tree() or is_local_player():
+	if is_local_player():
 		return;
 	self.velocity = boopData.velocity;
 	self.position = boopData.position;
@@ -378,7 +375,7 @@ func client_process_boop(boopData) -> void:
 	$Sprite.set_animation(boopData.anim_playing);
 	
 func server_process_boop(boopData) -> void:
-	if !get_tree() or is_local_player():
+	if is_local_player():
 		return;
 	self.velocity = boopData.velocity;
 	self.position = boopData.position;

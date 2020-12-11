@@ -55,11 +55,25 @@ func _input(event):
 	
 	if event is InputEventKey and Input.is_key_pressed(KEY_ESCAPE) && !event.is_echo():
 		if MainMenu.is_inside_tree():
-			CurrentMap.call_deferred("remove_child", MainMenu);
-			get_tree().paused = false;
+			close_menu();
 		else:
-			CurrentMap.call_deferred("add_child", MainMenu);
-			get_tree().paused = true;
+			open_menu();
+
+func pause() -> void:
+	get_tree().paused = true;
+	
+func unpause() -> void:
+	get_tree().paused = false;
+
+func open_menu() -> void:
+	if typeof(CurrentMap) != TYPE_NIL && typeof(MainMenu) != TYPE_NIL:
+		CurrentMap.call_deferred("add_child", MainMenu);
+	pause();
+
+func close_menu() -> void:
+	if typeof(CurrentMap) != TYPE_NIL && typeof(MainMenu) != TYPE_NIL:
+		CurrentMap.call_deferred("remove_child", MainMenu);
+	unpause();
 
 func change_lang(new_lang: String):
 	if Lang.lang_exists(new_lang):
@@ -116,12 +130,25 @@ func add_player(netid: int, forceid: int = -1) -> Node2D:
 	
 	return Players[free_player_index];
 
+func start_new_game():
+	Network.stop_networking();
+	CurrentMap = null;
+	change_to_map("res://src/Levels/DemoLevel.tscn");
+
+func change_to_map(map_name: String):
+	close_menu();
+	Network.clear_map_change();
+	get_tree().call_deferred("change_scene", map_name);
+
 func spawn_player(player: Node2D):
 	player.Spawn = SpawnPoints[0];
 	player.position = SpawnPoints[0].position;
 	player.z_index = SpawnPoints[0].z_index;
 	player.z_as_relative = SpawnPoints[0].z_as_relative;
 	player.Spawn.get_parent().call_deferred("add_child", player);
+
+func get_current_map_path() -> String:
+	return CurrentMap.filename;
 
 func get_active_players() -> Array:
 	var result: Array = [];

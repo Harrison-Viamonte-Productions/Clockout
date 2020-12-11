@@ -1,8 +1,12 @@
 extends Node
 
+# TODO: implement snapshot priority to entities, an array for queue snapshots and all that similar stuff from librecoop here
+# to optimize netcode and avoid snapshot overflow in big maps and areas.
+# same with events!
+
 #player: cuties
 
-const SNAPSHOT_DELAY = 1.0/30.0; #Msec to Sec
+const SNAPSHOT_DELAY = 1.0/30.0; #Msec to Sec (20hz)
 const MAX_PLAYERS:int = 4;
 const SERVER_PORT:int = 27666;
 const SERVER_NETID: int = 1;
@@ -19,11 +23,19 @@ var LevelScene: Node = null;
 var local_player_id = 0; # 0 = Server
 var netentities: Array;
 
+# Netcode optimization: START (TODO in future, by now I just leave these vars and const)
+const SV_MAX_SNAPSHOTS: int = 24; #How many snapshots at max to send at once each time using SNAPSHOT_DELAY
+const SV_MAX_EVENTS: int = 16; #How many events at max to send at once
+var snapshot_list: Array; #elements: Dictionary { net_entity = null, queue_pos = 0}
+var event_list: Array; #elements: Dictionary { net_entity = null, queue_pos = 0}
+# Netcode optimiaztion: END
+
 func ready():
 	clear();
 	Game.get_tree().connect("network_peer_connected", self, "_on_player_connected");
 	Game.get_tree().connect("network_peer_disconnected", self, "_on_player_disconnect");
 	Game.get_tree().connect("connected_to_server", self, "_cutie_joined_ok");
+	Game.get_tree().connect("server_disconnected", self, "_on_server_shutdown");
 	
 	var timer = Timer.new();
 	timer.set_wait_time(SNAPSHOT_DELAY);
@@ -33,10 +45,21 @@ func ready():
 	timer.start()
 
 func clear():
+	netentities.clear();
 	clients_connected.clear();
 	player_count = 0;
+	local_player_id = 0;
 	for i in range(MAX_PLAYERS):
 		netentities.append(null); 
+
+func clear_map_change():
+	while netentities.size() > MAX_PLAYERS: #Clear all elements but keeping the players
+		netentities.remove(MAX_PLAYERS);
+
+func _on_server_shutdown():
+	stop_networking();
+	Game.get_tree().call_deferred("change_scene", "res://src/GUI/MainMenu.tscn");
+	#Game.get_tree().change_scene("res://src/GUI/MainMenu.tscn");
 
 func _cutie_joined_ok():
 	if !Game.is_network_master():
@@ -79,14 +102,15 @@ func find_player_number_by_netid(netid: int):
 	return -1;
 
 func server_process_client_question(id_client: int):
-	Game.rpc_id(id_client, "game_process_rpc", "client_receive_answer", [{map_name = "res://src/Levels/DemoLevel.tscn", player_number = find_player_number_by_netid(id_client)}]);
+	Game.rpc_id(id_client, "game_process_rpc", "client_receive_answer", [{map_name = Game.get_current_map_path(), player_number = find_player_number_by_netid(id_client)}]);
 
 func client_receive_answer(receive_data: Dictionary):
 	print("player number: %d, uniqueid: %d" % [receive_data.player_number, Game.get_tree().get_network_unique_id()]);
 	local_player_id = receive_data.player_number;
 	#spawn the player in-game in the local machine :3
 	Game.add_player(Game.get_tree().get_network_unique_id(), receive_data.player_number);
-	Game.get_tree().change_scene(receive_data.map_name);
+	Game.change_to_map(receive_data.map_name);
+	#Game.get_tree().call_deferred("change_scene", receive_data.map_name);
 
 
 func clear_players():
@@ -123,7 +147,8 @@ func host_server(maxPlayers: int, mapName: String, serverPort: int = SERVER_PORT
 	print(host.create_server(serverPort, maxPlayers));
 	Game.get_tree().set_network_peer(host);
 	add_client(SERVER_NETID); #adding server as friend client always
-	Game.get_tree().change_scene(mapName);
+	Game.change_to_map(mapName);
+	#Game.get_tree().change_scene(mapName);
 
 func join_server(ip: String):
 	ip = ip.replace(" ", "");
@@ -174,14 +199,14 @@ func client_send_boop() -> void:
 			entity.client_send_boop();
 
 remote func client_process_boop(entityId, message) -> void:
-	if entityId < netentities.size() && netentities[entityId]:
+	if entityId < netentities.size() && netentities[entityId] && netentities[entityId].is_inside_tree():
 		if netentities[entityId].has_method("client_process_boop"):
 			netentities[entityId].client_process_boop(message);
 	#else: #Entity exists in server but not in client, lets spawn it
 	#	register_sycned_node_by_typenum(nodeNum, entityId);
 
 remote func server_process_boop(entityId, message) -> void:
-	if entityId < netentities.size() && netentities[entityId]:
+	if entityId < netentities.size() && netentities[entityId] && netentities[entityId].is_inside_tree():
 		if netentities[entityId].has_method("server_process_boop"):
 			netentities[entityId].server_process_boop(message);
 
@@ -210,12 +235,16 @@ func server_send_event(entityId, eventId, eventData=null, unreliable = false) ->
 			send_rpc("client_process_event", [entityId, eventId, eventData]);
 
 remote func server_process_event(entityId, eventId, eventData) -> void:
+	if !is_server():
+		return;
 	print("server receiving event...");
 	if entityId < netentities.size() && netentities[entityId]:
 		if netentities[entityId].has_method("server_process_event"):
 			netentities[entityId].server_process_event(eventId, eventData);
 			
 remote func client_process_event(entityId, eventId, eventData) -> void:
+	if !is_client():
+		return;
 	print("client receiving event...");
 	if entityId < netentities.size() && netentities[entityId]:
 		if netentities[entityId].has_method("client_process_event"):
@@ -234,6 +263,8 @@ func send_rpc_unreliable(method_name: String, args: Array) -> void:
 	Game.callv("rpc_unreliable", ["game_process_rpc", method_name, args])
 
 func register_synced_node(nodeEntity: Node, forceId = NODENUM_NULL ) -> void:
+	if !is_multiplayer():
+		return;
 	var freeIndex = MAX_PLAYERS;
 	if forceId >= 0:
 		freeIndex = forceId;
@@ -248,3 +279,8 @@ func register_synced_node(nodeEntity: Node, forceId = NODENUM_NULL ) -> void:
 	nodeEntity.node_id = freeIndex;
 	netentities[nodeEntity.node_id] = nodeEntity;
 	print("Registering entity [ID " + str(freeIndex) + "] : " + nodeEntity.get_class());
+
+func stop_networking() -> void:
+	Game.get_tree().call_deferred("set_network_peer", null);
+	#Game.get_tree().set_network_peer(null); #Destoy any previous networking session
+	clear();
