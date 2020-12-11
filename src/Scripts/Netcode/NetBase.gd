@@ -52,9 +52,20 @@ func clear():
 	for i in range(MAX_PLAYERS):
 		netentities.append(null); 
 
+func add_clients_to_map():
+	for client in clients_connected:
+		if client.netId == SERVER_NETID: #ignore this one, it's always player0
+			continue;
+		if is_client():
+			print("adding client id %d as player %d" % [client.netId, client.player_num]);
+		var PlayerToSpawn: Node2D = Game.add_player(client.netId, client.player_num);
+		if Game.CurrentMap && Game.CurrentMap.already_loaded && !PlayerToSpawn.is_inside_tree():
+			Game.spawn_player(PlayerToSpawn);
+
 func clear_map_change():
-	while netentities.size() > MAX_PLAYERS: #Clear all elements but keeping the players
-		netentities.remove(MAX_PLAYERS);
+	netentities.clear();
+	for i in range(MAX_PLAYERS):
+		netentities.append(null); 
 
 func _on_server_shutdown():
 	stop_networking();
@@ -73,20 +84,23 @@ func _process(delta):
 
 #Jim from ID please implement on_cutie_joined
 func _on_player_connected(id):
-	add_client(id);
 	if is_server():
+		var client_index:int = add_client(id);
 		var PlayerToSpawn: Node2D = Game.add_player(id);
 		Game.spawn_player(PlayerToSpawn);
+		clients_connected[client_index].player_num = PlayerToSpawn.node_id;
 
 #Jim from ID please on_cutie_leave
 func _on_player_disconnect(id):
-	clients_connected.remove(find_client_number_by_netid(id));
-	player_count-=1;
+	if is_server():
+		clients_connected.remove(find_client_number_by_netid(id));
+		player_count-=1;
 
-func add_client(netid: int):
+func add_client(netid: int, num: int = -1) -> int:
 	print("Adding client with at position %d with netid %d" % [clients_connected.size(), netid]);
-	clients_connected.append({netId = netid, ingame = false})
+	clients_connected.append({netId = netid, player_num = num, ingame = false})
 	player_count+=1;
+	return player_count-1;
 	
 func find_client_number_by_netid(netid: int):
 	for i in range(clients_connected.size()):
@@ -102,7 +116,9 @@ func find_player_number_by_netid(netid: int):
 	return -1;
 
 func server_process_client_question(id_client: int):
-	Game.rpc_id(id_client, "game_process_rpc", "client_receive_answer", [{map_name = Game.get_current_map_path(), player_number = find_player_number_by_netid(id_client)}]);
+	var player_num: int = find_player_number_by_netid(id_client);
+	send_rpc("new_client_connected", [clients_connected]);
+	Game.rpc_id(id_client, "game_process_rpc", "client_receive_answer", [{map_name = Game.get_current_map_path(), player_number = player_num}]);
 
 func client_receive_answer(receive_data: Dictionary):
 	print("player number: %d, uniqueid: %d" % [receive_data.player_number, Game.get_tree().get_network_unique_id()]);
@@ -110,8 +126,14 @@ func client_receive_answer(receive_data: Dictionary):
 	#spawn the player in-game in the local machine :3
 	Game.add_player(Game.get_tree().get_network_unique_id(), receive_data.player_number);
 	Game.change_to_map(receive_data.map_name);
-	#Game.get_tree().call_deferred("change_scene", receive_data.map_name);
 
+func new_client_connected(new_clients_list: Array):
+	clients_connected.clear();
+	clients_connected = new_clients_list;
+	add_clients_to_map();
+	#if (Game.get_tree().get_network_unique_id() != id_client) && Game.CurrentMap && Game.CurrentMap.already_loaded:
+	#	var PlayerToSpawn: Node2D = Game.add_player(id_client, player_num);
+	#	Game.spawn_player(PlayerToSpawn);
 
 func clear_players():
 	var is_server: bool = false;
@@ -198,14 +220,14 @@ func client_send_boop() -> void:
 		if entity && entity.has_method("client_send_boop"):
 			entity.client_send_boop();
 
-remote func client_process_boop(entityId, message) -> void:
+func client_process_boop(entityId, message) -> void:
 	if entityId < netentities.size() && netentities[entityId] && netentities[entityId].is_inside_tree():
 		if netentities[entityId].has_method("client_process_boop"):
 			netentities[entityId].client_process_boop(message);
 	#else: #Entity exists in server but not in client, lets spawn it
 	#	register_sycned_node_by_typenum(nodeNum, entityId);
 
-remote func server_process_boop(entityId, message) -> void:
+func server_process_boop(entityId, message) -> void:
 	if entityId < netentities.size() && netentities[entityId] && netentities[entityId].is_inside_tree():
 		if netentities[entityId].has_method("server_process_boop"):
 			netentities[entityId].server_process_boop(message);
@@ -234,7 +256,7 @@ func server_send_event(entityId, eventId, eventData=null, unreliable = false) ->
 		else:
 			send_rpc("client_process_event", [entityId, eventId, eventData]);
 
-remote func server_process_event(entityId, eventId, eventData) -> void:
+func server_process_event(entityId, eventId, eventData) -> void:
 	if !is_server():
 		return;
 	print("server receiving event...");
@@ -242,7 +264,7 @@ remote func server_process_event(entityId, eventId, eventData) -> void:
 		if netentities[entityId].has_method("server_process_event"):
 			netentities[entityId].server_process_event(eventId, eventData);
 			
-remote func client_process_event(entityId, eventId, eventData) -> void:
+func client_process_event(entityId, eventId, eventData) -> void:
 	if !is_client():
 		return;
 	print("client receiving event...");
@@ -250,16 +272,37 @@ remote func client_process_event(entityId, eventId, eventData) -> void:
 		if netentities[entityId].has_method("client_process_event"):
 			netentities[entityId].client_process_event(eventId, eventData);
 
+func change_map(newmap: String) -> void:
+	clear_map_change();
+	if player_count <= 0 or is_client():
+		return;
+	send_rpc("server_changed_map", [newmap]);
+
+func server_changed_map(server_map: String) -> void:
+	Game.change_to_map(server_map);
+
 func send_rpc_id(id: int, method_name: String, args: Array) -> void:
+	if !is_multiplayer():
+		print("[Warning] trying to call send_rpc_id during singleplayer");
+		return;
 	Game.callv("rpc_id", [id, "game_process_rpc", method_name, args]);
 
 func send_rpc_unreliable_id(id: int, method_name: String, args: Array) -> void:
+	if !is_multiplayer():
+		print("[Warning] trying to call send_rpc_unreliable_id during singleplayer");
+		return;
 	Game.callv("rpc_unreliable_id", [id, "game_process_rpc", method_name, args])
 	
 func send_rpc(method_name: String, args: Array) -> void:
+	if !is_multiplayer():
+		print("[Warning] trying to call send_rpc during singleplayer");
+		return;
 	Game.callv("rpc", ["game_process_rpc", method_name, args]);
 
 func send_rpc_unreliable(method_name: String, args: Array) -> void:
+	if !is_multiplayer():
+		print("[Warning] trying to call rpc_unreliable during singleplayer");
+		return;
 	Game.callv("rpc_unreliable", ["game_process_rpc", method_name, args])
 
 func register_synced_node(nodeEntity: Node, forceId = NODENUM_NULL ) -> void:

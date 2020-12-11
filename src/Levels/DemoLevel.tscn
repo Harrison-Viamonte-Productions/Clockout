@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=2]
+[gd_scene load_steps=42 format=2]
 
 [ext_resource path="res://src/Levels/ModularScenes/Office1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/Entities/Enemies/Roomba.tscn" type="PackedScene" id=2]
@@ -21,6 +21,7 @@
 [ext_resource path="res://src/Entities/Misc/ElevatorButton.tscn" type="PackedScene" id=19]
 [ext_resource path="res://src/Entities/Enemies/Skins/roomba_cute.tres" type="SpriteFrames" id=20]
 [ext_resource path="res://src/Entities/Misc/BrekeableComputer.tscn" type="PackedScene" id=21]
+[ext_resource path="res://src/Entities/Misc/TriggerUse.tscn" type="PackedScene" id=22]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
@@ -48,6 +49,9 @@ extents = Vector2( 40, 160 )
 
 [sub_resource type="RectangleShape2D" id=9]
 extents = Vector2( 32, 32 )
+
+[sub_resource type="RectangleShape2D" id=19]
+extents = Vector2( 31.876, 45.7525 )
 
 [sub_resource type="OccluderPolygon2D" id=10]
 closed = false
@@ -732,6 +736,17 @@ call_args = [ 0 ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Misc/CallFloor2"]
 shape = SubResource( 9 )
+
+[node name="E1M0Map" parent="Entities/Misc" instance=ExtResource( 22 )]
+position = Vector2( 1229.71, -122.794 )
+node_caller = "$Game"
+trigger_once = true
+allow_clientside = false
+call_function = "change_to_map"
+call_args = [ "res://src/Levels/E1M0.tscn" ]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Misc/E1M0Map"]
+shape = SubResource( 19 )
 
 [node name="StaticEntities" type="Node2D" parent="."]
 position = Vector2( 8, 64 )

@@ -79,6 +79,8 @@ func _ready() -> void:
 		$Camera/GUI.hide_gui();
 	Engine.set_target_fps(Engine.get_iterations_per_second()) #Do this in other place later
 	CurrentWeapon.disable_damage()
+	
+	Game.Network.register_synced_node(self, node_id);
 
 func _physics_process(delta: float) -> void:
 	update_velocity(delta)

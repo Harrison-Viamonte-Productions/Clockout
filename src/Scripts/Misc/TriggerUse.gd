@@ -16,18 +16,26 @@ func update_trigger_data():
 			self.connect("area_exited", self,  "on_area_exited");
 
 func on_body_entered(body):
+	if !allow_clientside and Game.Network.is_client():
+		return;
 	if Game.get_local_player() == body:
 		on_player_entered();
 
 func on_body_exited(body):
+	if !allow_clientside and Game.Network.is_client():
+		return;
 	if Game.get_local_player() == body:
 		on_player_exited();
 
 func on_area_entered(area):
+	if !allow_clientside and Game.Network.is_client():
+		return;
 	if Game.get_local_player() == area:
 		on_player_entered();
 
 func on_area_exited(area):
+	if !allow_clientside and Game.Network.is_client():
+		return;
 	if Game.get_local_player() == area:
 		on_player_exited();
 		

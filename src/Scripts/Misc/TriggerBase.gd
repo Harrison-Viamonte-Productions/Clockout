@@ -4,6 +4,7 @@ export var node_caller: String = "$CurrentMap";
 export var trigger_once: bool = false;
 export var wait_time: float = 0.0; #Time until the trigger can be called again
 export var delay: float = 0.0; #Time until the trigger can be called again
+export var allow_clientside: bool = true; #if true, this can also be activated clientside
 
 var nodeCaller: Node;
 var trigger_enabled: bool = true;
@@ -31,6 +32,8 @@ func get_node_by_string(node_string: String) -> Node:
 			nodeReturn = self;
 		"$Parent":
 			nodeReturn = self.get_parent();
+		"$Game": #this is probably a dangerous thing to do, maybe we want in a future to specify only which kind of functions can be called using this in the Game singleton
+			nodeReturn = Game;
 		_:
 			nodeReturn = get_tree().get_node(NodePath(node_string));
 	return nodeReturn;

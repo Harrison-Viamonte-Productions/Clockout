@@ -32,6 +32,10 @@ func _init():
 	self.call_deferred("update_settings");
 	Players.resize(Network.MAX_PLAYERS);
 
+func clear_players():
+	Players.clear();
+	Players.resize(Network.MAX_PLAYERS);
+
 func _ready():
 	Network.ready();
 
@@ -106,14 +110,14 @@ func get_closest_player_to(node: Node2D) -> Node2D:
 func get_local_player() -> Node2D:
 	return Players[Network.local_player_id]; #fix later
 
-remote func game_process_rpc(method_name: String, data: Array): 
-	Network.callv(method_name, data);
-
 func add_player(netid: int, forceid: int = -1) -> Node2D:
 	var free_player_index: int = 0;
 	for i in range(Players.size()):
 		if Players[i]:
 			free_player_index += 1;
+			if Players[i].netid == netid: #already exists this player
+				print("The player %d with netid %d was already in the list!!" % [i, netid])
+				return Players[i];
 			continue;
 		break;
 	
@@ -124,23 +128,28 @@ func add_player(netid: int, forceid: int = -1) -> Node2D:
 
 	player_instance.node_id = free_player_index;
 	player_instance.netid = netid;
-	Game.Network.register_synced_node(player_instance, player_instance.node_id);
+	#Game.Network.register_synced_node(player_instance, player_instance.node_id);
 	#Game.Network.netentities[player_instance.id] = player_instance;
 	Players[free_player_index] = player_instance;
-	
+	print("Adding player %d with netid %d" % [free_player_index, netid]);
 	return Players[free_player_index];
 
 func start_new_game():
 	Network.stop_networking();
-	CurrentMap = null;
+	#CurrentMap = null;
 	change_to_map("res://src/Levels/DemoLevel.tscn");
 
 func change_to_map(map_name: String):
+	CurrentMap = null;
 	close_menu();
-	Network.clear_map_change();
+	Network.change_map(map_name);
+	#clear_players();
 	get_tree().call_deferred("change_scene", map_name);
 
 func spawn_player(player: Node2D):
+	if player.is_inside_tree():
+		print("The player %d was already spawned!!" % player.node_id)
+		return;
 	player.Spawn = SpawnPoints[0];
 	player.position = SpawnPoints[0].position;
 	player.z_index = SpawnPoints[0].z_index;
@@ -156,3 +165,13 @@ func get_active_players() -> Array:
 		if Players[i]:
 			result.append(Players[i]);
 	return result;
+
+func new_map_loaded() -> void:
+	#clear_players();
+	add_player(Network.SERVER_NETID);
+	Network.add_clients_to_map();
+	
+
+# Netcode specific
+remote func game_process_rpc(method_name: String, data: Array): 
+	Network.callv(method_name, data);

@@ -2,7 +2,6 @@
 
 [ext_resource path="res://src/Scripts/Misc/TriggerEntity.gd" type="Script" id=1]
 
-
 [node name="TriggerEntity" type="Area2D"]
 script = ExtResource( 1 )
 
