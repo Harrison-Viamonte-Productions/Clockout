@@ -339,7 +339,7 @@ func disable_damage():
 
 func killed():
 	if Game.Network.is_server():
-		Game.Network.server_send_event(self.node_id, NET_EVENTS.KILLED, null);
+		Game.Network.server_send_event(self.node_id, NET_EVENTS.KILLED, null, false, true); #null eventData, unreliable = false, saveEvent = true
 	call_deferred("queue_free");
 
 func _on_player_entered():

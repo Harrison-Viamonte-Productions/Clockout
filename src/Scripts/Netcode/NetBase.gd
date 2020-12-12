@@ -4,8 +4,6 @@ extends Node
 # to optimize netcode and avoid snapshot overflow in big maps and areas.
 # same with events!
 
-#player: cuties
-
 const SNAPSHOT_DELAY = 1.0/30.0; #Msec to Sec (20hz)
 const MAX_PLAYERS:int = 4;
 const SERVER_PORT:int = 27666;
@@ -27,7 +25,7 @@ var netentities: Array;
 const SV_MAX_SNAPSHOTS: int = 24; #How many snapshots at max to send at once each time using SNAPSHOT_DELAY
 const SV_MAX_EVENTS: int = 16; #How many events at max to send at once
 var snapshot_list: Array; #elements: Dictionary { net_entity = null, queue_pos = 0}
-var event_list: Array; #elements: Dictionary { net_entity = null, queue_pos = 0}
+var saved_event_list: Array; #elements: Dictionary { net_id = -1, queue_pos = 0}
 # Netcode optimiaztion: END
 
 func ready():
@@ -49,21 +47,7 @@ func clear():
 	clients_connected.clear();
 	player_count = 0;
 	local_player_id = 0;
-	for i in range(MAX_PLAYERS):
-		netentities.append(null); 
-
-func add_clients_to_map():
-	for client in clients_connected:
-		if client.netId == SERVER_NETID: #ignore this one, it's always player0
-			continue;
-		if is_client():
-			print("adding client id %d as player %d" % [client.netId, client.player_num]);
-		var PlayerToSpawn: Node2D = Game.add_player(client.netId, client.player_num);
-		if Game.CurrentMap && Game.CurrentMap.already_loaded && !PlayerToSpawn.is_inside_tree():
-			Game.spawn_player(PlayerToSpawn);
-
-func clear_map_change():
-	netentities.clear();
+	saved_event_list.clear();
 	for i in range(MAX_PLAYERS):
 		netentities.append(null); 
 
@@ -180,7 +164,16 @@ func join_server(ip: String):
 	print(host.create_client(ip, SERVER_PORT));
 	Game.get_tree().set_network_peer(host);
 
-# Some util funcs
+func stop_networking() -> void:
+	Game.get_tree().call_deferred("set_network_peer", null);
+	#Game.get_tree().set_network_peer(null); #Destoy any previous networking session
+	clear();
+
+
+##################
+# UTIL METHODS   #
+##################
+
 func is_multiplayer() -> bool:
 	return Game.get_tree().has_network_peer();
 	
@@ -198,8 +191,11 @@ func is_local_player(playerEntity: Node) -> bool:
 	if Game.get_tree().has_network_peer() && playerEntity.player_id != local_player_id:
 		return false;
 	return true;
-	
-# Snapshot stuff basic
+
+##################
+# NETWORK BOOPS #
+##################
+
 func write_boop() -> void:
 	if !Game.get_tree().has_network_peer():
 		return;
@@ -233,6 +229,13 @@ func server_process_boop(entityId, message) -> void:
 		if netentities[entityId].has_method("server_process_boop"):
 			netentities[entityId].server_process_boop(message);
 
+##################
+# NETWORK EVENTS #
+##################
+
+func save_event_to_list(entityId, eventId, eventData, unreliable) -> void:
+	saved_event_list.append({evEntId = entityId, evId = eventId, evData = eventData, evUnreliable = unreliable});
+
 func net_send_event(entityId, eventId, eventData=null, unreliable = false) -> void:
 	if !is_multiplayer():
 		return;
@@ -249,9 +252,11 @@ func client_send_event(entityId, eventId, eventData=null, unreliable = false) ->
 		else:
 			send_rpc_id(SERVER_NETID, "server_process_event", [entityId, eventId, eventData]);
 
-func server_send_event(entityId, eventId, eventData=null, unreliable = false) -> void:
+func server_send_event(entityId, eventId, eventData=null, unreliable = false, saveEvent = false) -> void:
 	print("server sending event...");
 	if is_server():
+		if saveEvent:
+			save_event_to_list(entityId, eventId, eventData, unreliable);
 		if unreliable: # When it is not vital to the event to reach the server (not recommended unless necessary)
 			send_rpc_unreliable("client_process_event", [entityId, eventId, eventData]);
 		else:
@@ -261,7 +266,7 @@ func server_process_event(entityId, eventId, eventData) -> void:
 	if !is_server():
 		return;
 	print("server receiving event...");
-	if entityId < netentities.size() && netentities[entityId]:
+	if entityId < netentities.size() && netentities[entityId] && netentities[entityId].is_inside_tree():
 		if netentities[entityId].has_method("server_process_event"):
 			netentities[entityId].server_process_event(eventId, eventData);
 			
@@ -269,9 +274,29 @@ func client_process_event(entityId, eventId, eventData) -> void:
 	if !is_client():
 		return;
 	print("client receiving event...");
-	if entityId < netentities.size() && netentities[entityId]:
+	if entityId < netentities.size() && netentities[entityId] && netentities[entityId].is_inside_tree():
 		if netentities[entityId].has_method("client_process_event"):
 			netentities[entityId].client_process_event(eventId, eventData);
+
+################################
+# MAP CHANGE AND LOAD HANDLING #
+################################
+
+func add_clients_to_map():
+	for client in clients_connected:
+		if client.netId == SERVER_NETID: #ignore this one, it's always player0
+			continue;
+		if is_client():
+			print("adding client id %d as player %d" % [client.netId, client.player_num]);
+		var PlayerToSpawn: Node2D = Game.add_player(client.netId, client.player_num);
+		if Game.CurrentMap && Game.CurrentMap.already_loaded && !PlayerToSpawn.is_inside_tree():
+			Game.spawn_player(PlayerToSpawn);
+
+func clear_map_change():
+	saved_event_list.clear();
+	netentities.clear();
+	for i in range(MAX_PLAYERS):
+		netentities.append(null); 
 
 func change_map(newmap: String) -> void:
 	clear_map_change();
@@ -279,8 +304,30 @@ func change_map(newmap: String) -> void:
 		return;
 	send_rpc("server_changed_map", [newmap]);
 
+func map_is_loaded() -> void:
+	if !is_multiplayer():
+		return;
+	#if is_server():
+	#	send_rpc("server_changed_map", [Game.get_current_map_path()]);
+	if is_client():
+		send_rpc_id(SERVER_NETID, "client_map_loaded", [Game.get_tree().get_network_unique_id()]);
+
 func server_changed_map(server_map: String) -> void:
 	Game.change_to_map(server_map);
+
+func client_map_loaded(client_netid: int) -> void: #sending all saved events to the new player who joined
+	if !is_server():
+		return;
+	for savedEvent in saved_event_list:
+		if savedEvent.evUnreliable:
+			send_rpc_id(client_netid, "client_process_event", [savedEvent.evEntId, savedEvent.evId, savedEvent.evData]);
+		else:
+			send_rpc_unreliable_id(client_netid, "client_process_event", [savedEvent.evEntId, savedEvent.evId, savedEvent.evData]);
+		print("sending events to client....");
+
+#######################
+# NETWORK RPC METHODS #
+#######################
 
 func send_rpc_id(id: int, method_name: String, args: Array) -> void:
 	if !is_multiplayer():
@@ -305,6 +352,10 @@ func send_rpc_unreliable(method_name: String, args: Array) -> void:
 		print("[Warning] trying to call rpc_unreliable during singleplayer");
 		return;
 	Game.callv("rpc_unreliable", ["game_process_rpc", method_name, args])
+
+######################
+# NET NODES HANDLING #
+######################
 
 func register_synced_node(nodeEntity: Node, forceId = NODENUM_NULL ) -> void:
 	if !is_multiplayer():
@@ -331,8 +382,3 @@ func unregister_synced_node(nodeEntity: Node):
 		return;
 	print("Unregistering entity [ID " + str(nodeEntity.node_id) + "] : " + nodeEntity.get_class());
 	netentities[nodeEntity.node_id] = null;
-
-func stop_networking() -> void:
-	Game.get_tree().call_deferred("set_network_peer", null);
-	#Game.get_tree().set_network_peer(null); #Destoy any previous networking session
-	clear();

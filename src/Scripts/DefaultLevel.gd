@@ -18,6 +18,7 @@ func _ready():
 			Game.spawn_player(p);
 
 	self.already_loaded = true;
+	Game.Network.map_is_loaded();
 	Game.MainMenu = MainMenuScene.instance();
 	Game.MainMenu.set_ingame_mode();
 
