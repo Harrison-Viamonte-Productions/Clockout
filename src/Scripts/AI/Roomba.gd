@@ -54,6 +54,7 @@ var is_on_screen: bool = false;
 var can_be_damaged: bool = true;
 var runaway: bool = false;
 var currentEnemy: Node2D = null; #Maybe change this in future.
+var playerInArea: Node2D = null;
 var running: bool = false;
 
 var motion: Vector2 = Vector2.ZERO;
@@ -86,17 +87,17 @@ func _ready():
 	$Sprite.play("walk");
 
 func _physics_process(delta):
+	
+	check_if_in_player_pov(delta);
+	if !active && !never_dormant:
+		return;
+		
 	if Game.Network.is_client():
 		cs_physics_think(delta);
 	else:
 		physics_think(delta);
 
 func physics_think(delta):
-	
-	check_if_in_player_pov(delta);
-	if !active && !never_dormant:
-		return;
-		
 	var friction: float = IMPULSE_FLOOR_FRICTION if (is_on_floor() || is_on_ceiling()) else IMPULSE_AIR_FRICTION;
 	if impulse.x > 0.0:
 		impulse.x -= delta*friction;
@@ -117,9 +118,6 @@ func physics_think(delta):
 	move(delta);
 
 func cs_physics_think(delta):
-	if !active && !never_dormant:
-		return;
-
 	var friction: float = IMPULSE_FLOOR_FRICTION if (is_on_floor() || is_on_ceiling()) else IMPULSE_AIR_FRICTION;
 	if impulse.x > 0.0:
 		impulse.x -= delta*friction;
@@ -184,6 +182,10 @@ func check_if_in_player_pov(delta) -> void:
 	player_checkfov_countdown = IN_PLAYER_FOV_CHECK_DELAY;
 	var in_player_screen: bool = false;
 	for i in range(Game.Players.size()):
+		if !Game.Players[i]:
+			continue;
+		if  Game.Network.is_client() && Game.Players[i] != Game.get_local_player(): #for clients, just check the local player and no more.
+			continue;
 		if Game.Players[i] && Util.inside_camera_view(Game.Players[i].get_camera()):
 			in_player_screen = true;
 			break;
@@ -283,8 +285,9 @@ func check_attacks(delta):
 func check_damage(delta):
 	if !player_inside_area || self.harmless:
 		return;
-	if currentEnemy == Game.get_local_player(): #by now only attack players, change this in future
-		currentEnemy.hurt(self, ATTACK_DAMAGE);
+	#print("trying to damage player %d. Local player is %d" % [playerInArea.node_id, Game.get_local_player().node_id]);
+	if playerInArea and (playerInArea == Game.get_local_player()): #by now only attack players, change this in future
+		playerInArea.hurt(self, ATTACK_DAMAGE);
 
 func update_sprite():
 	if attacking && $Sprite.animation != "attack":
@@ -299,12 +302,14 @@ func update_sprite():
 		$Sprite.stop();
 
 func _on_body_entered(body):
-	if currentEnemy == body:
+	if body.get_class() == "Player":
+		playerInArea = body;
 		player_inside_area = true;
 		_on_player_entered();
 		
 func _on_body_exited(body):
-	if currentEnemy == body:
+	if body.get_class() == "Player":
+		playerInArea = null;
 		player_inside_area = false;
 		_on_player_exited();
 
@@ -387,6 +392,7 @@ func server_send_boop() -> Dictionary:
 		 walk_dir = 0.0,
 		 position = Vector2(),
 		 rotation = Vector2(),
+		 impulse = Vector2(),
 		 current_enemy = self.currentEnemy.node_id, #playerid
 		 running = self.running,
 		 attacking = self.attacking,
@@ -396,6 +402,7 @@ func server_send_boop() -> Dictionary:
 	#stepify iis important to avoid that an insignificant varition of data can lead to a new boop/snapshot
 	boopData.walk_dir = stepify(self.walk_direction, 0.01);
 	boopData.position = Util.stepify_vec2(self.position, 0.01);
+	boopData.impulse = Util.stepify_vec2(self.impulse, 0.01);
 	boopData.rotation = stepify(self.rotation, 0.01);
 	return boopData;
 
@@ -406,6 +413,7 @@ func client_process_boop(boopData) -> void:
 	self.currentEnemy = Game.Players[boopData.current_enemy];
 	self.running = boopData.running;
 	self.attacking = boopData.attacking;
+	self.impulse = boopData.impulse;
 	if (self.runaway != boopData.runaway) and boopData.runaway:
 		cs_run_away_from_player();
 	update_sprite();

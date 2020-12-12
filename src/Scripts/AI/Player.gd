@@ -212,12 +212,14 @@ func hurt_effect():
 	$AnimationPlayer.play("hurt");
 
 func hurt(attacker: Node2D, damage: int):
+	if !is_local_player(): #just clientside damage.... BY NOW
+		return;
 	if damage_protection || !is_alive():
 		return;
+	enable_damage_protection();
 	health-= damage;
 	update_gui();
 	hurt_effect();
-	enable_damage_protection();
 	if health <= 0:
 		killed(attacker);
 
@@ -240,8 +242,9 @@ func disable_damage_protection():
 	$AnimationPlayer.play("idle");
 	damage_protection = false;
 
-func killed(attacker: Node2D):
-	Game.GUI.info_message(Game.get_str(attacker.DEATH_MESSAGE) % ["Player_name", attacker.NAME]);
+func killed(attacker: Node2D = null):
+	var deathMsg: String = (Game.get_str(attacker.DEATH_MESSAGE) % ["Player_name", attacker.NAME]) if attacker else "Player_name died";
+	Game.GUI.info_message(deathMsg);
 
 	if is_local_player():
 		if tween.is_active():
@@ -375,7 +378,7 @@ func client_process_boop(boopData) -> void:
 	self.is_jumping = boopData.is_jumping;
 	self.is_crouched = boopData.is_crouched
 	$Sprite.set_animation(boopData.anim_playing);
-	
+
 func server_process_boop(boopData) -> void:
 	if is_local_player():
 		return;
