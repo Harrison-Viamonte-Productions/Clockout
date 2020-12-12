@@ -13,10 +13,11 @@ func _ready():
 	CameraPaths = $Cameras/CameraPath.get_children();
 
 func _on_player_outside():
-	Game.ActiveCamera.change_zoom_interpolated(1.5, 0.5);
+	if Game.ActiveCamera:
+		Game.ActiveCamera.change_zoom_interpolated(1.5, 0.5);
 
 func _on_player_inside():
-	if !player_inside_storage:
+	if !player_inside_storage && Game.ActiveCamera:
 		Game.ActiveCamera.change_zoom_interpolated(1.0, 0.5);
 
 func select_camera(cameraStr: String):

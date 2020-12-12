@@ -178,7 +178,33 @@ func new_map_loaded() -> void:
 	#clear_players();
 	add_player(Network.SERVER_NETID);
 	Network.add_clients_to_map();
-	
+
+func current_screen_size() -> Vector2:
+	var screenSize: Vector2 = (Game.get_viewport().get_visible_rect().size)*ActiveCamera.zoom;
+	return screenSize;
+
+func get_view_rect2(scale: float = 1.0) -> Rect2: #this was fuuun for sure..... :/
+	var screenSize: Vector2 = current_screen_size()*scale;
+	var startPos: Vector2 = ActiveCamera.global_position-screenSize/2.0;
+	var endPos: Vector2 = ActiveCamera.global_position+screenSize/2.0;
+	var dif: int;
+	if ActiveCamera.limit_left > startPos.x:
+		dif = ActiveCamera.limit_left-startPos.x;
+		startPos.x += dif;
+		endPos.x += dif;
+	elif ActiveCamera.limit_right < endPos.x:
+		dif = ActiveCamera.limit_right - endPos.x;
+		endPos.x += dif;
+		startPos.x += dif;
+	if ActiveCamera.limit_top > startPos.y:
+		dif = ActiveCamera.limit_top-startPos.y;
+		startPos.y += dif;
+		endPos.y += dif;
+	elif ActiveCamera.limit_bottom < endPos.y:
+		dif = ActiveCamera.limit_bottom - endPos.y;
+		endPos.y += dif;
+		startPos.y += dif;
+	return Rect2(startPos, screenSize);
 
 # Netcode specific
 remote func game_process_rpc(method_name: String, data: Array): 

@@ -186,11 +186,13 @@ func check_if_in_player_pov(delta) -> void:
 			continue;
 		if  Game.Network.is_client() && Game.Players[i] != Game.get_local_player(): #for clients, just check the local player and no more.
 			continue;
-		if Game.Players[i] && Util.inside_camera_view(Game.Players[i].get_camera()):
+		if Game.Players[i] && Util.inside_camera_view(Game.Players[i]):
 			in_player_screen = true;
 			break;
 	if in_player_screen:
 		active = true;
+		if !is_on_screen:
+			print("enemy on screen....");
 		is_on_screen = true;
 	else:
 		is_on_screen = false;

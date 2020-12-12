@@ -61,6 +61,8 @@ enum NET_EVENTS {
 	ATTACK,
 	MAX_EVENTS 
 };
+
+var client_view_rect: Rect2 = Rect2(0, 0, 0, 0);
 #Netcode stuff ends
 
 var Util = Game.Util_Object.new(self);
@@ -349,17 +351,21 @@ func server_send_boop() -> Dictionary:
 func client_send_boop() -> Dictionary:
 	if !is_local_player():
 		return {}; #empty dictionary means don't send nothing
+		
+	
 	var boopData = {
 		 velocity = Vector2(),
 		 position = Vector2(),
 		 rotation = Vector2(),
 		 is_crouched = self.is_crouched,
 		 anim_playing = $Sprite.get_current_anim_playing(),
-		 is_jumping = self.is_jumping
+		 is_jumping = self.is_jumping,
+		 view_rect = Rect2()
 	};
 	boopData.velocity = Util.stepify_vec2(self.velocity, 0.01);
 	boopData.position = Util.stepify_vec2(self.position, 0.01);
 	boopData.rotation = stepify(self.rotation, 0.01);
+	boopData.view_rect = Util.stepify_rect2(Game.get_view_rect2(), 0.01);
 	
 	return boopData;
 
@@ -393,7 +399,8 @@ func server_process_boop(boopData) -> void:
 			self.uncrouch_cs();
 			
 	self.is_jumping = boopData.is_jumping;
-	self.is_crouched = boopData.is_crouched
+	self.is_crouched = boopData.is_crouched;
+	self.client_view_rect = boopData.view_rect;
 	$Sprite.set_animation(boopData.anim_playing);
 
 func server_process_event(eventId : int, eventData) -> void:

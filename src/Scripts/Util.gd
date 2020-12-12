@@ -161,7 +161,11 @@ func normalize_position(old_pos: Vector2, new_pos: Vector2, end_pos: Vector2) ->
 func stepify_vec2(vec2: Vector2, precision: float) -> Vector2 :
 	return Vector2(stepify(vec2.x, precision),stepify(vec2.y, precision));
 
-func inside_camera_view(camera: Node2D) -> bool:
-	var screenSize: Vector2 = (Game.get_viewport().get_visible_rect().size); #FIXME: Find a more accurate way!!
-	var cameraRect: Rect2 = Rect2(camera.global_position-screenSize/2.0, screenSize);
-	return cameraRect.has_point(father_node.global_position)
+func stepify_rect2(rectangle: Rect2, precision: float) -> Rect2 :
+	return Rect2(stepify_vec2(rectangle.position, precision),stepify_vec2(rectangle.size, precision));
+
+func inside_camera_view(player: Node2D) -> bool:
+	if player.is_local_player():
+		return Game.get_view_rect2(1.1).has_point(father_node.global_position); 	#1.1 in order to get 10% extra margin
+	else:
+		return player.client_view_rect.has_point(father_node.global_position);

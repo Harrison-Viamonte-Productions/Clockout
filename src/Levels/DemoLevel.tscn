@@ -50,44 +50,44 @@ extents = Vector2( 40, 160 )
 [sub_resource type="RectangleShape2D" id=9]
 extents = Vector2( 32, 32 )
 
-[sub_resource type="RectangleShape2D" id=19]
+[sub_resource type="RectangleShape2D" id=10]
 extents = Vector2( 31.876, 45.7525 )
-
-[sub_resource type="OccluderPolygon2D" id=10]
-closed = false
-cull_mode = 1
-polygon = PoolVector2Array( 3013.86, -22.2298, 3144, -73.5, 3144, -265.5, 3208, -265.5, 3208, -73.5 )
 
 [sub_resource type="OccluderPolygon2D" id=11]
 closed = false
 cull_mode = 1
-polygon = PoolVector2Array( 1856, -160, 1856, -352, 1920, -352, 1920, -160, 2150.35, -68.9169 )
+polygon = PoolVector2Array( 3013.86, -22.2298, 3144, -73.5, 3144, -265.5, 3208, -265.5, 3208, -73.5 )
 
 [sub_resource type="OccluderPolygon2D" id=12]
 closed = false
-cull_mode = 2
-polygon = PoolVector2Array( 640, 160, 640, 352, 704, 352, 704, 160 )
+cull_mode = 1
+polygon = PoolVector2Array( 1856, -160, 1856, -352, 1920, -352, 1920, -160, 2150.35, -68.9169 )
 
 [sub_resource type="OccluderPolygon2D" id=13]
 closed = false
 cull_mode = 2
-polygon = PoolVector2Array( 1920, 352, 1984, 352, 1984, 160, 1920, 160, 1920, 352 )
+polygon = PoolVector2Array( 640, 160, 640, 352, 704, 352, 704, 160 )
 
 [sub_resource type="OccluderPolygon2D" id=14]
 closed = false
 cull_mode = 2
-polygon = PoolVector2Array( 2432, -32, 2432, 32, 2624, 32, 2624, -32 )
+polygon = PoolVector2Array( 1920, 352, 1984, 352, 1984, 160, 1920, 160, 1920, 352 )
 
 [sub_resource type="OccluderPolygon2D" id=15]
-polygon = PoolVector2Array( 6912, -672, 8704, -672, 8704, 160, 8896, 160, 8896, -96, 9664, -96, 9664, 96, 9792, 96, 9792, -544, 9344, -544, 9344, -480, 9664, -480, 9664, -160, 8832, -160, 8832, 96, 8768, 96, 8768, -672, 8768, -800, 6848, -800, 6848, -544, 6912, -544 )
+closed = false
+cull_mode = 2
+polygon = PoolVector2Array( 2432, -32, 2432, 32, 2624, 32, 2624, -32 )
 
 [sub_resource type="OccluderPolygon2D" id=16]
-polygon = PoolVector2Array( 7872, -288, 6080, -288, 6080, 224, 7424, 224, 7424, 288, 6016, 288, 6016, -352, 7872, -352 )
+polygon = PoolVector2Array( 6912, -672, 8704, -672, 8704, 160, 8896, 160, 8896, -96, 9664, -96, 9664, 96, 9792, 96, 9792, -544, 9344, -544, 9344, -480, 9664, -480, 9664, -160, 8832, -160, 8832, 96, 8768, 96, 8768, -672, 8768, -800, 6848, -800, 6848, -544, 6912, -544 )
 
 [sub_resource type="OccluderPolygon2D" id=17]
-polygon = PoolVector2Array( 8256, -544, 8576, -544, 8576, 288, 8256, 288 )
+polygon = PoolVector2Array( 7872, -288, 6080, -288, 6080, 224, 7424, 224, 7424, 288, 6016, 288, 6016, -352, 7872, -352 )
 
 [sub_resource type="OccluderPolygon2D" id=18]
+polygon = PoolVector2Array( 8256, -544, 8576, -544, 8576, 288, 8256, 288 )
+
+[sub_resource type="OccluderPolygon2D" id=19]
 polygon = PoolVector2Array( 9792, -736, 9408, -736, 9408, -800, 9792, -800 )
 
 [node name="DemoLevel" type="Node2D"]
@@ -746,7 +746,7 @@ call_function = "change_to_map"
 call_args = [ "res://src/Levels/E1M0.tscn" ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Misc/E1M0Map"]
-shape = SubResource( 19 )
+shape = SubResource( 10 )
 
 [node name="StaticEntities" type="Node2D" parent="."]
 position = Vector2( 8, 64 )
@@ -767,36 +767,36 @@ health = 3
 
 [node name="LightOccluder2D" type="LightOccluder2D" parent="LightOcluders"]
 position = Vector2( -648, -150.5 )
-occluder = SubResource( 10 )
+occluder = SubResource( 11 )
 
 [node name="LightOccluder2D2" type="LightOccluder2D" parent="LightOcluders"]
 position = Vector2( 0, -64 )
-occluder = SubResource( 11 )
+occluder = SubResource( 12 )
 
 [node name="LightOccluder2D3" type="LightOccluder2D" parent="LightOcluders"]
-occluder = SubResource( 12 )
+occluder = SubResource( 13 )
 
 [node name="LightOccluder2D4" type="LightOccluder2D" parent="LightOcluders"]
 position = Vector2( 640, 0 )
-occluder = SubResource( 12 )
-
-[node name="LightOccluder2D5" type="LightOccluder2D" parent="LightOcluders"]
 occluder = SubResource( 13 )
 
-[node name="LightOccluder2D6" type="LightOccluder2D" parent="LightOcluders"]
+[node name="LightOccluder2D5" type="LightOccluder2D" parent="LightOcluders"]
 occluder = SubResource( 14 )
 
-[node name="LightOccluder2D7" type="LightOccluder2D" parent="LightOcluders"]
+[node name="LightOccluder2D6" type="LightOccluder2D" parent="LightOcluders"]
 occluder = SubResource( 15 )
 
-[node name="LightOccluder2D8" type="LightOccluder2D" parent="LightOcluders"]
+[node name="LightOccluder2D7" type="LightOccluder2D" parent="LightOcluders"]
 occluder = SubResource( 16 )
 
-[node name="LightOccluder2D9" type="LightOccluder2D" parent="LightOcluders"]
+[node name="LightOccluder2D8" type="LightOccluder2D" parent="LightOcluders"]
 occluder = SubResource( 17 )
 
-[node name="LightOccluder2D10" type="LightOccluder2D" parent="LightOcluders"]
+[node name="LightOccluder2D9" type="LightOccluder2D" parent="LightOcluders"]
 occluder = SubResource( 18 )
+
+[node name="LightOccluder2D10" type="LightOccluder2D" parent="LightOcluders"]
+occluder = SubResource( 19 )
 
 [node name="Lights" type="Node2D" parent="."]
 position = Vector2( -648, -86.5 )
