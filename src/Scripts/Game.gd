@@ -12,6 +12,7 @@ const VERSION: String = "0.1.5"; #Major, Minor, build count
 const LANG_FILES_FOLDER: String = "lang";
 const CONFIG_FILE: String = "game_config.cfg";
 const PLAYER_ATTACK_LAYER: int = 32;
+const START_MAP: String = "res://src/Levels/DemoLevel.tscn";
 
 var SpawnPoints: Array = [];
 var Players: Array = [];
@@ -144,7 +145,7 @@ func add_player(netid: int, forceid: int = -1) -> Node2D:
 func start_new_game():
 	Network.stop_networking();
 	#CurrentMap = null;
-	change_to_map("res://src/Levels/DemoLevel.tscn");
+	change_to_map(START_MAP);
 
 func change_to_map(map_name: String):
 	CurrentMap = null;

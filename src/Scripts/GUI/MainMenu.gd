@@ -117,7 +117,7 @@ func apply_config_changes():
 
 func start_server():
 	var sv_maxPlayers: int = int(SvPlayersCmb.get_item_text(SvPlayersCmb.selected));
-	Game.Network.host_server(sv_maxPlayers, "res://src/Levels/DemoLevel.tscn");
+	Game.Network.host_server(sv_maxPlayers, Game.START_MAP);
 	
 func join_server():
 	Game.Network.join_server(ServerIp.text);
