@@ -71,7 +71,7 @@ func start():
 # NETCODE SPECIFIC RELATED #
 ############################
 
-func server_send_boop() -> void:
+func server_send_boop() -> Dictionary:
 	# todo: some pre-check to see if sending the boop is really necessary
 	var boopData = {
 		 velocity = Vector2(),
@@ -84,8 +84,8 @@ func server_send_boop() -> void:
 	boopData.velocity = Util.stepify_vec2(self.current_velocity, 0.01);
 	boopData.position = Util.stepify_vec2(self.position, 0.01);
 	boopData.rotation = stepify(self.rotation, 0.01);
-	if NetBoop.delta_boop_changed(boopData):
-		Game.Network.send_rpc_unreliable("client_process_boop", [self.node_id, boopData]);
+	
+	return boopData;
 
 func client_process_boop(boopData) -> void:
 	self.current_velocity = boopData.velocity;

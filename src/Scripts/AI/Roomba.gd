@@ -379,9 +379,9 @@ func enemy_can_be_reached() -> bool:
 
 # TODO: Make this entity active when any player can see it, and not just the local player
 
-func server_send_boop() -> void:
+func server_send_boop() -> Dictionary:
 	if !active && !never_dormant:
-		return; #only send info for active entities :3
+		return {}; #only send info for active entities :3
 	# todo: some pre-check to see if sending the boop is really necessary
 	var boopData = {
 		 walk_dir = 0.0,
@@ -397,8 +397,7 @@ func server_send_boop() -> void:
 	boopData.walk_dir = stepify(self.walk_direction, 0.01);
 	boopData.position = Util.stepify_vec2(self.position, 0.01);
 	boopData.rotation = stepify(self.rotation, 0.01);
-	if NetBoop.delta_boop_changed(boopData):
-		Game.Network.send_rpc_unreliable("client_process_boop", [self.node_id, boopData]);
+	return boopData;
 
 func client_process_boop(boopData) -> void:
 	self.walk_direction = boopData.walk_dir;

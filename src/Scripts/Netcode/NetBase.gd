@@ -86,7 +86,14 @@ func add_client(netid: int, num: int = -1) -> int:
 	clients_connected.append({netId = netid, player_num = num, ingame = false})
 	player_count+=1;
 	return player_count-1;
-	
+
+#only true when client finally loaded the map
+func client_is_ingame(clientNum: int) -> bool:
+	return clients_connected[clientNum].ingame;
+
+func clients_in_server() -> int:
+	return clients_connected.size();
+
 func find_client_number_by_netid(netid: int):
 	for i in range(clients_connected.size()):
 		if clients_connected[i].netId == netid:
@@ -209,13 +216,28 @@ func server_send_boop() -> void:
 	if player_count <= 0:
 		return;
 	for entity in netentities:
-		if entity && entity.has_method("server_send_boop"):
-			entity.server_send_boop();
+		if entity && entity.has_method("server_send_boop") && entity.is_inside_tree():
+			var boopData: Dictionary = entity.server_send_boop();
+			if !boopData or boopData.empty():
+				continue;
+			#This loop it's to have unique boop deltas for each client, to avoid bad syncing
+			for client in clients_connected:
+				if !client or !client.ingame:
+					continue;
+				if client.netId == SERVER_NETID: #to avoid sending a boop to oneself as server
+					continue;
+				var clientNum: int = find_client_number_by_netid(client.netId);
+				if entity.NetBoop.delta_boop_changed(boopData, clientNum):
+					send_rpc_unreliable_id(client.netId, "client_process_boop", [entity.node_id, boopData]);
 	
 func client_send_boop() -> void:
 	for entity in netentities:
-		if entity && entity.has_method("client_send_boop"):
-			entity.client_send_boop();
+		if entity && entity.has_method("client_send_boop") && entity.is_inside_tree():
+			var boopData: Dictionary = entity.client_send_boop();
+			if !boopData or boopData.empty():
+				continue;
+			if entity.NetBoop.delta_boop_changed(boopData):
+				send_rpc_unreliable_id(SERVER_NETID, "server_process_boop", [entity.node_id, boopData]);
 
 func client_process_boop(entityId, message) -> void:
 	if entityId < netentities.size() && netentities[entityId] && netentities[entityId].is_inside_tree():
@@ -295,6 +317,10 @@ func add_clients_to_map():
 func clear_map_change():
 	saved_event_list.clear();
 	netentities.clear();
+	for client in clients_connected:
+		if client.netId == SERVER_NETID: #ignore this one, it's always player0
+			continue;
+		client.ingame = false;
 	for i in range(MAX_PLAYERS):
 		netentities.append(null); 
 
@@ -318,12 +344,14 @@ func server_changed_map(server_map: String) -> void:
 func client_map_loaded(client_netid: int) -> void: #sending all saved events to the new player who joined
 	if !is_server():
 		return;
+	var clientnum: int = find_client_number_by_netid(client_netid);
+	clients_connected[clientnum].ingame = true;
+	print("Player %d is ready!" % clientnum);
 	for savedEvent in saved_event_list:
 		if savedEvent.evUnreliable:
 			send_rpc_id(client_netid, "client_process_event", [savedEvent.evEntId, savedEvent.evId, savedEvent.evData]);
 		else:
 			send_rpc_unreliable_id(client_netid, "client_process_event", [savedEvent.evEntId, savedEvent.evId, savedEvent.evData]);
-		print("sending events to client....");
 
 #######################
 # NETWORK RPC METHODS #
