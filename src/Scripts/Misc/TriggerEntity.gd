@@ -1,4 +1,5 @@
-extends "res://src/Scripts/Misc/TriggerBase.gd"
+extends TriggerBase
+#extends "res://src/Scripts/Misc/TriggerBase.gd"
 
 export var call_function_enter: String;
 export var call_args_enter: Array = [];

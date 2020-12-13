@@ -158,6 +158,9 @@ func normalize_position(old_pos: Vector2, new_pos: Vector2, end_pos: Vector2) ->
 	
 	return normalized_pos;
 
+func move_with_velocity(delta: float, vel: Vector2) -> void:
+	father_node.position += vel*delta;
+
 func stepify_vec2(vec2: Vector2, precision: float) -> Vector2 :
 	return Vector2(stepify(vec2.x, precision),stepify(vec2.y, precision));
 

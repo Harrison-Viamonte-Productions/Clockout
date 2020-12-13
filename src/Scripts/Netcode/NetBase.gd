@@ -48,7 +48,7 @@ func clear():
 	player_count = 0;
 	local_player_id = 0;
 	saved_event_list.clear();
-	for i in range(MAX_PLAYERS):
+	for _i in range(MAX_PLAYERS):
 		netentities.append(null); 
 
 func _on_server_shutdown():
@@ -60,7 +60,7 @@ func _cutie_joined_ok():
 	if !Game.is_network_master():
 		Game.rpc_id(SERVER_NETID, "game_process_rpc", "server_process_client_question", [Game.get_tree().get_network_unique_id()]);
 
-func _process(delta):
+func _process(_delta):
 	pass;
 	#if Game.get_tree().has_network_peer() && !Game.is_network_master():
 	#	if ping_counter <=  0.0 || ping_counter > 2.0:
@@ -321,7 +321,7 @@ func clear_map_change():
 		if client.netId == SERVER_NETID: #ignore this one, it's always player0
 			continue;
 		client.ingame = false;
-	for i in range(MAX_PLAYERS):
+	for _i in range(MAX_PLAYERS):
 		netentities.append(null); 
 
 func change_map(newmap: String) -> void:

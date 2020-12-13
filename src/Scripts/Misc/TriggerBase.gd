@@ -1,3 +1,4 @@
+class_name TriggerBase
 extends Area2D
 
 export var node_caller: String = "$CurrentMap";
@@ -80,7 +81,7 @@ func enable_trigger():
 
 func convert_array_args_to_tween_args(array_args: Array) -> Array:
 	var tween_array: Array = [];
-	for i in range(5):
+	for _i in range(5):
 		tween_array.append(null);
 		
 	for i in range(array_args.size()):

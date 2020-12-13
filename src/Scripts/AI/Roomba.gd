@@ -1,3 +1,4 @@
+#class_name ??? I don't remember :(
 extends KinematicBody2D
 
 const NAME: String = "Roomba";
@@ -111,7 +112,7 @@ func physics_think(delta):
 	check_collisions(delta);
 	check_attacks(delta);
 	check_damage(delta);
-	chase(delta);
+	check_chase(delta);
 	fall(delta);
 	
 	running = attacking || runaway;
@@ -131,7 +132,7 @@ func cs_physics_think(delta):
 	check_collisions(delta);
 	#check_attacks(delta);
 	check_damage(delta);
-	#chase(delta);
+	#check_chase(delta);
 	fall(delta);
 	move(delta);
 
@@ -142,7 +143,7 @@ func check_player(delta):
 	else:
 		player_check_countdown-=delta*1000.0;
 
-func chase(delta):
+func check_chase(delta):
 	if !self.chase || self.runaway:
 		return;
 	if chase_check_countdown <= 0.0:

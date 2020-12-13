@@ -27,6 +27,6 @@ func resume_game():
 func continue_pressed():
 	$AnimationPlayer.play("hide_message");
 
-func _input(event):
+func _input(_event):
 	if Input.is_action_just_pressed("ui_accept") && can_continue:
 		continue_pressed();

@@ -6,7 +6,7 @@ var father_node: Node2D;
 func _init(node: Node2D):
 	father_node = node;
 	current_boop.resize(Game.Network.MAX_PLAYERS);
-	for i in range(Game.Network.MAX_PLAYERS):
+	for _i in range(Game.Network.MAX_PLAYERS):
 		current_boop.append({}); #empty dictionary
 
 func boops_are_equal(boopA: Dictionary, boopB: Dictionary) -> bool:

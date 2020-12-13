@@ -47,7 +47,7 @@ func clear_players():
 func _ready():
 	Network.ready();
 
-func _process(delta):
+func _process(_delta):
 	self.pause_mode = Node.PAUSE_MODE_PROCESS; #So we can use functions
 	
 func set_active_camera(newCamera: Node):
@@ -187,7 +187,7 @@ func get_view_rect2(scale: float = 1.0) -> Rect2: #this was fuuun for sure..... 
 	var screenSize: Vector2 = current_screen_size()*scale;
 	var startPos: Vector2 = ActiveCamera.global_position-screenSize/2.0;
 	var endPos: Vector2 = ActiveCamera.global_position+screenSize/2.0;
-	var dif: int;
+	var dif: float;
 	if ActiveCamera.limit_left > startPos.x:
 		dif = ActiveCamera.limit_left-startPos.x;
 		startPos.x += dif;

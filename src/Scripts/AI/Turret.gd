@@ -1,3 +1,4 @@
+class_name Turret
 extends Node2D
 
 const NAME: String = "Turret";
@@ -5,7 +6,9 @@ const DEATH_MESSAGE: String = "#str1003"; #Change later
 const CLOSEST_PLAYER_CHECK_DELAY: float = 250.0;
 const IN_PLAYER_FOV_CHECK_DELAY: float = 250.0;
 const UPDATE_SPRITE_DELAY: float = 125.0;
+const FIRE_DELAY: float = 2000.0;
 
+export (PackedScene) var projectile = preload("res://src/Entities/Projectiles/DefaultProjectile.tscn");
 export var never_dormant: bool = false;
 export var aggressive: bool = false;
 
@@ -25,7 +28,9 @@ var is_on_screen: bool = false;
 var player_checkfov_countdown = IN_PLAYER_FOV_CHECK_DELAY;
 var player_check_countdown = 0.0; #important to start from zero
 var update_sprite_countdown = UPDATE_SPRITE_DELAY;
+var fire_countdown = FIRE_DELAY;
 var currentEnemy: Node2D = null; #Maybe change this in future.
+onready var BarrelNode: Position2D = $Barrel;
 
 func _ready():
 	Util._ready();
@@ -37,11 +42,25 @@ func _physics_process(delta):
 	if !active && !never_dormant:
 		return;
 	check_player(delta);
+	check_attack(delta);
 	update_sprite(delta);
+
+func check_attack(delta):
+	if fire_countdown <= 0.0:
+		fire_countdown = FIRE_DELAY;
+		if currentEnemy:
+			var firedProjectile: Projectile = projectile.instance();
+			get_parent().call_deferred("add_child", firedProjectile);
+			firedProjectile.fire_to_pos(BarrelNode.global_position, currentEnemy.global_position)
+	else:
+		fire_countdown-=delta*1000.0;
 
 func update_sprite(delta):
 	if update_sprite_countdown <= 0.0:
 		update_sprite_countdown = UPDATE_SPRITE_DELAY;
+		if !aggressive:
+			$Sprite.play("harmless");
+			return;
 		if currentEnemy:
 			var angleToEnemy: float =  rad2deg(self.global_position.angle_to_point(currentEnemy.global_position)); 
 			if angleToEnemy >= 0.0:

@@ -1,4 +1,5 @@
-extends "res://src/Scripts/Misc/TriggerBase.gd"
+extends TriggerBase
+#extends "res://src/Scripts/Misc/TriggerBase.gd"
 
 export var call_function: String;
 export var call_args: Array = [];
@@ -65,7 +66,7 @@ func enable_trigger():
 		$UseMessage/AnimationPlayer.stop();
 		$UseMessage/AnimationPlayer.play("show");
 
-func _input(event):
+func _input(_event):
 	if !player_inside:
 		return;
 	if Input.is_action_just_pressed("use"):

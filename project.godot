@@ -13,9 +13,27 @@ _global_script_classes=[ {
 "class": "Player",
 "language": "GDScript",
 "path": "res://src/Scripts/AI/Player.gd"
+}, {
+"base": "KinematicBody2D",
+"class": "Projectile",
+"language": "GDScript",
+"path": "res://src/Scripts/Projectiles/DefaultProjectile.gd"
+}, {
+"base": "Area2D",
+"class": "TriggerBase",
+"language": "GDScript",
+"path": "res://src/Scripts/Misc/TriggerBase.gd"
+}, {
+"base": "Node2D",
+"class": "Turret",
+"language": "GDScript",
+"path": "res://src/Scripts/AI/Turret.gd"
 } ]
 _global_script_class_icons={
-"Player": ""
+"Player": "",
+"Projectile": "",
+"TriggerBase": "",
+"Turret": ""
 }
 
 [application]
@@ -27,6 +45,10 @@ config/icon="res://icon.png"
 [autoload]
 
 Game="*res://src/Scripts/Game.gd"
+
+[debug]
+
+gdscript/warnings/return_value_discarded=false
 
 [display]
 
@@ -100,6 +122,7 @@ attack={
 2d_physics/layer_4="Enemies"
 2d_physics/layer_5="Enemy_clip"
 2d_physics/layer_6="Player_attack"
+2d_physics/layer_7="Enemy_attack"
 
 [rendering]
 

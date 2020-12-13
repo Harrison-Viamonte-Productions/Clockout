@@ -30,7 +30,7 @@ func get_current_anim_playing() -> String:
 func set_animation(anim_name: String) -> void:
 	self.play(anim_name);
 
-func _input(event):
+func _input(_event):
 	if !get_parent().is_local_player():
 		return;
 	if Input.is_action_pressed("move_left") || Input.is_action_pressed("move_right"):

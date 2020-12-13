@@ -19,7 +19,7 @@ func show_gui():
 func update_lang_strings():
 	$Parent/DialogSystem/HBoxContainer/Continue.text = Game.get_str("#str0101");
 
-func _process(delta):
+func _process(_delta):
 	$Parent/CenterContainer/HBoxContainer/VBoxContainer/FPSLabel.text = "FPS: " + str(Engine.get_frames_per_second());
 
 func hide_message():

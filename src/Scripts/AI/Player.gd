@@ -246,7 +246,11 @@ func disable_damage_protection():
 	damage_protection = false;
 
 func killed(attacker: Node2D = null):
-	var deathMsg: String = (Game.get_str(attacker.DEATH_MESSAGE) % ["Player_name", attacker.NAME]) if attacker else "Player_name died";
+	var deathMsg: String = "";
+	if !attacker or attacker.get("DEATH_MESSAGE") == null:
+		deathMsg = "Player_name died";
+	else:
+		deathMsg = Game.get_str(attacker.DEATH_MESSAGE) % ["Player_name", attacker.NAME];
 	Game.GUI.info_message(deathMsg);
 
 	if is_local_player():
