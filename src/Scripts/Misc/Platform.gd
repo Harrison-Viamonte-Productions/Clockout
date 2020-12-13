@@ -1,3 +1,4 @@
+class_name Platform
 extends KinematicBody2D
 
 export(Array, Vector2) var positions: Array;

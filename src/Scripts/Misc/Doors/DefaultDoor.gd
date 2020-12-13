@@ -2,6 +2,8 @@ class_name Door
 extends Node2D
 
 export var manual: bool = true;
+export var trigger_only: bool = false; #only activated by trigger 
+var locked: bool = false;
 
 #Netcode stuff start
 var netid: int = -1;
@@ -9,24 +11,35 @@ var node_id: int = -1
 enum NET_EVENTS {
 	ATTACK,
 	OPENED,
+	LOCK,
+	UNLOCK
 	CLOSED 
 };
 #Netcode stuff ends
 
 func _ready():
-	if manual:
+	if trigger_only:
 		$TriggerAutomatic.call_deferred("queue_free");
-		Game.Network.register_synced_node(self);
+		$TriggerManual.call_deferred("queue_free");
+	elif manual:
+		$TriggerAutomatic.call_deferred("queue_free");
 	else:
 		$TriggerManual.call_deferred("queue_free");
 
+	Game.Network.register_synced_node(self);
+
 func toggle():
+	if locked:
+		return;
 	if $Closed.visible:
 		open(true);
 	else:
 		close(true);
 
 func open(send_net_event: bool = false):
+	if locked:
+		return;
+		
 	if manual && send_net_event:
 		Game.Network.net_send_event(self.node_id, NET_EVENTS.OPENED, null);
 	$Closed.hide();
@@ -34,11 +47,26 @@ func open(send_net_event: bool = false):
 	$Closed/StaticEntity.disable_collisions();
 
 func close(send_net_event: bool = false):
+	if locked:
+		return;
+		
 	if manual && send_net_event:
 		Game.Network.net_send_event(self.node_id, NET_EVENTS.CLOSED, null);
 	$Closed.show();
 	$Open.hide();
 	$Closed/StaticEntity.enable_collisions();
+
+func lock() -> void:
+	if Game.Network.is_multiplayer() and Game.Network.is_server():
+		Game.Network.server_send_event(self.node_id, NET_EVENTS.LOCK, null);
+	close();
+	locked = true;
+
+func unlock() -> void:
+	if Game.Network.is_multiplayer() and Game.Network.is_server():
+		Game.Network.server_send_event(self.node_id, NET_EVENTS.UNLOCK, null);
+	locked = false;
+	open();
 
 func server_process_event(eventId : int, eventData) -> void:
 	match eventId:
@@ -55,6 +83,10 @@ func client_process_event(eventId : int, eventData) -> void:
 			open();
 		NET_EVENTS.CLOSED:
 			close();
+		NET_EVENTS.LOCK:
+			lock();
+		NET_EVENTS.UNLOCK:
+			unlock();
 		_:
 			print("Warning: Received unkwown event");
 

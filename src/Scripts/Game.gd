@@ -28,7 +28,7 @@ var Boop_Object = preload("res://src/Scripts/Netcode/Boop.gd");
 var Util_Object = preload("res://src/Scripts/Util.gd");
 var Lang = load("res://src/Scripts/Langs.gd").new();
 var Config = load("res://src/Scripts/ConfigManager.gd").new();
-var Network = load("res://src/Scripts/Netcode/NetBase.gd").new();
+var Network: NetworkBase = load("res://src/Scripts/Netcode/NetBase.gd").new();
 const PlayerNode = preload("res://src/Entities/Player.tscn");
 # Game specific vars
 var threatLevel: int = 0; # Maybe I want to move this into a different place later.

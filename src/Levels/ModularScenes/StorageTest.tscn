@@ -48,8 +48,10 @@ tile_data = PoolIntArray( -655349, 15, 0, -655348, 15, 0, -589813, 15, 0, -58981
 position = Vector2( 4000, -512 )
 z_index = 1
 positions = [ Vector2( 4000, 320 ) ]
+speed = 400.0
 acel_time = 1.5
 start_on = false
+automatic = false
 lights = true
 
 [node name="Platforms" type="Node2D" parent="."]

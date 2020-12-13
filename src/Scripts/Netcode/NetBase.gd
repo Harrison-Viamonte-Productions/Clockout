@@ -1,3 +1,4 @@
+class_name NetworkBase
 extends Node
 
 # TODO: implement snapshot priority to entities, an array for queue snapshots and all that similar stuff from librecoop here

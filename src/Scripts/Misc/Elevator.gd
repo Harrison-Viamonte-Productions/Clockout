@@ -1,4 +1,5 @@
-extends "res://src/Scripts/Misc/Platform.gd"
+class_name ElevatorBase
+extends Platform
 
 export var automatic: bool = true;
 export var lights: bool = false;
