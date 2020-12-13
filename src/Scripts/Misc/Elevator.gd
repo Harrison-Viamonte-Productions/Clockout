@@ -3,8 +3,17 @@ extends "res://src/Scripts/Misc/Platform.gd"
 export var automatic: bool = true;
 export var lights: bool = false;
 
+var old_visibility: bool = false;
+
 func _ready():
+	old_visibility = self.visible;
 	update_lights();
+	update_triggers();
+
+func _process(delta):
+	if old_visibility != self.visible:
+		update_triggers();
+		old_visibility = self.visible; 
 
 func enable_lights():
 	lights = true
@@ -13,7 +22,13 @@ func enable_lights():
 func disable_lights():
 	lights = false;
 	update_lights()
-	
+
+func update_triggers():
+	if !self.visible:
+		$ElevatorButton.disable_trigger();
+	else:
+		$ElevatorButton.enable_trigger();
+
 func update_lights():
 	if lights:
 		$Light.visible = true;

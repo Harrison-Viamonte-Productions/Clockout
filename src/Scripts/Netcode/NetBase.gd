@@ -28,6 +28,10 @@ var snapshot_list: Array; #elements: Dictionary { net_entity = null, queue_pos =
 var saved_event_list: Array; #elements: Dictionary { net_id = -1, queue_pos = 0}
 # Netcode optimiaztion: END
 
+#DEBUG ONLY
+var boops_sent_at_once: int = 0;
+#END DEBUG ONLY
+
 func ready():
 	clear();
 	Game.get_tree().connect("network_peer_connected", self, "_on_player_connected");
@@ -215,11 +219,13 @@ func write_boop() -> void:
 func server_send_boop() -> void:
 	if player_count <= 0:
 		return;
+	boops_sent_at_once = 0;
 	for entity in netentities:
 		if entity && entity.has_method("server_send_boop") && entity.is_inside_tree():
 			var boopData: Dictionary = entity.server_send_boop();
 			if !boopData or boopData.empty():
 				continue;
+			var boop_was_sent: bool = false; #DEBUG ONLY, DELETE LATER. 
 			#This loop it's to have unique boop deltas for each client, to avoid bad syncing
 			for client in clients_connected:
 				if !client or !client.ingame:
@@ -229,6 +235,14 @@ func server_send_boop() -> void:
 				var clientNum: int = find_client_number_by_netid(client.netId);
 				if entity.NetBoop.delta_boop_changed(boopData, clientNum):
 					send_rpc_unreliable_id(client.netId, "client_process_boop", [entity.node_id, boopData]);
+					boop_was_sent = true;
+
+			if boop_was_sent:
+				boops_sent_at_once+=1;
+
+	# UN-COMMENT TO DEBUG
+	#if boops_sent_at_once > 0:
+	#	print("Sending %d boops" % boops_sent_at_once);
 	
 func client_send_boop() -> void:
 	for entity in netentities:

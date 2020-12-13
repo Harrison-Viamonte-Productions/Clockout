@@ -1,3 +1,4 @@
+class_name CameraEntity
 extends Camera2D
 
 const MIN_MOVE_PRECISION: float = 1.0;
@@ -7,6 +8,16 @@ var next_zoom: Vector2;
 var next_pos: Vector2;
 var moving_to: bool = false;
 var Util = Game.Util_Object.new(self);
+
+#For camera interpolation
+#var i_start_pos: Vector2 = Vector2.ZERO;
+#var i_end_pos: Vector2 = Vector2.ZERO;
+#var i_time: float = 0.25; #Default time for movement interpolation
+
+const MAX_FOLLOW_SPEED: float = 8.0;
+
+var i_speed: float = 4.0;
+var i_speed_incr: float = 0.0;
 
 func _ready():
 	next_pos = position;
@@ -19,7 +30,9 @@ func _physics_process(delta):
 
 func interpolate_movement(delta):
 	if moving_to:
-		position = position.linear_interpolate(next_pos, delta * 4.0);
+		if i_speed <= MAX_FOLLOW_SPEED:
+			i_speed+=delta*i_speed_incr;
+		position = position.linear_interpolate(next_pos, delta * i_speed);
 		if (position - next_pos).length() <= MIN_MOVE_PRECISION:
 			moving_to = false;
 
@@ -45,7 +58,9 @@ func change_zoom_interpolated(new_scale: float, seconds: float) -> void:
 	move_step.y = (new_scale - zoom.y)/seconds;
 	next_zoom = Vector2(new_scale, new_scale);
 
-func move_to(to: Vector2, interpolated: bool):
+func move_to(to: Vector2, interpolated: bool, speed: float = 4.0):
+	i_speed = speed;
+	i_speed_incr = speed;
 	if interpolated:
 		moving_to = true;
 		next_pos.x = to.x;
@@ -54,17 +69,22 @@ func move_to(to: Vector2, interpolated: bool):
 		position.x = to.x;
 		position.y = to.y;
 
-func move_from(from: Vector2, to: Vector2):
+func move_from(from: Vector2, to: Vector2, speed: float = 4.0):
 	position = from;
-	move_to(to, true);
+	move_to(to, true, speed);
 
-func move_to_node2d(point: Node2D, interpolated: bool):
+func move_to_node2d(point: Node2D, interpolated: bool, speed: float = 4.0):
 	var to: Vector2 = point.global_position - get_parent().global_position;
-	move_to(to, interpolated);
+	move_to(to, interpolated, speed);
 
-func move_from_node2d(point: Node2D, to: Vector2):
+func move_from_node2d(point: Node2D, to: Vector2, speed: float = 4.0):
 	var from: Vector2 = point.global_position -  get_parent().global_position;
-	move_from(from, to);
+	move_from(from, to, speed);
+	
+func move_from_node2d_to_node2d(point_from: Node2D, point_to: Node2D, speed: float = 4.0):
+	var from: Vector2 = point_from.global_position -  get_parent().global_position;
+	var to = point_to.global_position - get_parent().global_position;
+	move_from(from, to, speed);
 
 func _exit_tree():
 	if Game.ActiveCamera == self:

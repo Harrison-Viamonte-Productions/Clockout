@@ -79,6 +79,9 @@ func node_call_function(call_function: String, call_args: Array, call_delay: flo
 func enable_trigger():
 	trigger_enabled = true; 
 
+func disable_trigger():
+	trigger_enabled = false;
+
 func convert_array_args_to_tween_args(array_args: Array) -> Array:
 	var tween_array: Array = [];
 	for _i in range(5):

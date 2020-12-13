@@ -141,8 +141,3 @@ func update_from_config():
 		if langs_data[i] == Game.Config.get_value("language"):
 			LangsOptions.selected = i;
 			break;
-
-# TO AVOID CRASH IN RELEASE BUILD!
-func _exit_tree():
-	if Game.MainMenu == self:
-		Game.MainMenu = null;

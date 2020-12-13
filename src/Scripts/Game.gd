@@ -16,7 +16,7 @@ const START_MAP: String = "res://src/Levels/DemoLevel.tscn";
 
 var SpawnPoints: Array = [];
 var Players: Array = [];
-var CurrentMap: Node = null;
+var CurrentMap: Level = null;
 var GUI: Node = null;
 var ActiveCamera: Camera2D = null;
 var ViewportFX: Node = null; # Reference to the node that leads with transitions. Loaded per level
@@ -32,6 +32,18 @@ var Network = load("res://src/Scripts/Netcode/NetBase.gd").new();
 const PlayerNode = preload("res://src/Entities/Player.tscn");
 # Game specific vars
 var threatLevel: int = 0; # Maybe I want to move this into a different place later.
+
+#bit mask constants
+const BITMASK_PLAYER: int = 1;
+const BITMASK_TILES: int = 2;
+const BITMASK_STATIC: int = 4;
+const BITMASK_ENEMIES: int = 8;
+const BITMASK_ENEMYCLIP: int = 16;
+const BITMASK_PLAYER_ATTACK: int = 32;
+const BITMASK_ENEMY_ATTACK: int = 64;
+const BITMASK_PLAYER_BACK: int = 1024; #Used while being behind the map (ELEVATOR EFFECT)
+const BITMASK_TILES_BACK: int = 2048; #Used while being behind the map (ELEVATOR EFFECT)
+const BITMASK_STATIC_BACK: int = 4096; #Used while being behind the map (ELEVATOR EFFECT)
 
 func _init():
 	Lang.load_langs(LANG_FILES_FOLDER);
@@ -49,8 +61,10 @@ func _ready():
 
 func _process(_delta):
 	self.pause_mode = Node.PAUSE_MODE_PROCESS; #So we can use functions
-	
-func set_active_camera(newCamera: Node):
+
+func set_active_camera(newCamera: CameraEntity):
+	if typeof(CurrentMap) != TYPE_NIL:
+		newCamera.update_limits(CurrentMap.map_limit_start, CurrentMap.map_limit_end);
 	ActiveCamera = newCamera;
 	ActiveCamera.current = true;
 	print("set camera to: " + str(newCamera));
@@ -115,7 +129,7 @@ func get_closest_player_to(node: Node2D) -> Node2D:
 			closestPlayer = Player;
 	return closestPlayer;
 
-func get_local_player() -> Node2D:
+func get_local_player() -> Player:
 	return Players[Network.local_player_id]; #fix later
 
 func add_player(netid: int, forceid: int = -1) -> Node2D:
@@ -150,6 +164,8 @@ func start_new_game():
 func change_to_map(map_name: String):
 	CurrentMap = null;
 	close_menu();
+	MainMenu = null;
+	#ViewportFX = null;
 	Network.change_map(map_name);
 	#clear_players();
 	get_tree().call_deferred("change_scene", map_name);

@@ -9,7 +9,6 @@ export var start_on: bool = true;
 var current_pos_index: int = 0;
 var next_pos_index: int = 0;
 var current_velocity: Vector2;
-
 var Util = Game.Util_Object.new(self);
 
 #Netcode stuff start

@@ -44,7 +44,7 @@ func show_message(msg: String, time: float) -> void:
 
 func enter_building():
 	Game.ViewportFX.fade_in_out(1.0, 0.5);
-	var tween: Tween = $Tween;
+	#var tween: Tween = $Tween;
 	tween.interpolate_callback(self, 0.75, "entering_building_effect");
 	tween.start();
 
@@ -82,3 +82,9 @@ func set_day():
 
 func call_elevator(to_floor: int):
 	$Tiles/Storage/Elevator.move_to_pos(to_floor);
+
+func exit_small_room():
+	enter_room($Entities/Misc/Teleport_storagedoor, Game.ActiveCamera, Game.get_local_player().get_camera(), $Entities/Misc/storage_door, Vector2(5888, -1376), Vector2(11904, 610));
+
+func enter_small_room():
+	enter_room($Entities/Misc/Teleport_smallroom, Game.ActiveCamera, $Cameras/SmallRoomCamera, $Entities/Misc/smallroom_door, Vector2(8700, 1500), Vector2(10000, 2500));

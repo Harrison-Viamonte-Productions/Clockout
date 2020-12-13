@@ -16,6 +16,9 @@ const DAMAGE_PROTECTION_SEC: float = 1.5; #Seconds of damage protection
 const SNAP_VECTOR: Vector2 = Vector2(0, 32.0);
 const RESPAWN_TIME: float = 1.0;
 
+var init_layer_mask = 0
+var init_collision_mask = 0
+
 var jump_count : int = 0
 var jump_add_time_ms : int = 0
 var next_jump_time : int = 0
@@ -23,6 +26,7 @@ var velocity : Vector2  = Vector2.ZERO
 var is_crouched: bool = false;
 var damage_protection: bool = false;
 var is_jumping: bool = false;
+var frozen: bool = false;
 
 #friction and impulse code
 var was_on_floor: bool = false;
@@ -68,6 +72,8 @@ var client_view_rect: Rect2 = Rect2(0, 0, 0, 0);
 var Util = Game.Util_Object.new(self);
 
 func _ready() -> void:
+	init_collision_mask = collision_mask;
+	init_layer_mask = collision_layer;
 	add_to_group("network_group"); # let's the Netcode know that we are a node that uses netcode
 	add_to_group("players_group"); # let's the Netcode know that we are a node that uses netcode
 	Util._ready();
@@ -85,11 +91,22 @@ func _ready() -> void:
 	
 	Game.Network.register_synced_node(self, node_id);
 
+func reset_collisions():
+	collision_mask = init_collision_mask;
+	collision_layer = init_layer_mask;
+	
+func disable_collisions():
+	collision_mask = 0;
+	collision_layer = 0;
+
 func _physics_process(delta: float) -> void:
+	if frozen:
+		return;
+
 	update_velocity(delta)
 	update_collision_box()
 	friction(delta)
-	
+
 	if !is_jumping:
 		move_and_slide_with_snap(velocity + velocity_impulse, 32.0*Vector2.DOWN, 1*Vector2.UP);
 	else:
@@ -138,11 +155,15 @@ func update_collision_box():
 		crouch_collision_box.disabled = true
 
 func fall(delta: float) -> void:
+	if frozen or is_on_floor():
+		if velocity.y > 0.0:
+			velocity.y = 0
+		return;
 	velocity.y += Game.GRAVITY*delta;
 
 
 func jump(time: int, delta: float) -> void:
-	if !is_local_player():
+	if !is_local_player() or frozen:
 		return;
 
 	if is_on_floor() or is_on_ceiling():
@@ -164,7 +185,7 @@ func jump(time: int, delta: float) -> void:
 		velocity.y += JUMP_SPEED*delta
 
 func run() -> void:
-	if !is_local_player():
+	if !is_local_player() or frozen:
 		return;
 	velocity.x = 0;
 	if Input.is_action_pressed("move_right"):
@@ -173,7 +194,7 @@ func run() -> void:
 		velocity.x -= MOVE_SPEED;
 
 func crouch() -> void:
-	if !is_local_player():
+	if !is_local_player() or frozen:
 		return;
 	if Input.is_action_pressed("crouch"):
 		is_crouched = true
@@ -264,6 +285,21 @@ func killed(attacker: Node2D = null):
 	$AnimationPlayer.play("teleport");
 	#respawn();
 	update_gui();
+
+func fade_out() -> void:
+	$AnimationPlayer.play("fade_out");
+
+func fade_in() -> void:
+	$AnimationPlayer.play("fade_in");
+
+func freeze() -> void:
+	self.frozen = true;
+
+func unfreeze() -> void:
+	self.frozen = false;
+
+func teleport_to_node(teleport_node: Node2D) -> void:
+	self.global_position = teleport_node.global_position;
 
 func is_alive() -> bool:
 	return health > 0

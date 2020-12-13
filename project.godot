@@ -9,6 +9,26 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Camera2D",
+"class": "CameraEntity",
+"language": "GDScript",
+"path": "res://src/Scripts/Misc/CameraEntity.gd"
+}, {
+"base": "Node2D",
+"class": "Door",
+"language": "GDScript",
+"path": "res://src/Scripts/Misc/Doors/DefaultDoor.gd"
+}, {
+"base": "AnimatedSprite",
+"class": "FrontDoor",
+"language": "GDScript",
+"path": "res://src/Scripts/Misc/Doors/DefaultFrontDoor.gd"
+}, {
+"base": "Node2D",
+"class": "Level",
+"language": "GDScript",
+"path": "res://src/Scripts/DefaultLevel.gd"
+}, {
 "base": "KinematicBody2D",
 "class": "Player",
 "language": "GDScript",
@@ -30,6 +50,10 @@ _global_script_classes=[ {
 "path": "res://src/Scripts/AI/Turret.gd"
 } ]
 _global_script_class_icons={
+"CameraEntity": "",
+"Door": "",
+"FrontDoor": "",
+"Level": "",
 "Player": "",
 "Projectile": "",
 "TriggerBase": "",
@@ -123,6 +147,9 @@ attack={
 2d_physics/layer_5="Enemy_clip"
 2d_physics/layer_6="Player_attack"
 2d_physics/layer_7="Enemy_attack"
+2d_physics/layer_11="Player_back"
+2d_physics/layer_12="Tiles_back"
+2d_physics/layer_13="StaticBodies_back"
 
 [rendering]
 

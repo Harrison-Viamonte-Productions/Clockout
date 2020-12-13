@@ -16,10 +16,6 @@ export var aggressive: bool = false;
 var netid: int = -1;
 var node_id: int = -1
 var NetBoop = Game.Boop_Object.new(self);
-enum NET_EVENTS {
-	KILLED,
-	MAX_EVENTS 
-};
 #Netcode stuff ends
 
 var Util = Game.Util_Object.new(self);
@@ -34,21 +30,24 @@ onready var BarrelNode: Position2D = $Barrel;
 
 func _ready():
 	Util._ready();
-	currentEnemy =  Game.get_local_player();
+	currentEnemy = Game.get_local_player();
+	add_to_group("enemies"); # let's the Netcode know that we are a node that uses netcode
+	Game.Network.register_synced_node(self);
 
 func _physics_process(delta):
 	
 	check_if_in_player_pov(delta);
 	if !active && !never_dormant:
 		return;
-	check_player(delta);
+	if !Game.Network.is_client(): #Let the server decide who this turret is aiming at.
+		check_player(delta);
 	check_attack(delta);
 	update_sprite(delta);
 
 func check_attack(delta):
 	if fire_countdown <= 0.0:
 		fire_countdown = FIRE_DELAY;
-		if currentEnemy:
+		if currentEnemy && aggressive:
 			var firedProjectile: Projectile = projectile.instance();
 			get_parent().call_deferred("add_child", firedProjectile);
 			firedProjectile.fire_to_pos(BarrelNode.global_position, currentEnemy.global_position)
@@ -114,3 +113,27 @@ func check_if_in_player_pov(delta) -> void:
 		is_on_screen = true;
 	else:
 		is_on_screen = false;
+
+
+############################
+# NETCODE SPECIFIC RELATED #
+############################
+
+# TODO: Make this entity active when any player can see it, and not just the local player
+
+func server_send_boop() -> Dictionary:
+	if !active && !never_dormant:
+		return {}; #only send info for active entities :3
+	# todo: some pre-check to see if sending the boop is really necessary
+	var boopData = {
+		enemy_id = self.currentEnemy.node_id
+	};
+	return boopData;
+
+func client_process_boop(boopData) -> void:
+	self.currentEnemy = Game.Players[boopData.enemy_id];
+	
+# TO AVOID CRASH IN RELEASE BUILD!
+func _exit_tree():
+	remove_from_group("enemies"); # let's the Netcode know that we are a node that uses netcode
+	Game.Network.unregister_synced_node(self); #solve problem by now

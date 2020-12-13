@@ -30,4 +30,4 @@ func fire_to_pos(origin: Vector2, destiny: Vector2):
 	velocity = (destiny - origin).normalized()*speed;
 	self.global_position = origin;
 	global_spawn_pos = origin;
-	print("Firing projectile at " + str(velocity));
+	#print("Firing projectile at " + str(velocity));
