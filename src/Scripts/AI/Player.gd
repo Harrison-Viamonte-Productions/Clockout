@@ -69,6 +69,7 @@ var Util = Game.Util_Object.new(self);
 
 func _ready() -> void:
 	add_to_group("network_group"); # let's the Netcode know that we are a node that uses netcode
+	add_to_group("players_group"); # let's the Netcode know that we are a node that uses netcode
 	Util._ready();
 	initial_health = health;
 	var mapLimits = Game.CurrentMap.get_world_limits();
@@ -438,5 +439,6 @@ func get_class():
 
 # TO AVOID CRASH IN RELEASE BUILD!
 func _exit_tree():
+	remove_from_group("players_group");
 	Game.Network.unregister_synced_node(self); #solve problem by now
 	Game.Players[node_id] = null;

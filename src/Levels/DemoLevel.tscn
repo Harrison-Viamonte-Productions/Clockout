@@ -1,4 +1,4 @@
-[gd_scene load_steps=42 format=2]
+[gd_scene load_steps=44 format=2]
 
 [ext_resource path="res://src/Levels/ModularScenes/Office1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/Entities/Enemies/Roomba.tscn" type="PackedScene" id=2]
@@ -22,6 +22,8 @@
 [ext_resource path="res://src/Entities/Enemies/Skins/roomba_cute.tres" type="SpriteFrames" id=20]
 [ext_resource path="res://src/Entities/Misc/BrekeableComputer.tscn" type="PackedScene" id=21]
 [ext_resource path="res://src/Entities/Misc/TriggerUse.tscn" type="PackedScene" id=22]
+[ext_resource path="res://src/Entities/Misc/Doors/WoodenDoor.tscn" type="PackedScene" id=23]
+[ext_resource path="res://src/Entities/Enemies/Turret.tscn" type="PackedScene" id=24]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
@@ -51,7 +53,7 @@ extents = Vector2( 40, 160 )
 extents = Vector2( 32, 32 )
 
 [sub_resource type="RectangleShape2D" id=10]
-extents = Vector2( 31.876, 45.7525 )
+extents = Vector2( 38.2842, 79.7906 )
 
 [sub_resource type="OccluderPolygon2D" id=11]
 closed = false
@@ -123,7 +125,7 @@ cell_size = Vector2( 32, 32 )
 collision_layer = 0
 collision_mask = 0
 format = 1
-tile_data = PoolIntArray( 65538, -1610612724, 0, 65540, -1610612724, 0, 65542, -1610612724, 0, 65544, -1610612724, 0, 65546, -1610612724, 0, 65548, -1610612724, 0, 65550, -1610612724, 0, 65552, -1610612724, 0, 65554, -1610612724, 0, 327700, 21, 0, 458755, 60, 0, 458769, 60, 0 )
+tile_data = PoolIntArray( 65538, -1610612724, 0, 65540, -1610612724, 0, 65542, -1610612724, 0, 65544, -1610612724, 0, 65546, -1610612724, 0, 65548, -1610612724, 0, 65550, -1610612724, 0, 65552, -1610612724, 0, 65554, -1610612724, 0, 458755, 60, 0, 458769, 60, 0 )
 
 [node name="walls_solid" type="TileMap" parent="Tiles/Inside/Floor1/Office2"]
 tile_set = ExtResource( 5 )
@@ -147,6 +149,10 @@ collision_layer = 0
 collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 720898, 4, 0, 720900, 4, 0, 720902, 4, 0, 720904, 4, 0, 720906, 4, 0, 720908, 4, 0, 720910, 4, 0, 720912, 4, 0, 720914, 4, 0 )
+
+[node name="Door" parent="Tiles/Inside/Floor1/Office2" instance=ExtResource( 23 )]
+position = Vector2( 704, 256 )
+z_index = 1
 
 [node name="Office3" type="Node2D" parent="Tiles/Inside/Floor1"]
 position = Vector2( 1248, 160 )
@@ -206,7 +212,7 @@ cell_size = Vector2( 32, 32 )
 collision_layer = 0
 collision_mask = 0
 format = 1
-tile_data = PoolIntArray( 65546, -1610612722, 0, 65548, -1610612724, 0, 65550, -1610612724, 0, 327680, 23, 0 )
+tile_data = PoolIntArray( 65546, -1610612722, 0, 65548, -1610612724, 0, 65550, -1610612724, 0 )
 
 [node name="walls_solid" type="TileMap" parent="Tiles/Inside/Floor1/Office4"]
 tile_set = ExtResource( 5 )
@@ -229,6 +235,10 @@ collision_layer = 0
 collision_mask = 0
 format = 1
 tile_data = PoolIntArray( -65534, 1610612746, 0, -65533, 1610612746, 0, -65532, 1610612746, 0, -65531, 1610612746, 0, -65530, 1610612746, 0, -65529, 1610612746, 0, -65528, 1610612746, 0, -65527, 1610612746, 0, -65526, 1610612746, 0, -65525, 1610612746, 0, -65524, 1610612746, 0, -65523, 1610612746, 0, -65522, 1610612746, 0, 65544, 20, 0, 196608, 1610612746, 0, 720904, 10, 0, 720906, 10, 0, 720908, 10, 0, 720910, 10, 0 )
+
+[node name="Door" parent="Tiles/Inside/Floor1/Office4" instance=ExtResource( 23 )]
+position = Vector2( 64, 256 )
+manual = false
 
 [node name="Office5" type="Node2D" parent="Tiles/Inside/Floor1"]
 position = Vector2( 2464, 160 )
@@ -646,6 +656,7 @@ position = Vector2( 2255, 384 )
 shape = SubResource( 8 )
 
 [node name="Enemies" type="Node2D" parent="Entities"]
+z_index = 2
 
 [node name="Roomba" parent="Entities/Enemies" instance=ExtResource( 2 )]
 position = Vector2( 1423, -56.5 )
@@ -714,6 +725,15 @@ harmless = true
 chase = true
 skin = ExtResource( 20 )
 
+[node name="Turret" parent="Entities/Enemies" instance=ExtResource( 24 )]
+position = Vector2( 1071, 224 )
+
+[node name="Turret2" parent="Entities/Enemies" instance=ExtResource( 24 )]
+position = Vector2( 1487, -352 )
+
+[node name="Turret3" parent="Entities/Enemies" instance=ExtResource( 24 )]
+position = Vector2( 7503, -672 )
+
 [node name="Misc" type="Node2D" parent="Entities"]
 
 [node name="Teleport1" type="Position2D" parent="Entities/Misc"]
@@ -746,6 +766,10 @@ call_function = "change_to_map"
 call_args = [ "res://src/Levels/E1M0.tscn" ]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Misc/E1M0Map"]
+shape = SubResource( 10 )
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Entities/Misc/E1M0Map"]
+position = Vector2( 8769.29, -965.206 )
 shape = SubResource( 10 )
 
 [node name="StaticEntities" type="Node2D" parent="."]

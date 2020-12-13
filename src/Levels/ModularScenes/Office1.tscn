@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://src/Tiles/game_tiles.tres" type="TileSet" id=1]
+[ext_resource path="res://src/Entities/Misc/Doors/WoodenDoor.tscn" type="PackedScene" id=2]
 
 [node name="Office1" type="Node2D"]
 
@@ -17,7 +18,7 @@ cell_size = Vector2( 32, 32 )
 collision_layer = 0
 collision_mask = 0
 format = 1
-tile_data = PoolIntArray( 65538, 6, 0, 65540, 6, 0, 65542, 6, 0, 65544, 6, 0, 65546, 6, 0, 65548, 6, 0, 65550, 6, 0, 65552, 6, 0, 65553, 13, 0, 65555, -1610612724, 0, 196625, 12, 0, 327697, 12, 0, 458760, 60, 0, 458769, 12, 0, 589841, 12, 0 )
+tile_data = PoolIntArray( 65538, 6, 0, 65540, 6, 0, 65542, 6, 0, 65544, 6, 0, 65546, 6, 0, 65548, 6, 0, 65550, 6, 0, 65552, 6, 0, 65553, 13, 0, 65555, -1610612724, 0, 196625, 12, 0, 327680, 23, 0, 327697, 12, 0, 458760, 60, 0, 458769, 12, 0, 589841, 12, 0 )
 
 [node name="walls_solid" type="TileMap" parent="."]
 tile_set = ExtResource( 1 )
@@ -38,4 +39,9 @@ cell_size = Vector2( 32, 32 )
 collision_layer = 0
 collision_mask = 0
 format = 1
-tile_data = PoolIntArray( 327680, 23, 0, 327692, 18, 0, 327700, 22, 0, 393220, 8, 0, 393222, 8, 0, 458766, 19, 0 )
+tile_data = PoolIntArray( 327692, 18, 0, 393220, 8, 0, 393222, 8, 0, 458766, 19, 0 )
+
+[node name="Door" parent="." instance=ExtResource( 2 )]
+position = Vector2( 704, 256 )
+z_index = 1
+manual = false

@@ -429,4 +429,5 @@ func client_process_event(eventId : int, eventData) -> void:
 
 # TO AVOID CRASH IN RELEASE BUILD!
 func _exit_tree():
+	remove_from_group("enemies"); # let's the Netcode know that we are a node that uses netcode
 	Game.Network.unregister_synced_node(self); #solve problem by now
