@@ -47,6 +47,8 @@ func update_limits(start: Vector2, end: Vector2, update_camera: bool = true) -> 
 	if Game.ActiveCamera and update_camera:
 		Game.ActiveCamera.update_limits(map_limit_start, map_limit_end);
 
+# SHORT HAND FUNCTIONS (Not great for the programming spirit, But I AM MAKING GAAAAMES)
+
 # ##################################################################################
 # enter_elevator info
 #

@@ -47,26 +47,28 @@ tile_data = PoolIntArray( -655349, 15, 0, -655348, 15, 0, -589813, 15, 0, -58981
 [node name="Elevator" parent="." instance=ExtResource( 2 )]
 position = Vector2( 4000, -512 )
 z_index = 1
-positions = [ Vector2( 4000, 320 ) ]
 speed = 400.0
 acel_time = 1.5
 start_on = false
 automatic = false
 lights = true
 
+[node name="path" type="Node2D" parent="Elevator"]
+
+[node name="floor1" type="Position2D" parent="Elevator/path"]
+position = Vector2( 0, 832 )
+
 [node name="Platforms" type="Node2D" parent="."]
 position = Vector2( 0, -256 )
 
-[node name="PlatformPair1" type="Node2D" parent="Platforms"]
-
-[node name="Platform1" parent="Platforms/PlatformPair1" instance=ExtResource( 3 )]
+[node name="Platform1" parent="Platforms" instance=ExtResource( 3 )]
 position = Vector2( 4480, -384 )
-positions = [ Vector2( 5120, -384 ) ]
 speed = 0.0
 time = 2.0
 acel_time = 0.5
+wait = 2.0
 
-[node name="tile1" type="TileMap" parent="Platforms/PlatformPair1/Platform1"]
+[node name="tile1" type="TileMap" parent="Platforms/Platform1"]
 modulate = Color( 0.407843, 0.87451, 1, 1 )
 tile_set = ExtResource( 1 )
 collision_layer = 0
@@ -74,14 +76,14 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65534, 1610612793, 0, 65535, 1610612793, 0, 0, 1610612793, 0, 1, 1610612793, 0 )
 
-[node name="tile2" type="TileMap" parent="Platforms/PlatformPair1/Platform1"]
+[node name="tile2" type="TileMap" parent="Platforms/Platform1"]
 tile_set = ExtResource( 1 )
 collision_layer = 0
 collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65534, 6, 0, 1, 6, 0 )
 
-[node name="tile_lights" type="TileMap" parent="Platforms/PlatformPair1/Platform1"]
+[node name="tile_lights" type="TileMap" parent="Platforms/Platform1"]
 material = SubResource( 1 )
 tile_set = ExtResource( 4 )
 collision_layer = 0
@@ -89,19 +91,24 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65534, 0, 0, 1, 0, 0 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/PlatformPair1/Platform1"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform1"]
 visible = false
 position = Vector2( 0, 13 )
 shape = SubResource( 2 )
 
-[node name="Platform2" parent="Platforms/PlatformPair1" instance=ExtResource( 3 )]
-position = Vector2( 5696, -224 )
-positions = [ Vector2( 5120, -224 ) ]
+[node name="path" type="Node2D" parent="Platforms/Platform1"]
+
+[node name="path1" type="Position2D" parent="Platforms/Platform1/path"]
+position = Vector2( 1216, 0 )
+
+[node name="Platform2" parent="Platforms" instance=ExtResource( 3 )]
+position = Vector2( 5696, -192 )
 speed = 0.0
 time = 2.0
 acel_time = 0.5
+wait = 2.0
 
-[node name="tile1" type="TileMap" parent="Platforms/PlatformPair1/Platform2"]
+[node name="tile1" type="TileMap" parent="Platforms/Platform2"]
 modulate = Color( 0.407843, 0.87451, 1, 1 )
 tile_set = ExtResource( 1 )
 collision_layer = 0
@@ -109,14 +116,14 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65534, 1610612793, 0, 65535, 1610612793, 0, 0, 1610612793, 0, 1, 1610612793, 0 )
 
-[node name="tile2" type="TileMap" parent="Platforms/PlatformPair1/Platform2"]
+[node name="tile2" type="TileMap" parent="Platforms/Platform2"]
 tile_set = ExtResource( 1 )
 collision_layer = 0
 collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65534, 6, 0, 1, 6, 0 )
 
-[node name="tile_lights" type="TileMap" parent="Platforms/PlatformPair1/Platform2"]
+[node name="tile_lights" type="TileMap" parent="Platforms/Platform2"]
 material = SubResource( 1 )
 tile_set = ExtResource( 4 )
 collision_layer = 0
@@ -124,22 +131,24 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65534, 0, 0, 1, 0, 0 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/PlatformPair1/Platform2"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform2"]
 visible = false
 position = Vector2( 0, 13 )
 shape = SubResource( 2 )
 
-[node name="PlatformPair2" type="Node2D" parent="Platforms"]
-position = Vector2( 0, 288 )
+[node name="path" type="Node2D" parent="Platforms/Platform2"]
 
-[node name="Platform1" parent="Platforms/PlatformPair2" instance=ExtResource( 3 )]
-position = Vector2( 4480, -384 )
-positions = [ Vector2( 5120, -384 ) ]
+[node name="path1" type="Position2D" parent="Platforms/Platform2/path"]
+position = Vector2( -1216, 0 )
+
+[node name="Platform3" parent="Platforms" instance=ExtResource( 3 )]
+position = Vector2( 5696, 224 )
 speed = 0.0
 time = 2.0
 acel_time = 0.5
+wait = 1.0
 
-[node name="tile1" type="TileMap" parent="Platforms/PlatformPair2/Platform1"]
+[node name="tile1" type="TileMap" parent="Platforms/Platform3"]
 modulate = Color( 0.407843, 0.87451, 1, 1 )
 tile_set = ExtResource( 1 )
 collision_layer = 0
@@ -147,14 +156,14 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65534, 1610612793, 0, 65535, 1610612793, 0, 0, 1610612793, 0, 1, 1610612793, 0 )
 
-[node name="tile2" type="TileMap" parent="Platforms/PlatformPair2/Platform1"]
+[node name="tile2" type="TileMap" parent="Platforms/Platform3"]
 tile_set = ExtResource( 1 )
 collision_layer = 0
 collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65534, 6, 0, 1, 6, 0 )
 
-[node name="tile_lights" type="TileMap" parent="Platforms/PlatformPair2/Platform1"]
+[node name="tile_lights" type="TileMap" parent="Platforms/Platform3"]
 material = SubResource( 1 )
 tile_set = ExtResource( 4 )
 collision_layer = 0
@@ -162,19 +171,24 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65534, 0, 0, 1, 0, 0 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/PlatformPair2/Platform1"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform3"]
 visible = false
 position = Vector2( 0, 13 )
 shape = SubResource( 2 )
 
-[node name="Platform2" parent="Platforms/PlatformPair2" instance=ExtResource( 3 )]
-position = Vector2( 5696, -224 )
-positions = [ Vector2( 5120, -224 ) ]
+[node name="path" type="Node2D" parent="Platforms/Platform3"]
+
+[node name="path1" type="Position2D" parent="Platforms/Platform3/path"]
+position = Vector2( -1216, 0 )
+
+[node name="Platform4" parent="Platforms" instance=ExtResource( 3 )]
+position = Vector2( 4480, 0 )
 speed = 0.0
 time = 2.0
 acel_time = 0.5
+wait = 3.0
 
-[node name="tile1" type="TileMap" parent="Platforms/PlatformPair2/Platform2"]
+[node name="tile1" type="TileMap" parent="Platforms/Platform4"]
 modulate = Color( 0.407843, 0.87451, 1, 1 )
 tile_set = ExtResource( 1 )
 collision_layer = 0
@@ -182,14 +196,14 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65534, 1610612793, 0, 65535, 1610612793, 0, 0, 1610612793, 0, 1, 1610612793, 0 )
 
-[node name="tile2" type="TileMap" parent="Platforms/PlatformPair2/Platform2"]
+[node name="tile2" type="TileMap" parent="Platforms/Platform4"]
 tile_set = ExtResource( 1 )
 collision_layer = 0
 collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65534, 6, 0, 1, 6, 0 )
 
-[node name="tile_lights" type="TileMap" parent="Platforms/PlatformPair2/Platform2"]
+[node name="tile_lights" type="TileMap" parent="Platforms/Platform4"]
 material = SubResource( 1 )
 tile_set = ExtResource( 4 )
 collision_layer = 0
@@ -197,191 +211,12 @@ collision_mask = 0
 format = 1
 tile_data = PoolIntArray( 65534, 0, 0, 1, 0, 0 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/PlatformPair2/Platform2"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/Platform4"]
 visible = false
 position = Vector2( 0, 13 )
 shape = SubResource( 2 )
 
-[node name="PlatformPair3" type="Node2D" parent="Platforms"]
-position = Vector2( 0, 576 )
+[node name="path" type="Node2D" parent="Platforms/Platform4"]
 
-[node name="Platform1" parent="Platforms/PlatformPair3" instance=ExtResource( 3 )]
-position = Vector2( 4480, -384 )
-positions = [ Vector2( 5120, -384 ) ]
-speed = 0.0
-time = 2.0
-acel_time = 0.5
-
-[node name="tile1" type="TileMap" parent="Platforms/PlatformPair3/Platform1"]
-modulate = Color( 0.407843, 0.87451, 1, 1 )
-tile_set = ExtResource( 1 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 65534, 1610612793, 0, 65535, 1610612793, 0, 0, 1610612793, 0, 1, 1610612793, 0 )
-
-[node name="tile2" type="TileMap" parent="Platforms/PlatformPair3/Platform1"]
-tile_set = ExtResource( 1 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 65534, 6, 0, 1, 6, 0 )
-
-[node name="tile_lights" type="TileMap" parent="Platforms/PlatformPair3/Platform1"]
-material = SubResource( 1 )
-tile_set = ExtResource( 4 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 65534, 0, 0, 1, 0, 0 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/PlatformPair3/Platform1"]
-visible = false
-position = Vector2( 0, 13 )
-shape = SubResource( 2 )
-
-[node name="Platform2" parent="Platforms/PlatformPair3" instance=ExtResource( 3 )]
-position = Vector2( 5696, -224 )
-positions = [ Vector2( 5120, -224 ) ]
-speed = 0.0
-time = 2.0
-acel_time = 0.5
-
-[node name="tile1" type="TileMap" parent="Platforms/PlatformPair3/Platform2"]
-modulate = Color( 0.407843, 0.87451, 1, 1 )
-tile_set = ExtResource( 1 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 65534, 1610612793, 0, 65535, 1610612793, 0, 0, 1610612793, 0, 1, 1610612793, 0 )
-
-[node name="tile2" type="TileMap" parent="Platforms/PlatformPair3/Platform2"]
-tile_set = ExtResource( 1 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 65534, 6, 0, 1, 6, 0 )
-
-[node name="tile_lights" type="TileMap" parent="Platforms/PlatformPair3/Platform2"]
-material = SubResource( 1 )
-tile_set = ExtResource( 4 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 65534, 0, 0, 1, 0, 0 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/PlatformPair3/Platform2"]
-visible = false
-position = Vector2( 0, 13 )
-shape = SubResource( 2 )
-
-[node name="PlatformPair4" type="Node2D" parent="Platforms"]
-position = Vector2( 0, 864 )
-
-[node name="Platform1" parent="Platforms/PlatformPair4" instance=ExtResource( 3 )]
-position = Vector2( 4480, -384 )
-positions = [ Vector2( 5120, -384 ) ]
-speed = 0.0
-time = 2.0
-acel_time = 0.5
-
-[node name="tile1" type="TileMap" parent="Platforms/PlatformPair4/Platform1"]
-modulate = Color( 0.407843, 0.87451, 1, 1 )
-tile_set = ExtResource( 1 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 65534, 1610612793, 0, 65535, 1610612793, 0, 0, 1610612793, 0, 1, 1610612793, 0 )
-
-[node name="tile2" type="TileMap" parent="Platforms/PlatformPair4/Platform1"]
-tile_set = ExtResource( 1 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 65534, 6, 0, 1, 6, 0 )
-
-[node name="tile_lights" type="TileMap" parent="Platforms/PlatformPair4/Platform1"]
-material = SubResource( 1 )
-tile_set = ExtResource( 4 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 65534, 0, 0, 1, 0, 0 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/PlatformPair4/Platform1"]
-visible = false
-position = Vector2( 0, 13 )
-shape = SubResource( 2 )
-
-[node name="Platform2" parent="Platforms/PlatformPair4" instance=ExtResource( 3 )]
-position = Vector2( 5696, -224 )
-positions = [ Vector2( 5120, -224 ) ]
-speed = 0.0
-time = 2.0
-acel_time = 0.5
-
-[node name="tile1" type="TileMap" parent="Platforms/PlatformPair4/Platform2"]
-modulate = Color( 0.407843, 0.87451, 1, 1 )
-tile_set = ExtResource( 1 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 65534, 1610612793, 0, 65535, 1610612793, 0, 0, 1610612793, 0, 1, 1610612793, 0 )
-
-[node name="tile2" type="TileMap" parent="Platforms/PlatformPair4/Platform2"]
-tile_set = ExtResource( 1 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 65534, 6, 0, 1, 6, 0 )
-
-[node name="tile_lights" type="TileMap" parent="Platforms/PlatformPair4/Platform2"]
-material = SubResource( 1 )
-tile_set = ExtResource( 4 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 65534, 0, 0, 1, 0, 0 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/PlatformPair4/Platform2"]
-visible = false
-position = Vector2( 0, 13 )
-shape = SubResource( 2 )
-
-[node name="PlatformPair5" type="Node2D" parent="Platforms"]
-position = Vector2( 0, 1184 )
-
-[node name="Platform1" parent="Platforms/PlatformPair5" instance=ExtResource( 3 )]
-position = Vector2( 4480, -384 )
-positions = [ Vector2( 5120, -384 ) ]
-speed = 0.0
-time = 2.0
-acel_time = 0.5
-
-[node name="tile1" type="TileMap" parent="Platforms/PlatformPair5/Platform1"]
-modulate = Color( 0.407843, 0.87451, 1, 1 )
-tile_set = ExtResource( 1 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 65534, 1610612793, 0, 65535, 1610612793, 0, 0, 1610612793, 0, 1, 1610612793, 0 )
-
-[node name="tile2" type="TileMap" parent="Platforms/PlatformPair5/Platform1"]
-tile_set = ExtResource( 1 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 65534, 6, 0, 1, 6, 0 )
-
-[node name="tile_lights" type="TileMap" parent="Platforms/PlatformPair5/Platform1"]
-material = SubResource( 1 )
-tile_set = ExtResource( 4 )
-collision_layer = 0
-collision_mask = 0
-format = 1
-tile_data = PoolIntArray( 65534, 0, 0, 1, 0, 0 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Platforms/PlatformPair5/Platform1"]
-visible = false
-position = Vector2( 0, 13 )
-shape = SubResource( 2 )
+[node name="path1" type="Position2D" parent="Platforms/Platform4/path"]
+position = Vector2( 1216, 0 )

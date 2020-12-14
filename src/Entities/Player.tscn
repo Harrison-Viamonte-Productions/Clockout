@@ -1,15 +1,11 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://src/Scripts/AI/Player.gd" type="Script" id=1]
 [ext_resource path="res://assets/player/stand1.png" type="Texture" id=2]
-[ext_resource path="res://assets/player/walk1.png" type="Texture" id=3]
 [ext_resource path="res://src/Scripts/PlayerSprite.gd" type="Script" id=4]
 [ext_resource path="res://src/GUI/GUI.tscn" type="PackedScene" id=5]
 [ext_resource path="res://src/Entities/Misc/CameraEntity.tscn" type="PackedScene" id=6]
-[ext_resource path="res://assets/player/walk2.png" type="Texture" id=7]
-[ext_resource path="res://assets/player/crouch_walk2.png" type="Texture" id=8]
 [ext_resource path="res://assets/player/crouch1.png" type="Texture" id=9]
-[ext_resource path="res://assets/player/crouch_walk1.png" type="Texture" id=10]
 [ext_resource path="res://assets/weapons/sword_cc0.png" type="Texture" id=11]
 [ext_resource path="res://src/Scripts/AI/PlayerWeapon.gd" type="Script" id=12]
 
@@ -25,12 +21,12 @@ animations = [ {
 "name": "crouch",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 10 ), ExtResource( 8 ) ],
+"frames": [ ExtResource( 9 ) ],
 "loop": true,
 "name": "crouch_walk",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 3 ), ExtResource( 7 ) ],
+"frames": [ ExtResource( 2 ) ],
 "loop": true,
 "name": "walk",
 "speed": 5.0
@@ -66,7 +62,7 @@ tracks/1/keys = {
 "values": [ true, false, true, true ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=3]
 resource_name = "fade_in"
 length = 0.5
 tracks/0/type = "value"
@@ -82,7 +78,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=4]
 resource_name = "fade_out"
 length = 0.5
 tracks/0/type = "value"
@@ -98,7 +94,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=5]
 length = 0.3
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:modulate")
@@ -139,7 +135,7 @@ tracks/2/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id=6]
 length = 0.1
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite:modulate")
@@ -166,8 +162,7 @@ tracks/1/keys = {
 "values": [ true, true ]
 }
 
-[sub_resource type="Animation" id=5]
-resource_name = "respawn"
+[sub_resource type="Animation" id=7]
 length = 0.35
 step = 0.05
 tracks/0/type = "value"
@@ -183,7 +178,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=6]
+[sub_resource type="Animation" id=8]
 length = 0.35
 step = 0.05
 tracks/0/type = "value"
@@ -199,7 +194,7 @@ tracks/0/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="Animation" id=7]
+[sub_resource type="Animation" id=9]
 length = 0.3
 tracks/0/type = "value"
 tracks/0/path = NodePath("Sprite/Weapon:position")
@@ -243,7 +238,7 @@ tracks/2/keys = {
 } ]
 }
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=10]
 length = 0.75
 step = 0.25
 tracks/0/type = "value"
@@ -280,7 +275,7 @@ __meta__ = {
 
 [node name="Sprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
-animation = "crouch_walk"
+animation = "walk"
 script = ExtResource( 4 )
 
 [node name="Weapon" type="Area2D" parent="Sprite"]
@@ -297,12 +292,11 @@ texture = ExtResource( 11 )
 polygon = PoolVector2Array( -48, 28, -36, 52, 56, -40, 36, -56 )
 
 [node name="CollisionNormal" type="CollisionPolygon2D" parent="."]
-visible = false
-polygon = PoolVector2Array( -36.92, 79.156, 35.08, 79.156, 35.08, -64.844, 11.08, -80.844, -12.92, -80.844, -28.92, -56.844, -36.92, -32.844 )
+polygon = PoolVector2Array( -33.8342, 80.0527, 21.3959, 80.1577, 38.1389, 12.3273, 21.4909, -34.5674, 20.69, -71.6727, -15.1838, -71.339, -23.2804, -34.4632, -34.001, -17.6269 )
 
 [node name="CollisionCrouch" type="CollisionPolygon2D" parent="."]
 visible = false
-polygon = PoolVector2Array( -36.92, 79.156, -36.92, 23.156, -12.92, -16.844, 15.08, -16.844, 35.08, 3.15601, 35.08, 15.156, 35.08, 79.156 )
+polygon = PoolVector2Array( -33.3098, 80.2199, -33.0851, 32.1622, -15, 3.625, 20.7438, 3.61516, 37.8386, 39.9315, 37.8976, 48.8983, 21.4909, 79.8664 )
 disabled = true
 
 [node name="Camera" parent="." instance=ExtResource( 6 )]
@@ -328,15 +322,15 @@ collision_mask = 6
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/damage_protection = SubResource( 2 )
-anims/fade_in = SubResource( 9 )
-anims/fade_out = SubResource( 10 )
-anims/hurt = SubResource( 3 )
-anims/idle = SubResource( 4 )
-anims/respawn = SubResource( 5 )
-anims/teleport = SubResource( 6 )
+anims/fade_in = SubResource( 3 )
+anims/fade_out = SubResource( 4 )
+anims/hurt = SubResource( 5 )
+anims/idle = SubResource( 6 )
+anims/respawn = SubResource( 7 )
+anims/teleport = SubResource( 8 )
 
 [node name="WeaponAnims" type="AnimationPlayer" parent="."]
-anims/attack_forward = SubResource( 7 )
-anims/raise = SubResource( 8 )
+anims/attack_forward = SubResource( 9 )
+anims/raise = SubResource( 10 )
 
 [node name="Tween" type="Tween" parent="."]

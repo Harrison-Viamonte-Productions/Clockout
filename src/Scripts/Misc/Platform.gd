@@ -1,11 +1,15 @@
 class_name Platform
 extends KinematicBody2D
 
-export(Array, Vector2) var positions: Array;
+#export(Array, Vector2) var positions: Array;
 export var speed: float = 100.0;
 export var time: float = 0.0; #if used, it uses time by secs instead of speed
 export var acel_time: float = 1.0;
 export var start_on: bool = true;
+export var wait: float = 0.0; #wait time for going between one position to other
+
+var positions: Array;
+var tween: Tween;
 
 var current_pos_index: int = 0;
 var next_pos_index: int = 0;
@@ -26,6 +30,22 @@ func _ready():
 	Game.Network.register_synced_node(self);
 	Util._ready();
 	positions.push_front(position);
+
+	# Implementing matt's idea <3
+	var pathNode: Node2D = self.get_node_or_null("path");
+	var positionOffset: Vector2 = self.position + pathNode.position;
+	if pathNode:
+		var pathChilds: Array = pathNode.get_children();
+		for pathPoint in pathChilds:
+			if pathPoint is Position2D:
+				positions.append(positionOffset + pathPoint.position);
+			else:
+				Game.print_warning("Invalid node type inside path node for platform.");
+	else:
+		Game.print_warning("path node for platform was not found.");
+	tween = Tween.new();
+	add_child(tween);
+
 	current_velocity = Vector2(0.0, 0.0);
 	if start_on:
 		start();
@@ -60,7 +80,15 @@ func next_pos_reached():
 	if Game.Network.is_client():
 		return; #by now let's let the server do ALL the physics and shit.
 	current_pos_index = next_pos_index;
-	move_to_pos(current_pos_index+1);
+	
+	#Implementing matt's idea :3
+	if wait > 0.0:
+		if tween.is_active():
+			tween.remove(self, "move_to_pos");
+		tween.interpolate_callback(self, wait, "move_to_pos", current_pos_index+1);
+		tween.start();
+	else:
+		move_to_pos(current_pos_index+1);
 
 func start():
 	if Game.Network.is_client():
