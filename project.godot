@@ -29,6 +29,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/Scripts/Misc/Doors/DefaultFrontDoor.gd"
 }, {
+"base": "CanvasLayer",
+"class": "GUICanvas",
+"language": "GDScript",
+"path": "res://src/Scripts/GUI/GUI.gd"
+}, {
+"base": "Node2D",
+"class": "Item",
+"language": "GDScript",
+"path": "res://src/Scripts/Items/ItemBase.gd"
+}, {
 "base": "Node2D",
 "class": "Level",
 "language": "GDScript",
@@ -69,6 +79,8 @@ _global_script_class_icons={
 "Door": "",
 "ElevatorBase": "",
 "FrontDoor": "",
+"GUICanvas": "",
+"Item": "",
 "Level": "",
 "NetworkBase": "",
 "Platform": "",
@@ -101,6 +113,29 @@ window/size/test_width=1280
 window/size/test_height=720
 window/stretch/mode="2d"
 window/stretch/aspect="expand"
+
+[importer_defaults]
+
+texture={
+"compress/bptc_ldr": 0,
+"compress/hdr_mode": 0,
+"compress/lossy_quality": 0.7,
+"compress/mode": 0,
+"compress/normal_map": 0,
+"detect_3d": false,
+"flags/anisotropic": false,
+"flags/filter": false,
+"flags/mipmaps": false,
+"flags/repeat": 0,
+"flags/srgb": 2,
+"process/HDR_as_SRGB": false,
+"process/fix_alpha_border": true,
+"process/invert_color": false,
+"process/premult_alpha": false,
+"size_limit": 0,
+"stream": false,
+"svg/scale": 1.0
+}
 
 [input]
 
@@ -165,6 +200,7 @@ attack={
 2d_physics/layer_5="Enemy_clip"
 2d_physics/layer_6="Player_attack"
 2d_physics/layer_7="Enemy_attack"
+2d_physics/layer_8="Pickups"
 2d_physics/layer_11="Player_back"
 2d_physics/layer_12="Tiles_back"
 2d_physics/layer_13="StaticBodies_back"

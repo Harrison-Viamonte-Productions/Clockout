@@ -4,6 +4,7 @@ extends AnimatedSprite
 export var locked: bool = false;
 export var call_function: String; #functions are called only in the current map
 export var call_args: Array = [];
+export var security_level: int = 0;
 onready var tween: Tween = $Tween;
 
 func _ready():
@@ -16,9 +17,13 @@ func update_trigger():
 		$TriggerUse.enable_trigger();
 
 func activated():
-	if Game.CurrentMap:
+	if !Game.CurrentMap:
+		return;
+	if Game.get_local_player().security_level >= self.security_level:
 		Game.CurrentMap.callv(call_function, call_args);
 		self.open();
+	else:
+		Game.GUI.info_message(Game.get_str("#str1006"));
 func open():
 	self.play("open");
 	if tween.is_active():

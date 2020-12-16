@@ -62,6 +62,11 @@ func update_lang_strings():
 	$OptionsContainer/OptionsMenu/VBoxContainer/Resolutions/Label.text = Game.get_str("#str0007");
 	$OptionsContainer/OptionsMenu/HBoxContainer/ApplyChanges.text = Game.get_str("#str0008");
 	$OptionsContainer/OptionsMenu/VBoxContainer/Languages/Label.text = Game.get_str("#str0009");
+	$OptionsContainer/MultiplayerMenu/VBoxContainer/ServerSettings/Label.text = Game.get_str("#str0011");
+	$OptionsContainer/MultiplayerMenu/VBoxContainer/MaxPlayers/Label.text = Game.get_str("#str0012");
+	$OptionsContainer/MultiplayerMenu/HBoxContainer/StartServer.text = Game.get_str("#str0013");
+	$OptionsContainer/MultiplayerMenu/VBoxContainer2/ClientSettings/Label.text = Game.get_str("#str0014");
+	$OptionsContainer/MultiplayerMenu/HBoxContainer2/JoinServer.text = Game.get_str("#str0015");
 
 func load_langs():
 	LangsOptions.clear();

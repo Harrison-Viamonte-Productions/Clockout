@@ -27,6 +27,7 @@ var is_crouched: bool = false;
 var damage_protection: bool = false;
 var is_jumping: bool = false;
 var frozen: bool = false;
+var security_level: int = 0;
 
 #friction and impulse code
 var was_on_floor: bool = false;
@@ -366,7 +367,40 @@ func get_action_name_from_scancode(scancode: int) -> String:
 
 func execute_combo(combo_name: String): 
 	print(combo_name);
-	
+
+#########################
+# INVENTORY AND PICKUPS #
+#########################
+#Fix later: it doesn't let me use Item directly as parameter, so I have to add
+#that extra ugly line of code to check if the node2d element it's indeed an item
+#and then cat it to item :/
+func give(item: Node2D) -> void:
+	if !(item is Item): 
+		return;
+	var currentItem: Item = item;
+	match(currentItem.get_name().to_lower()):
+		"key":
+			Game.GUI.info_message(Game.get_str("#str1004") % currentItem.ammount);
+			security_level = currentItem.ammount;
+		_:
+			add_to_inventory(currentItem);
+	return;
+
+func get_index_from_inventory(item: Item) -> int:
+	var itemName: String = item.get_name().to_lower();
+	for i in Game.players_inventory[node_id]:
+		if Game.players_inventory[node_id][i] and Game.players_inventory[node_id][i].has_key(itemName):
+			return i;
+	return -1;
+
+func add_to_inventory(item: Item) -> void:
+	var itemIndex: int = get_index_from_inventory(item);
+	if itemIndex != -1:
+		Game.players_inventory[node_id][itemIndex].ammount += item.ammount;
+	else:
+		Game.players_inventory[node_id].append({name = item.get_name().to_lower(), ammount = item.get_ammount()}); 
+
+
 #############################
 # NETCODE SPECIFIC RELATED ##
 ############################
@@ -469,8 +503,6 @@ func client_process_event(eventId : int, eventData) -> void:
 			tween.start();
 		_:
 			print("Warning: Received unkwown event");
-
-
 func is_local_player() -> bool:
 	return !Game.Network.is_multiplayer() or (netid == get_tree().get_network_unique_id());
 

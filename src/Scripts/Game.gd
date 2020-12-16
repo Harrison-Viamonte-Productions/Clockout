@@ -17,7 +17,7 @@ const START_MAP: String = "res://src/Levels/DemoLevel.tscn";
 var SpawnPoints: Array = [];
 var Players: Array = [];
 var CurrentMap: Level = null;
-var GUI: Node = null;
+var GUI: GUICanvas = null;
 var ActiveCamera: Camera2D = null;
 var ViewportFX: Node = null; # Reference to the node that leads with transitions. Loaded per level
 var MainMenu:Node = null;
@@ -32,6 +32,7 @@ var Network: NetworkBase = load("res://src/Scripts/Netcode/NetBase.gd").new();
 const PlayerNode = preload("res://src/Entities/Player.tscn");
 # Game specific vars
 var threatLevel: int = 0; # Maybe I want to move this into a different place later.
+var players_inventory: Array = [];
 
 #bit mask constants
 const BITMASK_PLAYER: int = 1;
@@ -51,6 +52,9 @@ func _init():
 	current_lang = Lang.get_langs()[0];
 	self.call_deferred("update_settings");
 	Players.resize(Network.MAX_PLAYERS);
+	players_inventory.resize(Network.MAX_PLAYERS);
+	for player_inv in players_inventory:
+		player_inv = Array();
 
 func clear_players():
 	Players.clear();
@@ -161,7 +165,8 @@ func start_new_game():
 	#CurrentMap = null;
 	change_to_map(START_MAP);
 
-func change_to_map(map_name: String):
+#I hope the remote key does not break anything
+remote func change_to_map(map_name: String):
 	CurrentMap = null;
 	close_menu();
 	MainMenu = null;

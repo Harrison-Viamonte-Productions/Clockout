@@ -6,6 +6,13 @@ export var call_args: Array = [];
 export var show_message: bool = true;
 var player_inside: bool = false;
 
+func _ready():
+	add_to_group("has_lang_strings");
+	update_lang_strings();
+
+func update_lang_strings():
+	$UseMessage/UseContainer/Label.text = Game.get_str("#str1005");
+
 func update_trigger_data():
 	.update_trigger_data();
 	if call_function.length() > 1:

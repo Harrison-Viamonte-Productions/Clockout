@@ -128,9 +128,6 @@ func new_client_connected(new_clients_list: Array):
 	clients_connected.clear();
 	clients_connected = new_clients_list;
 	add_clients_to_map();
-	#if (Game.get_tree().get_network_unique_id() != id_client) && Game.CurrentMap && Game.CurrentMap.already_loaded:
-	#	var PlayerToSpawn: Node2D = Game.add_player(id_client, player_num);
-	#	Game.spawn_player(PlayerToSpawn);
 
 func clear_players():
 	var is_server: bool = false;

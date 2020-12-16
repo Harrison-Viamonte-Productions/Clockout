@@ -10,6 +10,11 @@
 	"str0008":	"APPLY CHANGES",
 	"str0009":	"LANGUAGE",
 	"str0010":	"MULTIPLAYER",
+	"str0011":	"SERVER SETTINGS",
+	"str0012":	"MAX PLAYERS",
+	"str0013":	"START SERVER",
+	"str0014":	"CLIENT SETTINGS",
+	"str0015":	"JOIN SERVER",
 	//GUI
 	"str0100": 	"HEALTH",
 	"str0101":	"Continue",
@@ -17,5 +22,8 @@
 	"str1000":	"Something is not right here...",
 	"str1001":	"......?",
 	"str1002":	"Nothing like a bit of fresh air",
-	"str1003":	"%s was killed by a %s"
+	"str1003":	"%s was killed by a %s",
+	"str1004": 	"Security clearence updated to level %d",
+	"str1005": 	"USE",
+	"str1006": 	"You are not authorized to open this door."
 }

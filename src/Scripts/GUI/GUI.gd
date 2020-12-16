@@ -1,6 +1,5 @@
+class_name GUICanvas
 extends CanvasLayer
-
-
 
 func _ready():
 	add_to_group("has_lang_strings");

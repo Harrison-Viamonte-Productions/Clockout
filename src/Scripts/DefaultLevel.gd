@@ -98,6 +98,21 @@ func player_leaving_room_fx():
 	tween.interpolate_callback(Game.get_local_player(), 1.0, "unfreeze");
 	tween.start();
 
+#Added just for being able to change maps just from triggers and entities easily
+func change_to_map(map_name: String, delay: int = 0.0):
+	if Game.Network.is_client():
+		if delay > 0.0:
+			tween.interpolate_callback(Game, delay, "rpc_id", Game.Network.SERVER_NETID, "change_to_map", map_name);
+			tween.start();
+		else:
+			Game.rpc_id(Game.Network.SERVER_NETID, "change_to_map", map_name);
+	else:
+		if delay > 0.0:
+			tween.interpolate_callback(Game, delay, "change_to_map", map_name);
+			tween.start();
+		else:
+			Game.change_to_map(map_name);
+
 # TO AVOID CRASH IN RELEASE BUILD!
 func _exit_tree():
 	if Game.CurrentMap == self:

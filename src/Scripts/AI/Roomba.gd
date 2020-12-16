@@ -4,13 +4,11 @@ extends KinematicBody2D
 const NAME: String = "Roomba";
 const DEATH_MESSAGE: String = "#str1003";
 const ATTACK_DAMAGE: int = 1;
-const RUN_MULTIPLIER: float = 4.0;
 const MOVE_SPEED: float = 75.0
 const RAYCAST_CHECK_DELAY: float = 50.0; #msec
 const CHECKATTACK_DELAY: float = 350.0; #msec
 const ATTACK_DURATION: float = 2000.0; #msec
 const VIEW_ENEMY_DISTANCE: Vector2 = Vector2(350.0, 300.0);
-const RAYCAST_LENGTH: float = 35.0;
 const JUMP_SPEED: float = -400.0;
 const ACTIVE_OUTSIDE_SCREEN_TIME: float = 15.0#sec
 const SIZE: Vector2 = Vector2(32.0, 32.0); #Useful for jump detection
@@ -30,6 +28,7 @@ export var aggressive: bool = false;
 export var can_jump: bool = false;
 export var harmless: bool = false;
 export var chase: bool = false;
+export var run_vel_mult:float = 4.0; 
 export var skin: SpriteFrames = preload("res://src/Entities/Enemies/Skins/roomba_normal.tres");
 export var health: int = 2;
 
@@ -60,6 +59,8 @@ var running: bool = false;
 
 var motion: Vector2 = Vector2.ZERO;
 var impulse: Vector2 = Vector2.ZERO;
+var colbox_size: Vector2 = Vector2.ZERO;
+var raycast_length: float = 0.0;
 
 onready var tween: Tween = $Tween;
 
@@ -86,6 +87,8 @@ func _ready():
 	update_sprite();
 	$Sprite.set_sprite_frames(skin);
 	$Sprite.play("walk");
+	colbox_size = 2.0*($CollisionShape2D.shape.get_extents());
+	raycast_length = (colbox_size.x/2.0)+4.0;
 
 func _physics_process(delta):
 	
@@ -237,7 +240,7 @@ func fall(delta):
 			impulse.y = 0.0;
 
 func move(delta):
-	motion.x = MOVE_SPEED*RUN_MULTIPLIER if running else MOVE_SPEED;
+	motion.x = MOVE_SPEED*run_vel_mult if running else MOVE_SPEED;
 	motion.x *= walk_direction;
 	self.move_and_slide(motion + impulse, Vector2.UP);
 
@@ -245,12 +248,13 @@ func check_collisions(delta):
 	raycast_check_countdown-=delta*1000.0;
 	if raycast_check_countdown <= 0:
 		var current_global_position: Vector2 = global_position;
-		current_global_position.y += (SIZE.y/2.0)-4.0; #4.0 for a margin
+		current_global_position.y += (colbox_size.y/2.0)-4.0; #4.0 for a margin
 		var space_state = get_world_2d().direct_space_state;
-		var result = space_state.intersect_ray(current_global_position, current_global_position+walk_direction*Vector2(RAYCAST_LENGTH, 0), [self], collision_mask);
+		var result = space_state.intersect_ray(current_global_position, current_global_position+walk_direction*Vector2(raycast_length, 0), [self], collision_mask);
 		if result:
+			#print(result);
 			#check if can jump
-			if (can_jump_over(delta, current_global_position+walk_direction*Vector2(RAYCAST_LENGTH, 0))):
+			if (can_jump_over(delta, current_global_position+walk_direction*Vector2(raycast_length, 0))):
 				motion.y = JUMP_SPEED;
 			else:
 				walk_direction = -walk_direction;
@@ -365,7 +369,7 @@ func can_jump_over(delta, pos: Vector2) -> bool:
 		return false; #negative time... should never happen.
 
 	var current_global_position: Vector2 = global_position;
-	var size_offset: Vector2 = Vector2((SIZE.x/2.0 - 4.0), (SIZE.y/2.0)-4.0); #4.0 added as a margin-error avoider
+	var size_offset: Vector2 = Vector2((colbox_size.x/2.0 - 4.0), (colbox_size.y/2.0)-4.0); #4.0 added as a margin-error avoider
 	var get_max_jump_height: float = 0.5*Game.GRAVITY*pow(max_jump_time, 2.0)+JUMP_SPEED*max_jump_time;
 	var new_pos = Vector2(pos.x, pos.y+get_max_jump_height-size_offset.y);
 	current_global_position.y = new_pos.y;
