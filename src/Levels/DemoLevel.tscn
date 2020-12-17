@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=2]
+[gd_scene load_steps=50 format=2]
 
 [ext_resource path="res://src/Levels/ModularScenes/Office1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://src/Entities/Enemies/Roomba.tscn" type="PackedScene" id=2]
@@ -28,6 +28,8 @@
 [ext_resource path="res://src/Entities/Items/Key.tscn" type="PackedScene" id=26]
 [ext_resource path="res://src/Entities/Enemies/enemy_little_robot_jumpy.tscn" type="PackedScene" id=27]
 [ext_resource path="res://src/Entities/Enemies/enemy_little_robot_quick.tscn" type="PackedScene" id=28]
+[ext_resource path="res://src/Entities/Misc/Doors/SegmentDoor.tscn" type="PackedScene" id=29]
+[ext_resource path="res://src/Entities/Misc/TriggerInArea.tscn" type="PackedScene" id=30]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 blend_mode = 1
@@ -52,6 +54,9 @@ extents = Vector2( 32, 96 )
 
 [sub_resource type="RectangleShape2D" id=8]
 extents = Vector2( 40, 160 )
+
+[sub_resource type="RectangleShape2D" id=19]
+extents = Vector2( 128, 128 )
 
 [sub_resource type="RectangleShape2D" id=9]
 extents = Vector2( 32, 32 )
@@ -240,6 +245,7 @@ tile_data = PoolIntArray( -65534, 1610612746, 0, -65533, 1610612746, 0, -65532, 
 [node name="Door" parent="Tiles/Inside/Floor1/Office4" instance=ExtResource( 23 )]
 position = Vector2( 64, 256 )
 manual = false
+trigger_only = true
 
 [node name="Office5" type="Node2D" parent="Tiles/Inside/Floor1"]
 position = Vector2( 2464, 160 )
@@ -574,7 +580,6 @@ position = Vector2( -79, 0 )
 z_index = 2
 
 [node name="Triggers" type="Node2D" parent="Entities"]
-visible = false
 
 [node name="Trigger1" parent="Entities/Triggers" instance=ExtResource( 11 )]
 call_function_enter = "_on_player_outside"
@@ -680,6 +685,14 @@ call_function_enter = "enter_building"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/DoorTrigger"]
 position = Vector2( 2255, 384 )
 shape = SubResource( 8 )
+
+[node name="TriggerArea1" parent="Entities/Triggers" instance=ExtResource( 30 )]
+position = Vector2( 1839, 384 )
+trigger_once = true
+call_function = "players_in_room_1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Entities/Triggers/TriggerArea1"]
+shape = SubResource( 19 )
 
 [node name="Enemies" type="Node2D" parent="Entities"]
 z_index = 2
@@ -798,6 +811,11 @@ position = Vector2( 1295, -160 )
 call_function = "change_to_map"
 call_args = [ "res://src/Levels/E1M0.tscn", 2.0 ]
 security_level = 2
+
+[node name="SegmentDoor" parent="Entities/Misc" instance=ExtResource( 29 )]
+position = Vector2( 1487, 192 )
+speed = 200.0
+segments = 5
 
 [node name="Pickups" type="Node2D" parent="Entities"]
 

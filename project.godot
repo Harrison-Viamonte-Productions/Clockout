@@ -201,6 +201,7 @@ attack={
 2d_physics/layer_6="Player_attack"
 2d_physics/layer_7="Enemy_attack"
 2d_physics/layer_8="Pickups"
+2d_physics/layer_9="Triggers"
 2d_physics/layer_11="Player_back"
 2d_physics/layer_12="Tiles_back"
 2d_physics/layer_13="StaticBodies_back"

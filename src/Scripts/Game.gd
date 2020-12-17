@@ -188,6 +188,13 @@ func spawn_player(player: Node2D):
 func get_current_map_path() -> String:
 	return CurrentMap.filename;
 
+func get_active_players_count() -> int:
+	var p=0;
+	for i in range(Players.size()):
+		if Players[i]:
+			p+=1;
+	return p;
+
 func get_active_players() -> Array:
 	var result: Array = [];
 	for i in range(Players.size()):

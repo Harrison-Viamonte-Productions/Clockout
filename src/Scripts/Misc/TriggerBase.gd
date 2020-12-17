@@ -36,7 +36,7 @@ func get_node_by_string(node_string: String) -> Node:
 		"$Game": #this is probably a dangerous thing to do, maybe we want in a future to specify only which kind of functions can be called using this in the Game singleton
 			nodeReturn = Game;
 		_:
-			nodeReturn = get_tree().get_node(NodePath(node_string));
+			nodeReturn = Game.CurrentMap.get_node(NodePath(node_string));
 	return nodeReturn;
 
 func has_node_type(nodeEntity: Node, nodeType):

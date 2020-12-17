@@ -83,6 +83,11 @@ func set_day():
 func call_elevator(to_floor: int):
 	$Tiles/Storage/Elevator.move_to_pos(to_floor);
 
+func players_in_room_1():
+	$Entities/Misc/SegmentDoor.enable();
+	if !Game.Network.is_client():
+		$Tiles/Inside/Floor1/Office4/Door.open(true);
+
 func exit_small_room():
 	enter_room($Entities/Misc/Teleport_storagedoor, Game.ActiveCamera, Game.get_local_player().get_camera(), $Entities/Misc/storage_door, Vector2(5888, -1376), Vector2(11904, 610));
 

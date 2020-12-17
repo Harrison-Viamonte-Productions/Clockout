@@ -40,7 +40,7 @@ func open(send_net_event: bool = false):
 	if locked:
 		return;
 		
-	if manual && send_net_event:
+	if (manual or trigger_only) and send_net_event:
 		Game.Network.net_send_event(self.node_id, NET_EVENTS.OPENED, null);
 	$Closed.hide();
 	$Open.show();
@@ -50,7 +50,7 @@ func close(send_net_event: bool = false):
 	if locked:
 		return;
 		
-	if manual && send_net_event:
+	if (manual or trigger_only) and send_net_event:
 		Game.Network.net_send_event(self.node_id, NET_EVENTS.CLOSED, null);
 	$Closed.show();
 	$Open.hide();
