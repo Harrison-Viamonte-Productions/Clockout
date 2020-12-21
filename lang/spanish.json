@@ -25,5 +25,10 @@
 	"str1003":	"%s fue asesinado por un %s",
 	"str1004": 	"Nivel de seguridad actualizado a nivel %d",
 	"str1005": 	"USAR",
-	"str1006": 	"No estás autorizado a abrir esta puerta."
+	"str1006": 	"No estás autorizado a abrir esta puerta.",
+	//PDAS
+	"pda0001_head": "From:Maxi\nTo:Matthew\nDate:21/12/2020",
+	"pda0001_msg": "This is a message for you Matthew <3.\n\nPD: I want to play Doom 3 wuaaa",
+	"pda0002_head": "From:Maxi\nTo:Matthew\nDate:21/12/2020",
+	"pda0002_msg": "I WAAANT PIZZA GUAAAAAA, GUAAAA.\nPizza pizza pizza!, matthew nyo"
 }

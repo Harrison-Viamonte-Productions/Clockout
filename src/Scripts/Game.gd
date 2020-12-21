@@ -12,7 +12,8 @@ const VERSION: String = "0.1.5"; #Major, Minor, build count
 const LANG_FILES_FOLDER: String = "lang";
 const CONFIG_FILE: String = "game_config.cfg";
 const PLAYER_ATTACK_LAYER: int = 32;
-const START_MAP: String = "res://src/Levels/DemoLevel.tscn";
+const MAPS_FOLDER: String = "res://src/Levels/";
+const START_MAP: String = "DemoLevel.tscn";
 
 var SpawnPoints: Array = [];
 var Players: Array = [];
@@ -26,6 +27,7 @@ var current_lang: String = "";
 #Objects (to avoid using classes)
 var Boop_Object = preload("res://src/Scripts/Netcode/Boop.gd");
 var Util_Object = preload("res://src/Scripts/Util.gd");
+var FileSystem: FileSystemBase = load("res://src/Scripts/FileSystem.gd").new();
 var Lang = load("res://src/Scripts/Langs.gd").new();
 var Config = load("res://src/Scripts/ConfigManager.gd").new();
 var Network: NetworkBase = load("res://src/Scripts/Netcode/NetBase.gd").new();
@@ -84,7 +86,9 @@ func _input(event):
 		return;
 	
 	if event is InputEventKey and Input.is_key_pressed(KEY_ESCAPE) && !event.is_echo():
-		if MainMenu.is_inside_tree():
+		if typeof(GUI) != TYPE_NIL && GUI.is_pda_open():
+			GUI.hide_pda();
+		elif MainMenu.is_inside_tree():
 			close_menu();
 		else:
 			open_menu();
@@ -167,13 +171,14 @@ func start_new_game():
 
 #I hope the remote key does not break anything
 remote func change_to_map(map_name: String):
+	var full_map_path: String = self.MAPS_FOLDER + map_name;
 	CurrentMap = null;
 	close_menu();
 	MainMenu = null;
 	#ViewportFX = null;
 	Network.change_map(map_name);
 	#clear_players();
-	get_tree().call_deferred("change_scene", map_name);
+	get_tree().call_deferred("change_scene", full_map_path);
 
 func spawn_player(player: Node2D):
 	if player.is_inside_tree():
@@ -185,8 +190,11 @@ func spawn_player(player: Node2D):
 	player.z_as_relative = SpawnPoints[0].z_as_relative;
 	player.Spawn.get_parent().call_deferred("add_child", player);
 
+func sanitize_map_name(full_map_path: String) -> String:
+	return full_map_path.replacen(MAPS_FOLDER, "");
+
 func get_current_map_path() -> String:
-	return CurrentMap.filename;
+	return sanitize_map_name(CurrentMap.filename);
 
 func get_active_players_count() -> int:
 	var p=0;
@@ -233,6 +241,9 @@ func get_view_rect2(scale: float = 1.0) -> Rect2: #this was fuuun for sure..... 
 		endPos.y += dif;
 		startPos.y += dif;
 	return Rect2(startPos, screenSize);
+
+func show_pda_message(header: String, msg: String) -> void:
+	GUI.show_pda_message(header, msg);
 
 # Netcode specific
 remote func game_process_rpc(method_name: String, data: Array): 

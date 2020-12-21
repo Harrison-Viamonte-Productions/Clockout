@@ -1,5 +1,6 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=16 format=2]
 
+[ext_resource path="res://assets/fonts/PixelOperator-Bold.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://assets/fonts/PixelOperator8-Bold.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://src/Scripts/GUI/GUI.gd" type="Script" id=3]
 [ext_resource path="res://assets/fonts/PixelOperatorMonoHB8.ttf" type="DynamicFontData" id=4]
@@ -86,6 +87,19 @@ tracks/1/keys = {
 "update": 0,
 "values": [ Color( 0.313726, 0, 0, 0 ), Color( 0.313726, 0, 0, 1 ) ]
 }
+
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 0.513726, 0.705882, 0.988235, 0.686275 )
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color( 0, 0, 0, 1 )
+border_blend = true
+
+[sub_resource type="DynamicFont" id=10]
+size = 20
+font_data = ExtResource( 1 )
 
 [node name="GUI" type="CanvasLayer"]
 layer = 5
@@ -235,3 +249,74 @@ anims/info_message_hide = SubResource( 7 )
 anims/info_message_show = SubResource( 8 )
 
 [node name="Tween" type="Tween" parent="Parent"]
+
+[node name="PDA" type="Panel" parent="Parent"]
+visible = false
+margin_left = 32.0
+margin_top = 64.0
+margin_right = 320.0
+margin_bottom = 480.0
+custom_styles/panel = SubResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MarginContainer" type="MarginContainer" parent="Parent/PDA"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = 10.0
+margin_right = -10.0
+margin_bottom = -10.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Messsage" type="VBoxContainer" parent="Parent/PDA/MarginContainer"]
+margin_right = 268.0
+margin_bottom = 396.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Parent/PDA/MarginContainer/Messsage"]
+margin_right = 268.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 0, 25 )
+
+[node name="Header" type="RichTextLabel" parent="Parent/PDA/MarginContainer/Messsage/HBoxContainer"]
+margin_right = 268.0
+margin_bottom = 100.0
+rect_min_size = Vector2( 0, 100 )
+size_flags_horizontal = 3
+custom_fonts/normal_font = SubResource( 10 )
+custom_colors/default_color = Color( 0, 0.109804, 0.137255, 1 )
+text = "From: Ruarua
+To: Rrawarwa
+Date: 24/12/2095"
+scroll_active = false
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Parent/PDA/MarginContainer/Messsage"]
+margin_top = 104.0
+margin_right = 268.0
+margin_bottom = 396.0
+rect_min_size = Vector2( 0, 25 )
+size_flags_vertical = 3
+
+[node name="Message" type="RichTextLabel" parent="Parent/PDA/MarginContainer/Messsage/HBoxContainer2"]
+margin_right = 268.0
+margin_bottom = 292.0
+rect_min_size = Vector2( 0, 100 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+custom_fonts/normal_font = SubResource( 10 )
+custom_colors/default_color = Color( 0, 0.109804, 0.137255, 1 )
+bbcode_text = "Things are not going well in this place,
+all hell is breaking loose!.
+
+We shouldn't allow "
+text = "Things are not going well in this place,
+all hell is breaking loose!.
+
+We shouldn't allow "
+scroll_active = false

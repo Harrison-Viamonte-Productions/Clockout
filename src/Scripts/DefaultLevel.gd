@@ -2,6 +2,7 @@ class_name Level
 extends Node2D
 
 var MainMenuScene: PackedScene = preload("res://src/GUI/MainMenu.tscn");
+var TransitionsScene: PackedScene = preload("res://src/Transitions/TransitionScene.tscn");
 export var map_limit_start: Vector2 = Vector2.ZERO;
 export var map_limit_end: Vector2 = Vector2.ZERO;
 var already_loaded: bool = false;
@@ -25,11 +26,15 @@ func _ready():
 	Game.Network.map_is_loaded();
 	Game.MainMenu = MainMenuScene.instance();
 	Game.MainMenu.set_ingame_mode();
-	
 	initial_limit_start = map_limit_start;
 	initial_limit_end = map_limit_end;
 	tween = Tween.new(); #useful to avoid having to add it manually in each map
 	add_child(tween);
+	
+	var TransitionsInstance: Node = TransitionsScene.instance();
+	Game.ViewportFX = TransitionsInstance;
+	add_child(TransitionsInstance);
+	
 
 func get_world_limits() -> Dictionary:
 	var limits: Dictionary = {

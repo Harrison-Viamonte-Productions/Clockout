@@ -24,6 +24,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://src/Scripts/Misc/Elevator.gd"
 }, {
+"base": "Object",
+"class": "FileSystemBase",
+"language": "GDScript",
+"path": "res://src/Scripts/FileSystem.gd"
+}, {
 "base": "AnimatedSprite",
 "class": "FrontDoor",
 "language": "GDScript",
@@ -78,6 +83,7 @@ _global_script_class_icons={
 "CameraEntity": "",
 "Door": "",
 "ElevatorBase": "",
+"FileSystemBase": "",
 "FrontDoor": "",
 "GUICanvas": "",
 "Item": "",

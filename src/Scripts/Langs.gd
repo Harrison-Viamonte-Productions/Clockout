@@ -2,7 +2,7 @@ extends Object
 var langs_data: Dictionary;
 
 func get_str(text: String, lang: String) -> String:
-	if text.begins_with("#str") && langs_data.has(lang) && langs_data[lang].has(text.replace("#", "")):
+	if (text.begins_with("#str") or text.begins_with("#pda")) && langs_data.has(lang) && langs_data[lang].has(text.replace("#", "")):
 		return langs_data[lang][text.replace("#", "")];
 	else:
 		return text;
@@ -14,15 +14,12 @@ func load_langs(folder: String):
 		var lang_name: String = file.get_basename();
 		langs_data[lang_name] = get_data_from_json(folder + "/" + file);
 
-func get_langs() -> Array:
-	return langs_data.keys();
-
-func lang_exists(lang_name: String) -> bool:
-	return langs_data.has(lang_name);
-
 func list_files_in_directory(path, extension: String = "") -> Array:
 	var files: Array = []
 	var dir = Directory.new()
+	# Not working in export, I need to fix the problem in engine or wait for update.
+	# if !dir.dir_exists(path):
+	# 	return [];
 	dir.open(path)
 	dir.list_dir_begin()
 	while true:
@@ -34,6 +31,13 @@ func list_files_in_directory(path, extension: String = "") -> Array:
 	dir.list_dir_end()
 
 	return files
+
+
+func get_langs() -> Array:
+	return langs_data.keys();
+
+func lang_exists(lang_name: String) -> bool:
+	return langs_data.has(lang_name);
 
 func get_data_from_json(filename: String) -> Dictionary:
 	var file: File = File.new();

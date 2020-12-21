@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://src/Levels/E1M0.gd" type="Script" id=1]
 [ext_resource path="res://src/Levels/Backgrounds/Mountains1.tscn" type="PackedScene" id=2]
@@ -8,7 +8,6 @@
 [ext_resource path="res://src/Entities/Misc/CameraEntity.tscn" type="PackedScene" id=6]
 [ext_resource path="res://src/Entities/PlayerSpawn.tscn" type="PackedScene" id=7]
 [ext_resource path="res://src/Entities/Misc/TriggerUse.tscn" type="PackedScene" id=8]
-[ext_resource path="res://src/Transitions/TransitionScene.tscn" type="PackedScene" id=9]
 [ext_resource path="res://assets/lightmaps/white_light.png" type="Texture" id=16]
 [ext_resource path="res://src/Tiles/game_tiles.tres" type="TileSet" id=17]
 [ext_resource path="res://src/Tiles/light_tiles.tres" type="TileSet" id=18]
@@ -318,5 +317,3 @@ z_index = 3
 color = Color( 0.611765, 0.611765, 0.611765, 1 )
 
 [node name="Mountains1" parent="." instance=ExtResource( 2 )]
-
-[node name="Transitions" parent="." instance=ExtResource( 9 )]

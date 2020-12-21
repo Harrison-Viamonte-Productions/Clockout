@@ -8,7 +8,6 @@ onready var LevelStaticCamera = $Cameras/LevelCamera1; #Static camera used for c
 func _ready():
 	$Tiles/Clip.visible = false;
 	set_day();
-	Game.ViewportFX = $Transitions;
 	LevelStaticCamera.update_limits(map_limit_start, map_limit_end);
 	CameraPaths = $Cameras/CameraPath.get_children();
 

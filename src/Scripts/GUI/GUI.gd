@@ -28,7 +28,15 @@ func hide_message():
 func display_message(message: String, time: float = 5.0):
 	message = Game.get_str(message);
 	$Parent/DialogSystem.show_message(message);
-	
+
+func show_pda_message(header: String, msg: String):
+	$Parent/PDA/MarginContainer/Messsage/HBoxContainer/Header.text = Game.get_str(header);
+	$Parent/PDA/MarginContainer/Messsage/HBoxContainer2/Message.text = Game.get_str(msg);
+	$Parent/PDA.show();
+
+func hide_pda():
+	$Parent/PDA.hide();
+
 func message_showed():
 	$Parent/MessageTimer.start();
 
@@ -50,6 +58,13 @@ func info_message(msg: String, time: float = 5.0):
 
 func info_message_hide():
 	$Parent/InfoMessagesAnims.play("info_message_hide");
+
+func is_pda_open() -> bool:
+	return $Parent/PDA.is_visible();
+
+#func _input(_event):
+#	if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_cancel"):
+#		hide_pda();
 
 # TO AVOID CRASH IN RELEASE BUILD!
 func _exit_tree():

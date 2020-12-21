@@ -10,6 +10,8 @@ var resolutions: Array = [
 	"2560x1440"
 ];
 
+var map_list: Array = Array();
+
 onready var ResolutionsOptions: OptionButton = $OptionsContainer/OptionsMenu/VBoxContainer/Resolutions/Resolutions;
 onready var MaxPlayerOptions: OptionButton = $OptionsContainer/MultiplayerMenu/VBoxContainer/MaxPlayers/Players;
 onready var FullScreenCheckbox: CheckBox = $OptionsContainer/OptionsMenu/VBoxContainer/FullScreen/FullScreenCheckBox;
@@ -18,6 +20,7 @@ onready var StartServerBtn: Button = $OptionsContainer/MultiplayerMenu/HBoxConta
 onready var JoinButtonBtn: Button = $OptionsContainer/MultiplayerMenu/HBoxContainer2/JoinServer;
 onready var SvPlayersCmb: OptionButton = $OptionsContainer/MultiplayerMenu/VBoxContainer/MaxPlayers/Players;
 onready var ServerIp: TextEdit = $OptionsContainer/MultiplayerMenu/VBoxContainer2/ServerIP/ServerIP;
+onready var MapListOptions: OptionButton = $OptionsContainer/MultiplayerMenu/VBoxContainer/StartMap/Levels;
 
 var options_dialog_shown: bool = false; 
 
@@ -39,6 +42,7 @@ func _ready():
 		MaxPlayerOptions.add_item(str(i));
 	MaxPlayerOptions.select(0);
 	
+	load_maps();
 	load_langs();
 	load_resolutions();
 
@@ -52,6 +56,20 @@ func _ready():
 	update_from_config();
 	update_lang_strings();
 
+func load_maps():
+	MapListOptions.clear();
+	map_list.clear();
+	# FIX LATER: by now forcing to ignore the subfolders "Backgrounds" and "ModularScenes"
+	map_list = Game.FileSystem.list_files_in_directory(Game.MAPS_FOLDER, ".tscn", "", ["Backgrounds", "ModularScenes"]);
+	for map in map_list:
+		MapListOptions.add_item(map);
+	var start_map_idx: int = map_list.find(Game.START_MAP);
+	if start_map_idx != -1:
+		MapListOptions.select(start_map_idx);
+	else:
+		Game.print_warning("Game.START_MAP not found in map lit!");
+		MapListOptions.select(0);
+	
 func update_lang_strings():
 	$Buttons/NewGame/ButtonLabel.text = Game.get_str("#str0001");
 	$Buttons/Multiplayer/ButtonLabel.text = Game.get_str("#str0010");
@@ -122,8 +140,7 @@ func apply_config_changes():
 
 func start_server():
 	var sv_maxPlayers: int = int(SvPlayersCmb.get_item_text(SvPlayersCmb.selected));
-	Game.Network.host_server(sv_maxPlayers, Game.START_MAP);
-	
+	Game.Network.host_server(sv_maxPlayers, MapListOptions.get_item_text(MapListOptions.selected));
 func join_server():
 	Game.Network.join_server(ServerIp.text);
 
