@@ -1,7 +1,5 @@
 .import/
-*.import
 .export/
-assets/
 todo.txt
 *.zip
 *.rar
