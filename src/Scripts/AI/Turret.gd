@@ -61,30 +61,33 @@ func update_sprite(delta):
 			$Sprite.play("harmless");
 			return;
 		if currentEnemy:
-			var angleToEnemy: float =  rad2deg(self.global_position.angle_to_point(currentEnemy.global_position)); 
-			if angleToEnemy >= 0.0:
-				return; #Enemy it's in an higher position than the turret
-			angleToEnemy = abs(angleToEnemy); #just to make it easier for me
-			if angleToEnemy <= 25.0:
-				$Sprite.play("angry_90d");
-				$Sprite.scale.x = 1;
-			elif angleToEnemy <= 55.0:
-				$Sprite.play("angry_45d");
-				$Sprite.scale.x = 1;
-			elif angleToEnemy <= 90.0:
-				$Sprite.play("angry_30d");
-				$Sprite.scale.x = 1;
-			elif angleToEnemy <= 125.0:
-				$Sprite.play("angry_30d");
-				$Sprite.scale.x = -1;
-			elif angleToEnemy <= 155.0:
-				$Sprite.play("angry_45d");
-				$Sprite.scale.x = -1;
-			else:
-				$Sprite.play("angry_90d");
-				$Sprite.scale.x = -1;
+			adjust_sprite_angle()
 	else:
 		update_sprite_countdown-=delta*1000.0;
+
+func adjust_sprite_angle():
+	var angleToEnemy: float =  rad2deg(self.global_position.angle_to_point(currentEnemy.global_position)); 
+	if angleToEnemy >= 0.0:
+		return; #Enemy it's in an higher position than the turret
+	angleToEnemy = abs(angleToEnemy); #just to make it easier for me
+	if angleToEnemy <= 25.0:
+		$Sprite.play("angry_90d");
+		$Sprite.scale.x = 1;
+	elif angleToEnemy <= 55.0:
+		$Sprite.play("angry_45d");
+		$Sprite.scale.x = 1;
+	elif angleToEnemy <= 90.0:
+		$Sprite.play("angry_30d");
+		$Sprite.scale.x = 1;
+	elif angleToEnemy <= 125.0:
+		$Sprite.play("angry_30d");
+		$Sprite.scale.x = -1;
+	elif angleToEnemy <= 155.0:
+		$Sprite.play("angry_45d");
+		$Sprite.scale.x = -1;
+	else:
+		$Sprite.play("angry_90d");
+		$Sprite.scale.x = -1;
 
 func check_player(delta):
 	if player_check_countdown <= 0.0:
@@ -113,7 +116,6 @@ func check_if_in_player_pov(delta) -> void:
 		is_on_screen = true;
 	else:
 		is_on_screen = false;
-
 
 ############################
 # NETCODE SPECIFIC RELATED #

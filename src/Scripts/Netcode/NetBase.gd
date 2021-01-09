@@ -59,7 +59,6 @@ func clear():
 func _on_server_shutdown():
 	stop_networking();
 	Game.get_tree().call_deferred("change_scene", "res://src/GUI/MainMenu.tscn");
-	#Game.get_tree().change_scene("res://src/GUI/MainMenu.tscn");
 
 func _cutie_joined_ok():
 	if !Game.is_network_master():
@@ -120,7 +119,6 @@ func server_process_client_question(id_client: int):
 func client_receive_answer(receive_data: Dictionary):
 	print("player number: %d, uniqueid: %d" % [receive_data.player_number, Game.get_tree().get_network_unique_id()]);
 	local_player_id = receive_data.player_number;
-	#spawn the player in-game in the local machine :3
 	Game.add_player(Game.get_tree().get_network_unique_id(), receive_data.player_number);
 	Game.change_to_map(receive_data.map_name);
 
@@ -164,7 +162,6 @@ func host_server(maxPlayers: int, mapName: String, serverPort: int = SERVER_PORT
 	Game.get_tree().set_network_peer(host);
 	add_client(SERVER_NETID); #adding server as friend client always
 	Game.change_to_map(mapName);
-	#Game.get_tree().change_scene(mapName);
 
 func join_server(ip: String):
 	ip = ip.replace(" ", "");
@@ -175,7 +172,6 @@ func join_server(ip: String):
 
 func stop_networking() -> void:
 	Game.get_tree().call_deferred("set_network_peer", null);
-	#Game.get_tree().set_network_peer(null); #Destoy any previous networking session
 	clear();
 
 
@@ -219,37 +215,42 @@ func server_send_boop() -> void:
 		return;
 	boops_sent_at_once = 0;
 	for entity in netentities:
-		if entity && entity.has_method("server_send_boop") && entity.is_inside_tree():
-			var boopData: Dictionary = entity.server_send_boop();
-			if !boopData or boopData.empty():
-				continue;
-			var boop_was_sent: bool = false; #DEBUG ONLY, DELETE LATER. 
-			#This loop it's to have unique boop deltas for each client, to avoid bad syncing
-			for client in clients_connected:
-				if !client or !client.ingame:
-					continue;
-				if client.netId == SERVER_NETID: #to avoid sending a boop to oneself as server
-					continue;
-				var clientNum: int = find_client_number_by_netid(client.netId);
-				if entity.NetBoop.delta_boop_changed(boopData, clientNum):
-					send_rpc_unreliable_id(client.netId, "client_process_boop", [entity.node_id, boopData]);
-					boop_was_sent = true;
-
-			if boop_was_sent:
-				boops_sent_at_once+=1;
+		if server_entity_send_boop(entity):
+			boops_sent_at_once+=1;
 
 	# UN-COMMENT TO DEBUG
 	#if boops_sent_at_once > 0:
 	#	print("Sending %d boops" % boops_sent_at_once);
-	
+
+func server_entity_send_boop(entity) -> bool:
+	var boop_was_sent: bool = false; #DEBUG ONLY, DELETE LATER
+	if entity && entity.has_method("server_send_boop") && entity.is_inside_tree():
+		var boopData: Dictionary = entity.server_send_boop();
+		if !boopData or boopData.empty():
+			return false
+		#This loop it's to have unique boop deltas for each client, to avoid bad syncing
+		for client in clients_connected:
+			if !client or !client.ingame:
+				continue;
+			if client.netId == SERVER_NETID: #to avoid sending a boop to oneself as server
+				continue;
+			var clientNum: int = find_client_number_by_netid(client.netId);
+			if entity.NetBoop.delta_boop_changed(boopData, clientNum):
+				send_rpc_unreliable_id(client.netId, "client_process_boop", [entity.node_id, boopData]);
+				boop_was_sent = true;
+	return boop_was_sent
+
 func client_send_boop() -> void:
 	for entity in netentities:
-		if entity && entity.has_method("client_send_boop") && entity.is_inside_tree():
-			var boopData: Dictionary = entity.client_send_boop();
-			if !boopData or boopData.empty():
-				continue;
-			if entity.NetBoop.delta_boop_changed(boopData):
-				send_rpc_unreliable_id(SERVER_NETID, "server_process_boop", [entity.node_id, boopData]);
+		client_entity_send_boop(entity)
+
+func client_entity_send_boop(entity) -> void:
+	if entity && entity.has_method("client_send_boop") && entity.is_inside_tree():
+		var boopData: Dictionary = entity.client_send_boop();
+		if !boopData or boopData.empty():
+			return;
+		if entity.NetBoop.delta_boop_changed(boopData):
+			send_rpc_unreliable_id(SERVER_NETID, "server_process_boop", [entity.node_id, boopData]);
 
 func client_process_boop(entityId, message) -> void:
 	if entityId < netentities.size() && netentities[entityId] && netentities[entityId].is_inside_tree():

@@ -162,7 +162,6 @@ func fall(delta: float) -> void:
 		return;
 	velocity.y += Game.GRAVITY*delta;
 
-
 func jump(time: int, delta: float) -> void:
 	if !is_local_player() or frozen:
 		return;
@@ -176,14 +175,19 @@ func jump(time: int, delta: float) -> void:
 		jump_count = 1
 	
 	if Input.is_action_just_pressed("jump") and (is_on_floor() or jump_count < MAX_JUMPS) and time > next_jump_time:
-		is_jumping = true;
-
-		velocity.y = JUMP_SPEED;
-		jump_count += 1
-		next_jump_time = time + JUMP_DELAY_MS
-		jump_add_time_ms = time + JUMP_ADD_DURATION_MS
+		handle_first_jump(time)
 	elif jump_count > 0 and time < jump_add_time_ms and Input.is_action_pressed("jump"):
-		velocity.y += JUMP_SPEED*delta
+		handle_extra_jump(delta)
+
+func handle_first_jump(time: int):
+	is_jumping = true;
+	velocity.y = JUMP_SPEED;
+	jump_count += 1
+	next_jump_time = time + JUMP_DELAY_MS
+	jump_add_time_ms = time + JUMP_ADD_DURATION_MS
+
+func handle_extra_jump(delta: float):
+	velocity.y += JUMP_SPEED*delta
 
 func run() -> void:
 	if !is_local_player() or frozen:
@@ -268,6 +272,12 @@ func disable_damage_protection():
 	damage_protection = false;
 
 func killed(attacker: Node2D = null):
+	show_death_message(attacker)
+	killed_fx()
+	#respawn();
+	update_gui();
+
+func show_death_message(attacker: Node2D) -> void:
 	var deathMsg: String = "";
 	if !attacker or attacker.get("DEATH_MESSAGE") == null:
 		deathMsg = "Player_name died";
@@ -275,17 +285,16 @@ func killed(attacker: Node2D = null):
 		deathMsg = Game.get_str(attacker.DEATH_MESSAGE) % ["Player_name", attacker.NAME];
 	Game.GUI.info_message(deathMsg);
 
-	if is_local_player():
-		if tween.is_active():
-			tween.remove(Game.ViewportFX, "fade_in_out");
-			tween.remove(self, "respawn");
-		tween.interpolate_callback(Game.ViewportFX, RESPAWN_TIME, "fade_in_out", 1.0, 0.5);
-		tween.interpolate_callback(self, RESPAWN_TIME+1.0, "respawn");
-		tween.start();
-
+func killed_fx() -> void:
 	$AnimationPlayer.play("teleport");
-	#respawn();
-	update_gui();
+	if !is_local_player():
+		return
+	if tween.is_active():
+		tween.remove(Game.ViewportFX, "fade_in_out");
+		tween.remove(self, "respawn");
+	tween.interpolate_callback(Game.ViewportFX, RESPAWN_TIME, "fade_in_out", 1.0, 0.5);
+	tween.interpolate_callback(self, RESPAWN_TIME+1.0, "respawn");
+	tween.start();
 
 func fade_out() -> void:
 	$AnimationPlayer.play("fade_out");
@@ -503,6 +512,7 @@ func client_process_event(eventId : int, eventData) -> void:
 			tween.start();
 		_:
 			print("Warning: Received unkwown event");
+
 func is_local_player() -> bool:
 	return !Game.Network.is_multiplayer() or (netid == get_tree().get_network_unique_id());
 

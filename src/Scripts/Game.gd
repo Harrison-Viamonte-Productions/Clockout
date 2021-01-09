@@ -131,7 +131,7 @@ func get_closest_player_to(node: Node2D) -> Node2D:
 	for Player in Players:
 		if !Player:
 			continue;
-		var test_dist: float = node.global_position.distance_to(Player.global_position);
+		var test_dist: float = node.global_position.distance_squared_to(Player.global_position);
 		if current_dist > test_dist:
 			current_dist = test_dist;
 			closestPlayer = Player;
@@ -158,15 +158,12 @@ func add_player(netid: int, forceid: int = -1) -> Node2D:
 
 	player_instance.node_id = free_player_index;
 	player_instance.netid = netid;
-	#Game.Network.register_synced_node(player_instance, player_instance.node_id);
-	#Game.Network.netentities[player_instance.id] = player_instance;
 	Players[free_player_index] = player_instance;
 	print("Adding player %d with netid %d" % [free_player_index, netid]);
 	return Players[free_player_index];
 
 func start_new_game():
 	Network.stop_networking();
-	#CurrentMap = null;
 	change_to_map(START_MAP);
 
 #I hope the remote key does not break anything
@@ -175,9 +172,7 @@ remote func change_to_map(map_name: String):
 	CurrentMap = null;
 	close_menu();
 	MainMenu = null;
-	#ViewportFX = null;
 	Network.change_map(map_name);
-	#clear_players();
 	get_tree().call_deferred("change_scene", full_map_path);
 
 func spawn_player(player: Node2D):

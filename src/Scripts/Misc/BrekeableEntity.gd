@@ -30,7 +30,10 @@ func hurt():
 		$AnimatedSprite.play("broken");
 	else:
 		disable_damage();
-		if tween.is_active():
-			tween.remove(self, "enable_damage");
-		tween.interpolate_callback(self, DAMAGE_PROTECTION_TIME, "enable_damage");
-		tween.start();
+		enable_damage_protection_tween()
+
+func enable_damage_protection_tween():
+	if tween.is_active():
+		tween.remove(self, "enable_damage");
+	tween.interpolate_callback(self, DAMAGE_PROTECTION_TIME, "enable_damage");
+	tween.start();

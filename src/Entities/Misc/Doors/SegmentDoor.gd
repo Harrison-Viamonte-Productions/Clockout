@@ -22,12 +22,12 @@ func disable() -> void:
 	enabled = false;
 
 func _physics_process(delta):
-	if !enabled:
+	if !enabled or current_segment >= segments:
 		return;
-	if current_segment < segments:
-		if segments_node.position.y < segment_size.y*(current_segment+1):
-			segments_node.position.y = clamp(segments_node.position.y + speed*delta, segments_node.position.y, segment_size.y*(current_segment+1)+0.001);
-		else:
-			current_segment+=1;
-			if current_segment < segments:
-				segments_node.get_children()[current_segment].position.y = -segments_node.position.y;
+
+	if segments_node.position.y < segment_size.y*(current_segment+1):
+		segments_node.position.y = clamp(segments_node.position.y + speed*delta, segments_node.position.y, segment_size.y*(current_segment+1)+0.001);
+	else:
+		current_segment+=1;
+		if current_segment < segments:
+			segments_node.get_children()[current_segment].position.y = -segments_node.position.y;

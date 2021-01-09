@@ -25,16 +25,16 @@ func _ready():
 	Util._ready();
 
 func _physics_process(delta):
-	interpolate_movement(delta);
+	if moving_to:
+		interpolate_movement(delta);
 	interpolate_zoom(delta);
 
 func interpolate_movement(delta):
-	if moving_to:
-		if i_speed <= MAX_FOLLOW_SPEED:
-			i_speed+=delta*i_speed_incr;
-		position = position.linear_interpolate(next_pos, delta * i_speed);
-		if (position - next_pos).length() <= MIN_MOVE_PRECISION:
-			moving_to = false;
+	if i_speed <= MAX_FOLLOW_SPEED:
+		i_speed+=delta*i_speed_incr;
+	position = position.linear_interpolate(next_pos, delta * i_speed);
+	if (position - next_pos).length() <= MIN_MOVE_PRECISION:
+		moving_to = false;
 
 func interpolate_zoom(delta: float) -> void:
 	if	next_zoom != zoom:

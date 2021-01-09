@@ -71,7 +71,7 @@ func on_body_entered(body):
 	node_call_function(call_function_enter, call_args_enter, delay);
 	if trigger_once:
 		disconnect_method("body_entered");
-		
+
 func on_area_entered(area):
 	if !allow_clientside and Game.Network.is_client():
 		return;
@@ -99,7 +99,7 @@ func on_body_exited(body):
 	node_call_function(call_function_exit, call_args_exit, delay);
 	if trigger_once:
 		disconnect_method("body_exited");
-		
+
 func on_area_exited(area):
 	if !allow_clientside and Game.Network.is_client():
 		return;

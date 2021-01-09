@@ -130,12 +130,9 @@ func cs_physics_think(delta):
 	if abs(impulse.x) <= delta*friction:
 		impulse.x = 0.0;
 
-	#check_player(delta);
 	check_dormant(delta);
 	check_collisions(delta);
-	#check_attacks(delta);
 	check_damage(delta);
-	#check_chase(delta);
 	fall(delta);
 	move(delta);
 
@@ -202,15 +199,11 @@ func check_if_in_player_pov(delta) -> void:
 		is_on_screen = false;
 	
 func _on_enter_screen():
-	#active = true;
-	#is_on_screen = true;
 	pass;
 func _on_exit_screen():
-	#is_on_screen = false;
 	pass;
 
 func reset_countdowns():
-	#raycast_check_countdown = RAYCAST_CHECK_DELAY;
 	attack_check_countdown = CHECKATTACK_DELAY;
 	attacking_countdown = ATTACK_DURATION;
 	outside_screen_countdown = ACTIVE_OUTSIDE_SCREEN_TIME;
@@ -252,14 +245,12 @@ func check_collisions(delta):
 		var space_state = get_world_2d().direct_space_state;
 		var result = space_state.intersect_ray(current_global_position, current_global_position+walk_direction*Vector2(raycast_length, 0), [self], collision_mask);
 		if result:
-			#print(result);
-			#check if can jump
 			if (can_jump_over(delta, current_global_position+walk_direction*Vector2(raycast_length, 0))):
 				motion.y = JUMP_SPEED;
 			else:
 				walk_direction = -walk_direction;
 				update_sprite();
-		 #Random in order to reduce the chances of all checks being called at the same frame, to improve performance
+		#Random in order to reduce the chances of all checks being called at the same frame, to improve performance
 		raycast_check_countdown = rand_range(RAYCAST_CHECK_DELAY-20.0, RAYCAST_CHECK_DELAY+20.0);
 
 func check_attacks(delta):

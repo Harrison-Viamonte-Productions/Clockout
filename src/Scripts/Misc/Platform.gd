@@ -52,9 +52,15 @@ func _ready():
 
 func _physics_process(delta):
 	if Game.Network.is_client():
-		var current_pos: Vector2 = self.position;
-		self.position = Util.normalize_position(current_pos, current_pos+current_velocity*delta, positions[next_pos_index]);
-		return; #by now let's let the server do ALL the physics and shit.
+		client_think(delta)
+	else:
+		think(delta)
+
+func client_think(delta):
+	var current_pos: Vector2 = self.position;
+	self.position = Util.normalize_position(current_pos, current_pos+current_velocity*delta, positions[next_pos_index]);
+
+func think(delta):
 	var old_pos = self.position;
 	if (current_pos_index != next_pos_index):
 		if (time <= 0.0):
@@ -63,7 +69,6 @@ func _physics_process(delta):
 			Util.move_with_initial_accel_and_time(delta, time, acel_time, positions[current_pos_index], positions[next_pos_index]);
 		if Util.vectorsAreNearEqual(position, positions[next_pos_index]):
 			next_pos_reached();
-	
 	current_velocity = (self.position - old_pos)/delta;
 
 func move_to_pos(new_pos_index: int):

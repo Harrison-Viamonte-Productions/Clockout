@@ -149,7 +149,7 @@ func set_ingame_mode():
 	$BackgroundImage.modulate.r = 0.0;
 	$BackgroundImage.modulate.g = 0.0;
 	$BackgroundImage.modulate.b = 0.0;
-	
+
 func update_from_config():
 	FullScreenCheckbox.pressed = Game.Config.get_value("fullscreen");
 	var resolutionStr: String = get_string_from_resoltion(Game.Config.get_value("resolution"));
